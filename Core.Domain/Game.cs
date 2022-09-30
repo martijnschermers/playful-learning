@@ -1,0 +1,12 @@
+namespace Core.Domain;
+
+public class Game
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public bool IsForAdults { get; set; }
+    public string Image { get; set; }
+    public GameType Type { get; set; }
+    public Genre Genre { get; set; }
+}
