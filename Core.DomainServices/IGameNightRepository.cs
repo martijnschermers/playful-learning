@@ -1,5 +1,9 @@
-﻿namespace Core.DomainServices;
+﻿using Core.Domain;
+
+namespace Core.DomainServices;
 
 public interface IGameNightRepository
 {
+    ICollection<GameNight> GetAllGameNights();
+    void AddGameNight(GameNight gameNight);
 }
