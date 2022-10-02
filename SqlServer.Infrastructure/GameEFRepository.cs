@@ -1,6 +1,8 @@
+using Core.DomainServices;
+
 namespace SqlServer.Infrastructure;
 
-public class GameEFRepository
+public class GameEFRepository : IGameRepository
 {
     
 }
