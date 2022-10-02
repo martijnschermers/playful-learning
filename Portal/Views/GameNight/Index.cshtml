@@ -1,3 +1,5 @@
+@model ICollection<GameNight> 
+
 @{
     ViewBag.Title = "Alle Spelavonden";
 }
@@ -5,5 +7,9 @@
 <body>
 <div>
     <h1>Alle Spelavonden</h1>
+    
+    @foreach (var gameNight in Model) {
+        <p>@gameNight.DateTime</p>
+    }
 </div>
 </body>

@@ -1,0 +1,43 @@
+@model GameNightViewModel
+
+@{
+    ViewBag.Title = "Organiseer";
+}
+
+<h2>Spelavond Organiseren</h2>
+
+<form asp-action="Organize" method="post">
+    <label for="address">Adres van de spelavond: </label>
+    <div id="address" class="form-group">
+        <input asp-for="City" placeholder="Stad"/>
+        <input asp-for="Street" placeholder="Straat"/>
+        <input asp-for="HouseNumber" placeholder="Huisnummer"/>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="MaxPlayers">Maximaal aantal spelers: </label>
+        <input asp-for="MaxPlayers"/>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="DateTime">Datum en tijd: </label>
+        <input asp-for="DateTime"/>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="IsPotluck">Is de spelavond een potluck?</label>
+        <input asp-for="IsPotluck"/>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="IsOnlyForAdults">Is de spelavond alleen voor volwassenen?</label>
+        <input asp-for="IsOnlyForAdults"/>
+    </div>
+    
+    <div>
+        <h3>Bordspellen:</h3>
+    </div>
+    
+    
+    <button class="btn btn-primary" type="submit">Organiseer</button>
+</form>
