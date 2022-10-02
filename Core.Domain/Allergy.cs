@@ -1,6 +1,12 @@
 namespace Core.Domain;
 
-public enum Allergy
+public class Allergy
+{
+    public int Id { get; set; }
+    public AllergyEnum Name { get; set; }
+}
+
+public enum AllergyEnum
 {
     Nuts, 
     Lactose
