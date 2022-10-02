@@ -7,4 +7,5 @@ public class User
     public string Name { get; set; }
     public DateTime BirthDate { get; set; }
     public Gender Gender { get; set; }
+    public ICollection<Allergy> Allergies { get; set; }
 }
