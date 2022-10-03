@@ -10,18 +10,19 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IGameNightRepository, GameNightEFRepository>();
 builder.Services.AddScoped<IGameRepository, GameEFRepository>();
+builder.Services.AddScoped<IUserRepository, UserEFRepository>();
 
 builder.Services.AddDbContext<DomainDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Domain"))
         //TODO: remove in Production 
         .EnableSensitiveDataLogging());
 
-builder.Services.AddDbContext<IdentityDbContext>(options =>
+builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Identity"))
 );
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<IdentityDbContext>()
+    .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddAuthorization(options =>
