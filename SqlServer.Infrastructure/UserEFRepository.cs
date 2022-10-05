@@ -17,4 +17,9 @@ public class UserEFRepository : IUserRepository
         _context.Users.Add(user);
         _context.SaveChanges(); 
     }
+
+    public User GetUserByEmail(string email)
+    {
+        return _context.Users.First(u => u.Email == email); 
+    }
 }
