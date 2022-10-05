@@ -1,0 +1,17 @@
+@model GameNight
+
+@{
+  var routeData = new Dictionary<string, string> { { "id", Model.Id.ToString() } };
+}
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">@Model.Organizer.Name</h5>
+    <h6 class="card-subtitle mb-2 text-muted">@Model.DateTime</h6>
+    <p class="card-text">Adres: @Model.Address</p>
+    <p class="card-text">Maximaal aantal deelnemers: @Model.MaxPlayers</p>
+    <p class="card-text">Potluck: @Model.IsPotluck</p>
+    <p class="card-text">Voor volwassenen: @Model.IsOnlyForAdults</p>
+    <a asp-action="Details" asp-all-route-data="routeData" asp-controller="GameNight" class="card-link">Details</a>
+  </div>
+</div>

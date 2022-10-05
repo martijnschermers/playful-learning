@@ -9,7 +9,7 @@
     <h1>Alle Spelavonden</h1>
 
     @foreach (var gameNight in Model) {
-        <p>@gameNight.DateTime</p>
+        <partial model="gameNight" name="_GameNight" />
     }
 
     <div class="d-flex flex-column gap-2">
