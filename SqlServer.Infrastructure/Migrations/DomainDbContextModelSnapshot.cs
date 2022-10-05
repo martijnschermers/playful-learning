@@ -159,6 +159,38 @@ namespace SqlServer.Infrastructure.Migrations
                     b.HasIndex("GameNightId");
 
                     b.ToTable("Games");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Versimpelde versie van pesten!",
+                            Genre = 0,
+                            Image = "",
+                            IsOnlyForAdults = false,
+                            Name = "Uno",
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Het spel met treinen!",
+                            Genre = 0,
+                            Image = "",
+                            IsOnlyForAdults = false,
+                            Name = "Ticket to Ride",
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Het spel met geld.",
+                            Genre = 0,
+                            Image = "",
+                            IsOnlyForAdults = false,
+                            Name = "Monopoly",
+                            Type = 1
+                        });
                 });
 
             modelBuilder.Entity("Core.Domain.GameNight", b =>
