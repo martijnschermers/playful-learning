@@ -15,6 +15,8 @@ public class RegisterViewModel
     [Required]
     public Gender Gender { get; set; }
     [Required]
+    public List<Allergy> Allergies { get; set; }
+    [Required]
     [DataType(DataType.Password)]
     public string Password { get; set; }
     [Required]
