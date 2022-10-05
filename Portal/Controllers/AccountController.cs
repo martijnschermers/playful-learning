@@ -32,6 +32,7 @@ public class AccountController : Controller
     }
     
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> LoginAsync(LoginViewModel loginViewModel)
     {
         if (!ModelState.IsValid)
@@ -64,12 +65,21 @@ public class AccountController : Controller
             return RedirectToAction("Index", "Home"); 
         }
         
-        var choices = new[] {
+        var genders = new[] {
             new { Answer = Gender.Male, Description = "Man" },
             new { Answer = Gender.Female, Description = "Vrouw" },
             new { Answer = Gender.Unknown, Description = "Ik zeg het liever niet" }
         };
-        ViewBag.GenderChoices = new SelectList(choices, "Answer", "Description");
+        ViewBag.Gender = new SelectList(genders, "Answer", "Description");
+        
+        var allergies = new[] {
+            new { Answer = AllergyEnum.Lactose, Description = "Lactose" },
+            new { Answer = AllergyEnum.Nuts, Description = "Noten" },
+            new { Answer = AllergyEnum.Soya, Description = "Soja" },
+            new { Answer = AllergyEnum.Wheat, Description = "Tarwe" },
+            new { Answer = AllergyEnum.Gluten, Description = "Gluten" },
+        };
+        ViewBag.Allergies = allergies; 
         
         return View(new RegisterViewModel()); 
     }
@@ -81,9 +91,9 @@ public class AccountController : Controller
             return View(); 
         }
         
-        if (await _userManager.FindByNameAsync(registerViewModel.Username) != null)
+        if (await _userManager.FindByEmailAsync(registerViewModel.Email) != null)
         {
-            ModelState.AddModelError("", "Gebruikersnaam is al in gebruik!");
+            ModelState.AddModelError("", "Emailadres is al in gebruik!");
             return View();
         }
 
@@ -94,7 +104,7 @@ public class AccountController : Controller
         };
         _repository.AddUser(user);
 
-        var identityUser = new IdentityUser(registerViewModel.Username)
+        var identityUser = new IdentityUser(registerViewModel.Email)
         {
             Email = registerViewModel.Email
         };
@@ -111,10 +121,10 @@ public class AccountController : Controller
         return RedirectToAction(nameof(Login));
     }
 
-    public IActionResult Logout()
+    public async Task<IActionResult> Logout()
     {
-        _signInManager.SignOutAsync();
-        
+        await _signInManager.SignOutAsync();
+
         return RedirectToAction("Index", "Home"); 
     }
 }
