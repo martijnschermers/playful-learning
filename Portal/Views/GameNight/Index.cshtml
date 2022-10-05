@@ -7,9 +7,15 @@
 <body>
 <div>
     <h1>Alle Spelavonden</h1>
-    
+
     @foreach (var gameNight in Model) {
         <p>@gameNight.DateTime</p>
     }
+
+    <div class="d-flex flex-column gap-2">
+        <a asp-action="Organize">Organiseer een spelavond</a>
+        <a asp-action="Organized">Georganiseerde spelavonden</a>
+        <a asp-action="Participating">Spelavonden waaraan ik deelneem</a>
+    </div>
 </div>
 </body>
