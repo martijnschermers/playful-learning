@@ -7,37 +7,39 @@
 <h2>Spelavond Organiseren</h2>
 
 <form asp-action="Organize" method="post">
-    <label for="address">Adres van de spelavond: </label>
+    <label for="address">Adres: </label>
     <div id="address" class="form-group">
-        <input asp-for="City" placeholder="Stad"/>
-        <input asp-for="Street" placeholder="Straat"/>
-        <input asp-for="HouseNumber" placeholder="Huisnummer"/>
+        <input class="form-control" asp-for="City" placeholder="Stad"/>
+        <input class="form-control" asp-for="Street" placeholder="Straat"/>
+        <input class="form-control" asp-for="HouseNumber" placeholder="Huisnummer"/>
     </div>
     
     <div class="form-group">
         <label asp-for="MaxPlayers">Maximaal aantal spelers: </label>
-        <input asp-for="MaxPlayers"/>
+        <input class="form-control" asp-for="MaxPlayers"/>
     </div>
     
     <div class="form-group">
         <label asp-for="DateTime">Datum en tijd: </label>
-        <input asp-for="DateTime"/>
+        <input class="form-control" asp-for="DateTime"/>
     </div>
     
     <div class="form-group">
-        <label asp-for="IsPotluck">Is de spelavond een potluck?</label>
-        <input asp-for="IsPotluck"/>
+        <label asp-for="IsPotluck">Potluck?</label>
+        <input class="form-control" asp-for="IsPotluck"/>
     </div>
     
     <div class="form-group">
-        <label asp-for="IsOnlyForAdults">Is de spelavond alleen voor volwassenen?</label>
-        <input asp-for="IsOnlyForAdults"/>
+        <label asp-for="IsOnlyForAdults">Alleen voor volwassenen?</label>
+        <input class="form-control" asp-for="IsOnlyForAdults"/>
     </div>
     
-    <div>
-        <h3>Bordspellen:</h3>
+    <div class="form-group">
+        <label asp-for="Games"></label>
+        <select class="form-select" asp-items="@ViewBag.Games"></select>
     </div>
-    
     
     <button class="btn btn-primary" type="submit">Organiseer</button>
+    
+    <div class="text-danger" asp-validation-summary="All"></div>
 </form>
