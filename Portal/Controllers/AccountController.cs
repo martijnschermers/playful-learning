@@ -22,13 +22,16 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Login()
+    public IActionResult Login(string returnUrl)
     {
         if (_signInManager.IsSignedIn(new ClaimsPrincipal())) {
             return RedirectToAction("Index", "Home"); 
         }
         
-        return View(new LoginViewModel()); 
+        return View(new LoginViewModel
+        {
+            ReturnUrl = returnUrl
+        }); 
     }
     
     [HttpPost]
@@ -55,10 +58,11 @@ public class AccountController : Controller
             return View();
         }
 
-        return RedirectToAction("Index", "Home");
+        return Redirect(loginViewModel.ReturnUrl);
     }
 
     [HttpGet]
+    [ValidateAntiForgeryToken]
     public IActionResult Register()
     {
         if (_signInManager.IsSignedIn(new ClaimsPrincipal())) {
