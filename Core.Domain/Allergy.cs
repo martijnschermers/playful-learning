@@ -9,5 +9,8 @@ public class Allergy
 public enum AllergyEnum
 {
     Nuts, 
-    Lactose
+    Lactose, 
+    Soya,
+    Wheat, 
+    Gluten
 }
