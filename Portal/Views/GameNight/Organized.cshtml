@@ -10,9 +10,7 @@
     <h1>Georganiseerde spelavonden</h1>
     
     @foreach (var gameNight in Model) {
-        <h2>@gameNight.Organizer.Name</h2>
-        <h3>@gameNight.DateTime</h3>
-        <h4>@gameNight.MaxPlayers</h4>
+        <partial model="gameNight" name="_GameNight" />
     }
 </div>
 </body>
