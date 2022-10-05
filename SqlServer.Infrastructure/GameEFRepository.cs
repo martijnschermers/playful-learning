@@ -1,8 +1,19 @@
+using Core.Domain;
 using Core.DomainServices;
 
 namespace SqlServer.Infrastructure;
 
 public class GameEFRepository : IGameRepository
 {
+    private readonly DomainDbContext _context; 
     
+    public GameEFRepository(DomainDbContext context)
+    {
+        _context = context; 
+    }
+    
+    public ICollection<Game> GetAllGames()
+    {
+        return _context.Games.ToList();
+    }
 }
