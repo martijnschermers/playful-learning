@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace Core.Domain;
+﻿namespace Core.Domain;
 
 public class GameNight
 {
