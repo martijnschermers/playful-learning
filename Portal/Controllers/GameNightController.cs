@@ -75,4 +75,13 @@ public class GameNightController : Controller
 
         return RedirectToAction(nameof(Organized));
     }
+
+    public IActionResult Details()
+    {
+        var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
+
+        var gameNight = _gameNightRepository.GetGameNightById(id); 
+        
+        return View(gameNight); 
+    }
 }
