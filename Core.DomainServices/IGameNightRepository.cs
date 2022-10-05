@@ -6,5 +6,6 @@ public interface IGameNightRepository
 {
     ICollection<GameNight> GetAllGameNights();
     void AddGameNight(GameNight gameNight);
-    GameNight GetGameNightById(int id); 
+    GameNight GetGameNightById(int id);
+    void UpdateGameNight(GameNight updatedGameNight); 
 }
