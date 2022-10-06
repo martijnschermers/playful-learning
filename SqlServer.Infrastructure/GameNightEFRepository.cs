@@ -22,6 +22,15 @@ public class GameNightEFRepository : IGameNightRepository
             .ToList();
     }
 
+    public ICollection<GameNight> GetParticipating(User user)
+    {
+        return _context.GameNights.Where(g => g.Players.Contains(user))  
+            .Include(g => g.Address)
+            .Include(g => g.Organizer)
+            .Include(g => g.Players)
+            .ToList();
+    }
+
     public void AddGameNight(GameNight gameNight)
     {
         _context.GameNights.Add(gameNight);
@@ -38,13 +47,51 @@ public class GameNightEFRepository : IGameNightRepository
             .First();
     }
 
-    public async void UpdateGameNight(GameNight originalGameNight)
+    public void UpdateGameNight(GameNight updatedGameNight)
     {
-        _context.Entry(await _context.GameNights
-                .FirstOrDefaultAsync(x => x.Id == originalGameNight.Id))
-                .CurrentValues
-                .SetValues(originalGameNight);
+        var originalGameNight = _context.GameNights.FirstOrDefault(g => g.Id == updatedGameNight.Id)!;
 
-        await _context.SaveChangesAsync(); 
+        // When there are participants, updating is not allowed 
+        if (originalGameNight.Players.Count > 0) {
+            return;
+        }
+
+        originalGameNight.MaxPlayers = updatedGameNight.MaxPlayers;
+        originalGameNight.IsOnlyForAdults = updatedGameNight.IsOnlyForAdults;
+        originalGameNight.IsPotluck = updatedGameNight.IsPotluck;
+        originalGameNight.DateTime = updatedGameNight.DateTime;
+        originalGameNight.Organizer = updatedGameNight.Organizer;
+        originalGameNight.Games = updatedGameNight.Games;
+        originalGameNight.Address = updatedGameNight.Address;
+
+        _context.SaveChanges();
+    }
+
+    public void DeleteGameNight(int gameNightId)
+    {
+        var gameNight = _context.GameNights
+            .Where(g => g.Id == gameNightId)
+            .Include(g => g.Players)
+            .First();
+
+        // When there are participants, deleting is not allowed 
+        if (gameNight.Players.Count > 0) {
+            return;
+        }
+
+        _context.GameNights.Remove(gameNight);
+        _context.SaveChanges();
+    }
+
+    public void Participate(int gameNightId, User user)
+    {
+        var gameNight = _context.GameNights
+            .Where(g => g.Id == gameNightId)
+            .Include(g => g.Players)
+            .First();    
+        
+        gameNight.Players.Add(user);
+
+        _context.SaveChanges();
     }
 }

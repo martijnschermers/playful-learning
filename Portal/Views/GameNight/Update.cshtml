@@ -26,12 +26,12 @@
     
     <div class="form-group">
         <label asp-for="IsPotluck">Potluck?</label>
-        <input class="form-control" asp-for="IsPotluck"/>
+        <input asp-for="IsPotluck"/>
     </div>
     
     <div class="form-group">
         <label asp-for="IsOnlyForAdults">Alleen voor volwassenen?</label>
-        <input class="form-control" asp-for="IsOnlyForAdults"/>
+        <input asp-for="IsOnlyForAdults"/>
     </div>
     
     <div class="form-group">
@@ -39,7 +39,7 @@
         <select class="form-select" asp-items="@ViewBag.Games"></select>
     </div>
     
-    <button class="btn btn-primary" type="submit">Aanpassen</button>
+    <button class="btn btn-primary my-2" type="submit">Aanpassen</button>
     
     <div class="text-danger" asp-validation-summary="All"></div>
 </form>
