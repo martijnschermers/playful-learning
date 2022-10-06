@@ -30,7 +30,7 @@ public class GameNightEFRepository : IGameNightRepository
             .Include(g => g.Players)
             .ToList();
     }
-
+    
     public void AddGameNight(GameNight gameNight)
     {
         _context.GameNights.Add(gameNight);

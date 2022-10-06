@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Portal.Models;
 
@@ -14,5 +15,6 @@ public class LoginViewModel
     public string Password { get; set; }
     
     [HiddenInput]
+    [ValidateNever]
     public string? ReturnUrl { get; set; } =  "/";
 }
