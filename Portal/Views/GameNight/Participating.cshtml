@@ -1,9 +1,15 @@
+@model ICollection<GameNight>
+
 @{
-    ViewBag.Title = "Deelnemend"; 
+    ViewBag.Title = "Deelnemend";
 }
 
 <body>
 <div>
     <h1>Participating</h1>
+
+    @foreach (var gameNight in Model) {
+        <partial model="gameNight" name="_GameNight"/>
+    }
 </div>
 </body>

@@ -40,7 +40,24 @@ public class GameNightController : Controller
 
     public IActionResult Participating()
     {
-        return View();
+        var identity = HttpContext.User.Identity;
+        var user = _userRepository.GetUserByEmail(identity!.Name!);
+
+        var gameNights = _gameNightRepository.GetParticipating(user);
+        
+        return View(gameNights);
+    }
+
+    public IActionResult Participate()
+    {
+        var identity = HttpContext.User.Identity;
+        var user = _userRepository.GetUserByEmail(identity!.Name!);
+        
+        var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
+    
+        _gameNightRepository.Participate(id, user);
+        
+        return RedirectToAction("Participating"); 
     }
 
     [HttpGet]
@@ -141,7 +158,9 @@ public class GameNightController : Controller
 
     public IActionResult Delete()
     {
-        //TODO: Implement delete function
+        var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
+
+        _gameNightRepository.DeleteGameNight(id);
 
         return RedirectToAction("Organized");
     }
