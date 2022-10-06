@@ -14,8 +14,9 @@ public class RegisterViewModel
     public DateTime BirthDate { get; set; }
     [Required]
     public Gender Gender { get; set; }
-    [Required]
-    public List<Allergy> Allergies { get; set; }
+    
+    // public List<Allergy> Allergies { get; set; }
+    
     [Required]
     [DataType(DataType.Password)]
     public string Password { get; set; }
