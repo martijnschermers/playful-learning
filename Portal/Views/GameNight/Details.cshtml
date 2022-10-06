@@ -2,8 +2,12 @@
 
 @{
     ViewBag.Title = "Details spelavond";
+    var routeData = new Dictionary<string, string> { { "id", Model.Id.ToString() } };
 }
 
 <h2>Details spelavond</h2>
 
 <p>@Model.Address</p>
+<p>Aantal inschrijvingen: @Model.Players.Count</p>
+
+<a asp-action="Participate" asp-all-route-data="routeData">Inschrijven</a>

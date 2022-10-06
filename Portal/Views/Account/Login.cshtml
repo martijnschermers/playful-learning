@@ -7,7 +7,7 @@
 <h2>Login</h2>
 
 <form asp-action="Login" method="post">
-    <input type="hidden" asp-for="ReturnUrl" />
+    <input asp-for="ReturnUrl" />
     
     <div class="form-group">
         <label asp-for="Email">Emailadres: </label>
@@ -21,7 +21,7 @@
 
     <div class="d-flex flex-column mt-2 justify-center">
         <button class="btn btn-primary col-4" type="submit">Log in</button>
-        <a class="link-primary my-2" asp-action="Register">Nog geen account? Registreer!</a>
+        <a class="link-primary col-3 my-2" asp-action="Register">Nog geen account? Registreer!</a>
     </div>
 
     <div class="text-danger" asp-validation-summary="All"></div>

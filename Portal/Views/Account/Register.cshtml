@@ -24,7 +24,7 @@
 
     <div class="form-group">
         <label asp-for="Gender">Geslacht: </label>
-        <select class="form-select" asp-for="Gender" asp-items="@ViewBag.GenderChoices"></select>
+        <select class="form-select" asp-for="Gender" asp-items="ViewBag.Gender"></select>
     </div>
 
     @* @foreach (var allergy in ViewBag.Allergies) { *@
@@ -44,7 +44,7 @@
 
     <div class="d-flex flex-column mt-2 justify-center">
         <button class="btn btn-primary col-4" type="submit">Registreer</button>
-        <a class="link-primary my-2" asp-action="Login">Al een account? Login!</a>
+        <a class="link-primary w-fit my-2" asp-action="Login">Al een account? Login!</a>
     </div>
 
     <div class="text-danger" asp-validation-summary="All"></div>

@@ -13,33 +13,33 @@
         <input class="form-control" asp-for="Street" placeholder="Straat"/>
         <input class="form-control" asp-for="HouseNumber" placeholder="Huisnummer"/>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="MaxPlayers">Maximaal aantal spelers: </label>
         <input class="form-control" asp-for="MaxPlayers"/>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="DateTime">Datum en tijd: </label>
         <input class="form-control" asp-for="DateTime"/>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="IsPotluck">Potluck?</label>
-        <input class="form-control" asp-for="IsPotluck"/>
+        <input asp-for="IsPotluck"/>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="IsOnlyForAdults">Alleen voor volwassenen?</label>
-        <input class="form-control" asp-for="IsOnlyForAdults"/>
+        <input asp-for="IsOnlyForAdults"/>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="Games"></label>
         <select class="form-select" asp-items="@ViewBag.Games"></select>
     </div>
-    
-    <button class="btn btn-primary" type="submit">Organiseer</button>
-    
+
+    <button class="btn btn-primary my-2" type="submit">Organiseer</button>
+
     <div class="text-danger" asp-validation-summary="All"></div>
 </form>
