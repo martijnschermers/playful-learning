@@ -22,7 +22,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Login(string returnUrl)
+    public IActionResult Login(string? returnUrl)
     {
         if (_signInManager.IsSignedIn(new ClaimsPrincipal())) {
             return RedirectToAction("Index", "Home"); 
@@ -30,7 +30,7 @@ public class AccountController : Controller
         
         return View(new LoginViewModel
         {
-            ReturnUrl = returnUrl
+            ReturnUrl = returnUrl ?? "/"
         }); 
     }
     
@@ -58,11 +58,10 @@ public class AccountController : Controller
             return View();
         }
 
-        return Redirect(loginViewModel.ReturnUrl);
+        return Redirect(loginViewModel.ReturnUrl ?? "/");
     }
 
     [HttpGet]
-    [ValidateAntiForgeryToken]
     public IActionResult Register()
     {
         if (_signInManager.IsSignedIn(new ClaimsPrincipal())) {
@@ -116,9 +115,17 @@ public class AccountController : Controller
         
         if (!registerUserResult.Succeeded)
         {
+            var genders = new[] {
+                new { Answer = Gender.Male, Description = "Man" },
+                new { Answer = Gender.Female, Description = "Vrouw" },
+                new { Answer = Gender.Unknown, Description = "Ik zeg het liever niet" }
+            };
+            ViewBag.Gender = new SelectList(genders, "Answer", "Description");
+            
             foreach (var error in registerUserResult.Errors) {
                 ModelState.AddModelError("", error.Description);
             }
+            
             return View();
         }
         
