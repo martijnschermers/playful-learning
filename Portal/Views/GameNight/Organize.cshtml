@@ -6,13 +6,19 @@
 
 <h2>Spelavond Organiseren</h2>
 
-<form asp-action="Organize" method="post">
-    <label for="address">Adres: </label>
-    <div id="address" class="form-group">
-        <input class="form-control" asp-for="City" placeholder="Stad"/>
-        <input class="form-control" asp-for="Street" placeholder="Straat"/>
-        <input class="form-control" asp-for="HouseNumber" placeholder="Huisnummer"/>
-    </div>
+<form asp-action="Organize" class="row g-2" method="post">
+  <div class="row g-2">
+          <label>Adres: </label>
+          <div class="col-4">
+              <input asp-for="City" class="form-control" placeholder="Stad">
+          </div>
+          <div class="col">
+              <input asp-for="Street" class="form-control" placeholder="Straat">
+          </div>
+          <div class="col-1">
+              <input asp-for="HouseNumber" class="form-control" placeholder="Huisnummer">
+          </div>
+      </div>
 
     <div class="form-group">
         <label asp-for="MaxPlayers">Maximaal aantal spelers: </label>
@@ -39,7 +45,7 @@
         <select class="form-select" asp-items="@ViewBag.Games"></select>
     </div>
 
-    <button class="btn btn-primary my-2" type="submit">Organiseer</button>
+    <button class="btn btn-primary col-4 my-2" type="submit">Organiseer</button>
 
     <div class="text-danger" asp-validation-summary="All"></div>
 </form>
