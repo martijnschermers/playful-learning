@@ -27,7 +27,8 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult Login(string? returnUrl)
     {
-        if (_signInManager.IsSignedIn(new ClaimsPrincipal())) {
+        var identity = HttpContext.User.Identity;
+        if (identity!.IsAuthenticated) {
             return RedirectToAction("Index", "Home");
         }
 
@@ -64,7 +65,8 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult Register()
     {
-        if (_signInManager.IsSignedIn(new ClaimsPrincipal())) {
+        var identity = HttpContext.User.Identity;
+        if (identity!.IsAuthenticated) {
             return RedirectToAction("Index", "Home");
         }
 
