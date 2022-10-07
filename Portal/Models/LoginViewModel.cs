@@ -16,5 +16,5 @@ public class LoginViewModel
     
     [HiddenInput]
     [ValidateNever]
-    public string? ReturnUrl { get; set; } =  "/";
+    public string ReturnUrl { get; set; } =  "/";
 }
