@@ -28,6 +28,7 @@ public class GameNightController : Controller
         return View(gameNights);
     }
 
+    [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Organized()
     {
         var identity = HttpContext.User.Identity;
@@ -61,6 +62,7 @@ public class GameNightController : Controller
     }
 
     [HttpGet]
+    [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Organize()
     {
         //TODO: Fix select menu in Organize.html for games
@@ -71,6 +73,7 @@ public class GameNightController : Controller
     }
 
     [HttpPost]
+    [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Organize(GameNightViewModel gameNightViewModel)
     {
         if (!ModelState.IsValid) {
@@ -108,6 +111,7 @@ public class GameNightController : Controller
     }
 
     [HttpGet]
+    [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Update()
     {
         var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
@@ -130,6 +134,7 @@ public class GameNightController : Controller
     }
 
     [HttpPost]
+    [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Update(GameNightViewModel gameNightViewModel)
     {
         var identity = HttpContext.User.Identity;
@@ -156,6 +161,7 @@ public class GameNightController : Controller
         return RedirectToAction("Organized");
     }
 
+    [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Delete()
     {
         var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);

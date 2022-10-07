@@ -1,3 +1,4 @@
+using Core.Domain;
 using Core.DomainServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,10 +28,9 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.AddAuthorization(options =>
 {
-    //TODO: Add correct policies, example below
-    // options.AddPolicy("OnlyPowerUsersAndUp", policy => policy
-    //     .RequireAuthenticatedUser()
-    //     .RequireClaim("UserType", "poweruser"));
+    options.AddPolicy("OnlyOrganizers", policy => policy
+        .RequireAuthenticatedUser()
+        .RequireClaim("UserType", UserType.Organizer.ToString()));
 });
 
 var app = builder.Build();
