@@ -49,23 +49,6 @@ public class GameNightController : Controller
         return View(gameNights);
     }
 
-    public IActionResult Participate()
-    {
-        var identity = HttpContext.User.Identity;
-        var user = _userRepository.GetUserByEmail(identity!.Name!);
-
-        var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
-    
-        var result = _gameNightRepository.Participate(id, user);
-
-        if (!result) {
-            ModelState.AddModelError("", "Het is niet toegestaan om deel te nemen aan een spelavond voor volwassenen als iemand jonger dan 18 jaar!");
-            return Redirect($"/GameNight/Details/{id}"); 
-        }
-        
-        return RedirectToAction("Participating"); 
-    }
-
     [HttpGet]
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Organize()
@@ -127,6 +110,8 @@ public class GameNightController : Controller
         var user = _userRepository.GetUserByEmail(identity!.Name!);
 
         var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
+
+        gameNight = _gameNightRepository.GetGameNightById(id); 
     
         var result = _gameNightRepository.Participate(id, user);
 
@@ -135,7 +120,7 @@ public class GameNightController : Controller
             return View(gameNight); 
         }
         
-        return RedirectToAction("Participating"); 
+        return RedirectToAction(nameof(Participating)); 
     }
 
     [HttpGet]
@@ -198,7 +183,7 @@ public class GameNightController : Controller
 
         _gameNightRepository.UpdateGameNight(updatedGameNight);
 
-        return RedirectToAction("Organized");
+        return RedirectToAction(nameof(Organized));
     }
 
     [Authorize(Policy = "OnlyOrganizers")]
@@ -208,6 +193,6 @@ public class GameNightController : Controller
 
         _gameNightRepository.DeleteGameNight(id);
 
-        return RedirectToAction("Organized");
+        return RedirectToAction(nameof(Organized));
     }
 }
