@@ -168,6 +168,8 @@ public class GameNightController : Controller
 
         var gameIds = Request.Form.First(f => f.Key == "Game");
         var games = gameIds.Value.Select(gameId => _gameRepository.GetGameById(int.Parse(gameId))).ToList();
+        
+        var isForAdults = gameNightViewModel.IsOnlyForAdults || games.Any(g => g.IsOnlyForAdults);
 
         var updatedGameNight = new GameNight
         {
@@ -180,7 +182,7 @@ public class GameNightController : Controller
             Games = games,
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
-            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
+            IsOnlyForAdults = isForAdults, Organizer = user
         };
 
         _gameNightRepository.UpdateGameNight(updatedGameNight);
