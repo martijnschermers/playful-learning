@@ -6,40 +6,58 @@
 
 <h2>Spelavond aanpassen</h2>
 
-<form asp-action="Update" method="post">
-    <label for="address">Adres: </label>
-    <div id="address" class="form-group">
-        <input class="form-control" asp-for="City" placeholder="Stad"/>
-        <input class="form-control" asp-for="Street" placeholder="Straat"/>
-        <input class="form-control" asp-for="HouseNumber" placeholder="Huisnummer"/>
+<form asp-action="Update" class="row g-2" method="post">
+    <div class="row g-2">
+        <label asp-for="City"></label>
+        <div class="col-4">
+            <input asp-for="City" class="form-control" placeholder="Stad">
+        </div>
+        <div class="col">
+            <input asp-for="Street" class="form-control" placeholder="Straat">
+        </div>
+        <div class="col-1">
+            <input asp-for="HouseNumber" class="form-control" placeholder="Huisnummer">
+        </div>
     </div>
-    
+
     <div class="form-group">
-        <label asp-for="MaxPlayers">Maximaal aantal spelers: </label>
+        <label asp-for="MaxPlayers"></label>
         <input class="form-control" asp-for="MaxPlayers"/>
     </div>
-    
+
     <div class="form-group">
-        <label asp-for="DateTime">Datum en tijd: </label>
+        <label asp-for="DateTime"></label>
         <input class="form-control" asp-for="DateTime"/>
     </div>
-    
+
     <div class="form-group">
-        <label asp-for="IsPotluck">Potluck?</label>
+        <label asp-for="IsPotluck"></label>
         <input asp-for="IsPotluck"/>
     </div>
-    
+
     <div class="form-group">
-        <label asp-for="IsOnlyForAdults">Alleen voor volwassenen?</label>
+        <label asp-for="IsOnlyForAdults"></label>
         <input asp-for="IsOnlyForAdults"/>
     </div>
-    
-    <div class="form-group">
+
+    <div class="d-flex flex-column">
         <label asp-for="Games"></label>
-        <select class="form-select" asp-items="@ViewBag.Games"></select>
+        
+        @foreach (var game in Model.Games) {
+            <div class="form-group">
+                <label>@game.Name</label>
+                
+                @if (TempData.Contains(new KeyValuePair<string, object?>(game.Id.ToString(), game.Name))) {
+                    <input type="checkbox" checked name="Game" value="@game.Id"/>
+                } else {
+                    <input type="checkbox"  name="Game" value="@game.Id"/>
+                }
+                
+            </div>
+        }
     </div>
     
     <button class="btn btn-primary my-2" type="submit">Aanpassen</button>
-    
+
     <div class="text-danger" asp-validation-summary="All"></div>
 </form>

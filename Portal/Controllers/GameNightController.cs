@@ -53,10 +53,15 @@ public class GameNightController : Controller
     {
         var identity = HttpContext.User.Identity;
         var user = _userRepository.GetUserByEmail(identity!.Name!);
-        
+
         var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
     
-        _gameNightRepository.Participate(id, user);
+        var result = _gameNightRepository.Participate(id, user);
+
+        if (!result) {
+            ModelState.AddModelError("", "Het is niet toegestaan om deel te nemen aan een spelavond voor volwassenen als iemand jonger dan 18 jaar!");
+            return Redirect($"/GameNight/Details/{id}"); 
+        }
         
         return RedirectToAction("Participating"); 
     }
@@ -65,11 +70,9 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Organize()
     {
-        //TODO: Fix select menu in Organize.html for games
-        // var games = _gameRepository.GetAllGames().Select(g => g.Name);
-        // ViewBag.Games = new SelectList(games, "Name", "Name");
-
-        return View(new GameNightViewModel());
+        var games = _gameRepository.GetAllGames();
+                
+        return View(new GameNightViewModel(games));
     }
 
     [HttpPost]
@@ -77,9 +80,15 @@ public class GameNightController : Controller
     public IActionResult Organize(GameNightViewModel gameNightViewModel)
     {
         if (!ModelState.IsValid) {
-            return View();
+            return View(gameNightViewModel);
         }
 
+        var games = new List<Game>(); 
+        var gameIds = Request.Form.First(f => f.Key == "Game");
+        foreach (var gameId in gameIds.Value) {
+            games.Add(_gameRepository.GetGameById(int.Parse(gameId))); 
+        }
+        
         var identity = HttpContext.User.Identity;
         var user = _userRepository.GetUserByEmail(identity!.Name!);
 
@@ -90,7 +99,7 @@ public class GameNightController : Controller
                 Street = gameNightViewModel.Street, City = gameNightViewModel.City,
                 HouseNumber = gameNightViewModel.HouseNumber
             },
-            Drinks = new List<Drink>(), Foods = new List<Food>(), Games = new List<Game>(), Players = new List<User>(),
+            Drinks = new List<Drink>(), Foods = new List<Food>(), Games = games, Players = new List<User>(),
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
             IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
@@ -101,6 +110,7 @@ public class GameNightController : Controller
         return RedirectToAction(nameof(Organized));
     }
 
+    [HttpGet]
     public IActionResult Details()
     {
         var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
@@ -110,20 +120,47 @@ public class GameNightController : Controller
         return View(gameNight);
     }
 
+    [HttpPost]
+    public IActionResult Details(GameNight gameNight)
+    {
+        var identity = HttpContext.User.Identity;
+        var user = _userRepository.GetUserByEmail(identity!.Name!);
+
+        var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
+    
+        var result = _gameNightRepository.Participate(id, user);
+
+        if (!result) {
+            ModelState.AddModelError("", "Het is niet toegestaan om deel te nemen aan een spelavond voor volwassenen als iemand jonger dan 18 jaar!");
+            return View(gameNight); 
+        }
+        
+        return RedirectToAction("Participating"); 
+    }
+
     [HttpGet]
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Update()
     {
+        TempData.Clear();
+        
         var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
 
         var gameNight = _gameNightRepository.GetGameNightById(id);
+        var games = _gameRepository.GetAllGames();
+
+        foreach (var game in games) {
+            if (gameNight.Games.Contains(game)) {
+                TempData.Add(game.Id.ToString(), game.Name);
+            }
+        }
 
         var viewModel = new GameNightViewModel
         {
             City = gameNight.Address.City,
             Street = gameNight.Address.Street,
             HouseNumber = gameNight.Address.HouseNumber,
-            Games = gameNight.Games ?? new List<Game>(),
+            Games = games,
             DateTime = gameNight.DateTime,
             IsPotluck = gameNight.IsPotluck,
             MaxPlayers = gameNight.MaxPlayers,
@@ -142,6 +179,9 @@ public class GameNightController : Controller
 
         var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
 
+        var gameIds = Request.Form.First(f => f.Key == "Game");
+        var games = gameIds.Value.Select(gameId => _gameRepository.GetGameById(int.Parse(gameId))).ToList();
+
         var updatedGameNight = new GameNight
         {
             Id = id,
@@ -150,7 +190,7 @@ public class GameNightController : Controller
                 Street = gameNightViewModel.Street, City = gameNightViewModel.City,
                 HouseNumber = gameNightViewModel.HouseNumber
             },
-            Games = gameNightViewModel.Games,
+            Games = games,
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
             IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
