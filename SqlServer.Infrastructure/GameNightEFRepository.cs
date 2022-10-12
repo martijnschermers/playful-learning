@@ -89,7 +89,7 @@ public class GameNightEFRepository : IGameNightRepository
         _context.SaveChanges();
     }
 
-    public bool Participate(int gameNightId, User user)
+    public string Participate(int gameNightId, User user)
     {
         var gameNight = _context.GameNights
             .Where(g => g.Id == gameNightId)
@@ -100,12 +100,16 @@ public class GameNightEFRepository : IGameNightRepository
         if (user.BirthDate.Date > DateTime.Now.AddYears(-age)) age--;
 
         if (age < 18 && gameNight.IsOnlyForAdults) {
-            return false;
+            return "Het is niet toegestaan om deel te nemen aan een spelavond voor volwassenen als iemand jonger dan 18 jaar!";
+        }
+
+        if (gameNight.Players.Count + 1 > gameNight.MaxPlayers) {
+            return "Het is niet mogelijk om in te schrijven, omdat de spelavond vol is!";
         }
         
         gameNight.Players.Add(user);
         _context.SaveChanges();
         
-        return true; 
+        return ""; 
     }
 }

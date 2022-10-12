@@ -10,5 +10,5 @@ public interface IGameNightRepository
     GameNight GetGameNightById(int id);
     void UpdateGameNight(GameNight updatedGameNight);
     void DeleteGameNight(int gameNightId);
-    bool Participate(int gameNightId, User user); 
+    string Participate(int gameNightId, User user); 
 }

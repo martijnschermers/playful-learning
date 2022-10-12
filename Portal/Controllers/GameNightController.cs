@@ -115,9 +115,9 @@ public class GameNightController : Controller
     
         var result = _gameNightRepository.Participate(id, user);
 
-        if (!result) {
-            ModelState.AddModelError("", "Het is niet toegestaan om deel te nemen aan een spelavond voor volwassenen als iemand jonger dan 18 jaar!");
-            return View(gameNight); 
+        if (result != "") {
+            ModelState.AddModelError("", result);
+            return View(gameNight);
         }
         
         return RedirectToAction(nameof(Participating)); 
