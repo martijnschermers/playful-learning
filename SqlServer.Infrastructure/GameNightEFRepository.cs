@@ -42,6 +42,7 @@ public class GameNightEFRepository : IGameNightRepository
         return _context.GameNights
             .Where(g => g.Id == id)
             .Include(g => g.Address)
+            .Include(g => g.Games)
             .Include(g => g.Organizer)
             .Include(g => g.Players)
             .First();
@@ -49,7 +50,11 @@ public class GameNightEFRepository : IGameNightRepository
 
     public void UpdateGameNight(GameNight updatedGameNight)
     {
-        var originalGameNight = _context.GameNights.FirstOrDefault(g => g.Id == updatedGameNight.Id)!;
+        var originalGameNight = _context.GameNights
+            .Where(g => g.Id == updatedGameNight.Id)
+            .Include(g => g.Players)
+            .Include(g => g.Games)
+            .First();
 
         // When there are participants, updating is not allowed 
         if (originalGameNight.Players.Count > 0) {
@@ -72,6 +77,7 @@ public class GameNightEFRepository : IGameNightRepository
         var gameNight = _context.GameNights
             .Where(g => g.Id == gameNightId)
             .Include(g => g.Players)
+            .Include(g => g.Games)
             .First();
 
         // When there are participants, deleting is not allowed 
@@ -83,15 +89,23 @@ public class GameNightEFRepository : IGameNightRepository
         _context.SaveChanges();
     }
 
-    public void Participate(int gameNightId, User user)
+    public bool Participate(int gameNightId, User user)
     {
         var gameNight = _context.GameNights
             .Where(g => g.Id == gameNightId)
             .Include(g => g.Players)
             .First();    
         
-        gameNight.Players.Add(user);
+        var age = DateTime.Now.Year - user.BirthDate.Year;
+        if (user.BirthDate.Date > DateTime.Now.AddYears(-age)) age--;
 
+        if (age < 18 && gameNight.IsOnlyForAdults) {
+            return false;
+        }
+        
+        gameNight.Players.Add(user);
         _context.SaveChanges();
+        
+        return true; 
     }
 }
