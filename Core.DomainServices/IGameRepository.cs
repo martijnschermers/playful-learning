@@ -4,5 +4,6 @@ namespace Core.DomainServices;
 
 public interface IGameRepository
 {
-    ICollection<Game> GetAllGames(); 
+    ICollection<Game> GetAllGames();
+    Game GetGameById(int id); 
 }

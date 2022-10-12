@@ -16,4 +16,9 @@ public class GameEFRepository : IGameRepository
     {
         return _context.Games.ToList();
     }
+
+    public Game GetGameById(int id)
+    {
+        return _context.Games.Find(id)!;
+    }
 }
