@@ -71,7 +71,9 @@ public class GameNightController : Controller
         foreach (var gameId in gameIds.Value) {
             games.Add(_gameRepository.GetGameById(int.Parse(gameId))); 
         }
-        
+
+        var isForAdults = gameNightViewModel.IsOnlyForAdults || games.Any(g => g.IsOnlyForAdults);
+
         var identity = HttpContext.User.Identity;
         var user = _userRepository.GetUserByEmail(identity!.Name!);
 
@@ -85,7 +87,7 @@ public class GameNightController : Controller
             Drinks = new List<Drink>(), Foods = new List<Food>(), Games = games, Players = new List<User>(),
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
-            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
+            IsOnlyForAdults = isForAdults, Organizer = user
         };
 
         _gameNightRepository.AddGameNight(gameNight);
