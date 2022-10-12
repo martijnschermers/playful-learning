@@ -10,4 +10,10 @@
 <p>@Model.Address</p>
 <p>Aantal inschrijvingen: @Model.Players.Count</p>
 
-<a asp-action="Participate" asp-all-route-data="routeData">Inschrijven</a>
+@foreach (var game in Model.Games) {
+    <p>@game.Name</p>
+}
+
+<form asp-action="Details" method="post">
+    <button class="btn btn-primary" asp-all-route-data="routeData">Inschrijven</button>
+</form>
