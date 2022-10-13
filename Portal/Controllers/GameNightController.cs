@@ -20,13 +20,7 @@ public class GameNightController : Controller
         _gameRepository = gameRepository;
         _userRepository = userRepository;
     }
-
-    // Constructor for testing
-    public GameNightController(IGameNightRepository repository)
-    {
-        _gameNightRepository = repository;
-    }
-
+    
     public IActionResult Index()
     {
         var gameNights = _gameNightRepository.GetAllGameNights();

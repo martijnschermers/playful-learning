@@ -24,12 +24,6 @@ public class AccountController : Controller
         _signInManager = signInManager;
     }
 
-    // Constructor for testing
-    public AccountController(IUserRepository repository)
-    {
-        _repository = repository;
-    }
-
     [HttpGet]
     public IActionResult Login(string? returnUrl)
     {

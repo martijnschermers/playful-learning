@@ -1,4 +1,5 @@
 using Core.Domain;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 using Portal.Controllers;
 using Xunit;
@@ -12,11 +13,13 @@ public class UserTest
     {
         // Arrange
         var repositoryMock = new Mock<IUserRepository>();
+        var signInManagerMock = new Mock<SignInManager<IdentityUser>>();
+        var userManagerMock = new Mock<UserManager<IdentityUser>>(); 
         repositoryMock
             .Setup(r => r.GetUserByEmail("kees@gmail.com"))
             .Returns(new User { Id = 1, Email = "kees@gmail.com", Name = "Kees" });
 
-        var controller = new AccountController(repositoryMock.Object);
+        var controller = new AccountController(userManagerMock.Object, signInManagerMock.Object, repositoryMock.Object);
 
         // Act
         var user = controller.GetUserByEmail("kees@gmail.com");
@@ -39,10 +42,12 @@ public class UserTest
         };
         
         var repositoryMock = new Mock<IUserRepository>();
+        var signInManagerMock = new Mock<SignInManager<IdentityUser>>();
+        var userManagerMock = new Mock<UserManager<IdentityUser>>(); 
         repositoryMock
             .Setup(r => r.AddUser(user));
         
-        var controller = new AccountController(repositoryMock.Object);
+        var controller = new AccountController(userManagerMock.Object, signInManagerMock.Object, repositoryMock.Object);
 
         // Act
         // var user = controller.GetUserByEmail("kees@gmail.com");
