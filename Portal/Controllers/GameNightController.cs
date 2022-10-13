@@ -10,8 +10,8 @@ namespace Portal.Controllers;
 public class GameNightController : Controller
 {
     private readonly IGameNightRepository _gameNightRepository;
-    private readonly IGameRepository? _gameRepository;
-    private readonly IUserRepository? _userRepository;
+    private readonly IGameRepository _gameRepository;
+    private readonly IUserRepository _userRepository;
 
     public GameNightController(IGameNightRepository gameNightRepository, IGameRepository gameRepository,
         IUserRepository userRepository)
