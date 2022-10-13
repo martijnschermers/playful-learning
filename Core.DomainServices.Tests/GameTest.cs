@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
-using Core.DomainServices;
+using Core.Domain;
 using Moq;
 using Portal.Controllers;
 using Xunit;
 
-namespace Core.Domain.Tests;
+namespace Core.DomainServices.Tests;
 
 public class GameTest
 {

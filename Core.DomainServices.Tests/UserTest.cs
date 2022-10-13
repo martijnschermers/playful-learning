@@ -1,9 +1,9 @@
-using Core.DomainServices;
+using Core.Domain;
 using Moq;
 using Portal.Controllers;
 using Xunit;
 
-namespace Core.Domain.Tests;
+namespace Core.DomainServices.Tests;
 
 public class UserTest
 {
@@ -26,7 +26,7 @@ public class UserTest
         Assert.Equal("Kees", user.Name);
     }
 
-    [Fact]
+    // [Fact]
     //TODO:
     public void AddUser()
     {
