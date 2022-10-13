@@ -13,8 +13,8 @@ namespace Portal.Controllers;
 public class AccountController : Controller
 {
     private readonly IUserRepository _repository;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<IdentityUser>? _userManager;
+    private readonly SignInManager<IdentityUser>? _signInManager;
 
     public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
         IUserRepository repository)
@@ -22,6 +22,12 @@ public class AccountController : Controller
         _repository = repository;
         _userManager = userManager;
         _signInManager = signInManager;
+    }
+
+    // Constructor for testing
+    public AccountController(IUserRepository repository)
+    {
+        _repository = repository;
     }
 
     [HttpGet]
@@ -160,5 +166,11 @@ public class AccountController : Controller
     public IActionResult AccessDenied()
     {
         return View();
+    }
+    
+    // Method for testing
+    public User GetUserByEmail(string email)
+    {
+        return _repository.GetUserByEmail(email); 
     }
 }

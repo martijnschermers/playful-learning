@@ -10,8 +10,8 @@ namespace Portal.Controllers;
 public class GameNightController : Controller
 {
     private readonly IGameNightRepository _gameNightRepository;
-    private readonly IGameRepository _gameRepository;
-    private readonly IUserRepository _userRepository;
+    private readonly IGameRepository? _gameRepository;
+    private readonly IUserRepository? _userRepository;
 
     public GameNightController(IGameNightRepository gameNightRepository, IGameRepository gameRepository,
         IUserRepository userRepository)
@@ -19,6 +19,12 @@ public class GameNightController : Controller
         _gameNightRepository = gameNightRepository;
         _gameRepository = gameRepository;
         _userRepository = userRepository;
+    }
+
+    // Constructor for testing
+    public GameNightController(IGameNightRepository repository)
+    {
+        _gameNightRepository = repository;
     }
 
     public IActionResult Index()
@@ -198,5 +204,21 @@ public class GameNightController : Controller
         _gameNightRepository.DeleteGameNight(id);
 
         return RedirectToAction(nameof(Organized));
+    }
+    
+    // Methods for testing
+    public GameNight GetGameNightById(int id)
+    {
+        return _gameNightRepository.GetGameNightById(id);
+    }
+
+    public ICollection<GameNight> GetAllGameNights()
+    {
+        return _gameNightRepository.GetAllGameNights(); 
+    }
+
+    public ICollection<GameNight> GetParticipating(User user)
+    {
+        return _gameNightRepository.GetParticipating(user); 
     }
 }
