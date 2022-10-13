@@ -13,8 +13,8 @@ namespace Portal.Controllers;
 public class AccountController : Controller
 {
     private readonly IUserRepository _repository;
-    private readonly UserManager<IdentityUser>? _userManager;
-    private readonly SignInManager<IdentityUser>? _signInManager;
+    private readonly UserManager<IdentityUser> _userManager;
+    private readonly SignInManager<IdentityUser> _signInManager;
 
     public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
         IUserRepository repository)
@@ -70,30 +70,7 @@ public class AccountController : Controller
             return RedirectToAction("Index", "Home");
         }
 
-        var genders = new[]
-        {
-            new { Answer = Gender.Male, Description = "Man" },
-            new { Answer = Gender.Female, Description = "Vrouw" },
-            new { Answer = Gender.Unknown, Description = "Ik zeg het liever niet" }
-        };
-        ViewBag.Gender = new SelectList(genders, "Answer", "Description");
-
-        var allergies = new[]
-        {
-            new { Answer = AllergyEnum.Lactose, Description = "Lactose" },
-            new { Answer = AllergyEnum.Nuts, Description = "Noten" },
-            new { Answer = AllergyEnum.Soya, Description = "Soja" },
-            new { Answer = AllergyEnum.Wheat, Description = "Tarwe" },
-            new { Answer = AllergyEnum.Gluten, Description = "Gluten" },
-        };
-        ViewBag.Allergies = allergies;
-
-        var types = new[]
-        {
-            new { Answer = UserType.Organizer, Description = "Organisator" },
-            new { Answer = UserType.Participant, Description = "Speler" }
-        };
-        ViewBag.UserTypes = new SelectList(types, "Answer", "Description");
+        FillViewBag(); 
 
         return View(new RegisterViewModel());
     }
@@ -102,11 +79,13 @@ public class AccountController : Controller
     public async Task<IActionResult> RegisterAsync(RegisterViewModel registerViewModel)
     {
         if (!ModelState.IsValid) {
+            FillViewBag();
             return View();
         }
 
         if (await _userManager.FindByEmailAsync(registerViewModel.Email) != null) {
             ModelState.AddModelError("", "Emailadres is al in gebruik!");
+            FillViewBag();
             return View();
         }
 
@@ -129,13 +108,7 @@ public class AccountController : Controller
         var registerUserResult = await _userManager.CreateAsync(identityUser, registerViewModel.Password);
 
         if (!registerUserResult.Succeeded) {
-            var genders = new[]
-            {
-                new { Answer = Gender.Male, Description = "Man" },
-                new { Answer = Gender.Female, Description = "Vrouw" },
-                new { Answer = Gender.Unknown, Description = "Ik zeg het liever niet" }
-            };
-            ViewBag.Gender = new SelectList(genders, "Answer", "Description");
+            FillViewBag(); 
 
             foreach (var error in registerUserResult.Errors) {
                 ModelState.AddModelError("", error.Description);
@@ -160,6 +133,34 @@ public class AccountController : Controller
     public IActionResult AccessDenied()
     {
         return View();
+    }
+
+    private void FillViewBag()
+    {
+        var genders = new[]
+        {
+            new { Answer = Gender.Male, Description = "Man" },
+            new { Answer = Gender.Female, Description = "Vrouw" },
+            new { Answer = Gender.Unknown, Description = "Ik zeg het liever niet" }
+        };
+        ViewBag.Gender = new SelectList(genders, "Answer", "Description");
+
+        var allergies = new[]
+        {
+            new { Answer = AllergyEnum.Lactose, Description = "Lactose" },
+            new { Answer = AllergyEnum.Nuts, Description = "Noten" },
+            new { Answer = AllergyEnum.Soya, Description = "Soja" },
+            new { Answer = AllergyEnum.Wheat, Description = "Tarwe" },
+            new { Answer = AllergyEnum.Gluten, Description = "Gluten" },
+        };
+        ViewBag.Allergies = allergies;
+
+        var types = new[]
+        {
+            new { Answer = UserType.Organizer, Description = "Organisator" },
+            new { Answer = UserType.Participant, Description = "Speler" }
+        };
+        ViewBag.UserTypes = new SelectList(types, "Answer", "Description");
     }
     
     // Method for testing
