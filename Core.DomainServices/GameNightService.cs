@@ -10,6 +10,30 @@ public class GameNightService : IGameNightService
     {
         _repository = repository;
     }
+
+    public void UpdateGameNight(GameNight updatedGameNight)
+    {
+        var originalGameNight = _repository.GetGameNightById(updatedGameNight.Id); 
+        
+        // When there are participants, updating is not allowed 
+        if (originalGameNight.Players.Count > 0) {
+            return;
+        }
+        
+        _repository.UpdateGameNight(originalGameNight, updatedGameNight);
+    }
+
+    public void DeleteGameNight(int gameNightId)
+    {
+        var gameNight = _repository.GetGameNightById(gameNightId);
+        
+        // When there are participants, deleting is not allowed 
+        if (gameNight.Players.Count > 0) {
+            return;
+        }
+        
+        _repository.DeleteGameNight(gameNight);
+    }
     
     public string Participate(GameNight gameNight, User user)
     {

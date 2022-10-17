@@ -48,19 +48,8 @@ public class GameNightEFRepository : IGameNightRepository
             .First();
     }
 
-    public void UpdateGameNight(GameNight updatedGameNight)
+    public void UpdateGameNight(GameNight originalGameNight, GameNight updatedGameNight)
     {
-        var originalGameNight = _context.GameNights
-            .Where(g => g.Id == updatedGameNight.Id)
-            .Include(g => g.Players)
-            .Include(g => g.Games)
-            .First();
-
-        // When there are participants, updating is not allowed 
-        if (originalGameNight.Players.Count > 0) {
-            return;
-        }
-
         originalGameNight.MaxPlayers = updatedGameNight.MaxPlayers;
         originalGameNight.IsOnlyForAdults = updatedGameNight.IsOnlyForAdults;
         originalGameNight.IsPotluck = updatedGameNight.IsPotluck;
@@ -72,19 +61,8 @@ public class GameNightEFRepository : IGameNightRepository
         _context.SaveChanges();
     }
 
-    public void DeleteGameNight(int gameNightId)
+    public void DeleteGameNight(GameNight gameNight)
     {
-        var gameNight = _context.GameNights
-            .Where(g => g.Id == gameNightId)
-            .Include(g => g.Players)
-            .Include(g => g.Games)
-            .First();
-
-        // When there are participants, deleting is not allowed 
-        if (gameNight.Players.Count > 0) {
-            return;
-        }
-
         _context.GameNights.Remove(gameNight);
         _context.SaveChanges();
     }

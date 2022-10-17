@@ -10,12 +10,12 @@ namespace Portal.Controllers;
 public class GameNightController : Controller
 {
     private readonly IGameNightRepository _gameNightRepository;
-    private readonly IGameRepository _gameRepository;
-    private readonly IUserRepository _userRepository;
-    private readonly IGameNightService _gameNightService;
+    private readonly IGameRepository? _gameRepository;
+    private readonly IUserRepository? _userRepository;
+    private readonly IGameNightService? _gameNightService;
 
-    public GameNightController(IGameNightRepository gameNightRepository, IGameRepository gameRepository,
-        IUserRepository userRepository, IGameNightService gameNightService)
+    public GameNightController(IGameNightRepository gameNightRepository, IGameRepository? gameRepository,
+        IUserRepository? userRepository, IGameNightService? gameNightService)
     {
         _gameNightRepository = gameNightRepository;
         _gameRepository = gameRepository;
@@ -33,8 +33,7 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Organized()
     {
-        var identity = HttpContext.User.Identity;
-        var user = _userRepository.GetUserByEmail(identity!.Name!);
+        var user = GetUser();
 
         var gameNights = _gameNightRepository.GetAllGameNights().Where(g => g.Organizer == user);
 
@@ -43,9 +42,8 @@ public class GameNightController : Controller
 
     public IActionResult Participating()
     {
-        var identity = HttpContext.User.Identity;
-        var user = _userRepository.GetUserByEmail(identity!.Name!);
-
+        var user = GetUser();
+        
         var gameNights = _gameNightRepository.GetParticipating(user);
         
         return View(gameNights);
@@ -55,7 +53,7 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Organize()
     {
-        var games = _gameRepository.GetAllGames();
+        var games = _gameRepository!.GetAllGames();
                 
         return View(new GameNightViewModel(games));
     }
@@ -68,16 +66,12 @@ public class GameNightController : Controller
             return View(gameNightViewModel);
         }
 
-        var games = new List<Game>(); 
         var gameIds = Request.Form.First(f => f.Key == "Game");
-        foreach (var gameId in gameIds.Value) {
-            games.Add(_gameRepository.GetGameById(int.Parse(gameId))); 
-        }
+        var games = gameIds.Value.Select(gameId => _gameRepository!.GetGameById(int.Parse(gameId))).ToList();
 
         var isForAdults = gameNightViewModel.IsOnlyForAdults || games.Any(g => g.IsOnlyForAdults);
 
-        var identity = HttpContext.User.Identity;
-        var user = _userRepository.GetUserByEmail(identity!.Name!);
+        var user = GetUser();
 
         var gameNight = new GameNight
         {
@@ -100,7 +94,7 @@ public class GameNightController : Controller
     [HttpGet]
     public IActionResult Details()
     {
-        var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
+        var id = GetId();
 
         var gameNight = _gameNightRepository.GetGameNightById(id);
 
@@ -110,14 +104,13 @@ public class GameNightController : Controller
     [HttpPost]
     public IActionResult Details(GameNight gameNight)
     {
-        var identity = HttpContext.User.Identity;
-        var user = _userRepository.GetUserByEmail(identity!.Name!);
+        var user = GetUser();
 
-        var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
+        var id = GetId();
 
         gameNight = _gameNightRepository.GetGameNightById(id);
 
-        var result = _gameNightService.Participate(gameNight, user);
+        var result = _gameNightService!.Participate(gameNight, user);
 
         if (result != "") {
             ModelState.AddModelError("", result);
@@ -133,10 +126,10 @@ public class GameNightController : Controller
     {
         TempData.Clear();
         
-        var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
+        var id = GetId();
 
         var gameNight = _gameNightRepository.GetGameNightById(id);
-        var games = _gameRepository.GetAllGames();
+        var games = _gameRepository!.GetAllGames();
 
         foreach (var game in games) {
             if (gameNight.Games.Contains(game)) {
@@ -163,13 +156,12 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Update(GameNightViewModel gameNightViewModel)
     {
-        var identity = HttpContext.User.Identity;
-        var user = _userRepository.GetUserByEmail(identity!.Name!);
+        var user = GetUser();
+        var id = GetId();
 
-        var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
-
+        //TODO: Maybe move this logic to GameNightService?? 
         var gameIds = Request.Form.First(f => f.Key == "Game");
-        var games = gameIds.Value.Select(gameId => _gameRepository.GetGameById(int.Parse(gameId))).ToList();
+        var games = gameIds.Value.Select(gameId => _gameRepository!.GetGameById(int.Parse(gameId))).ToList();
         
         var isForAdults = gameNightViewModel.IsOnlyForAdults || games.Any(g => g.IsOnlyForAdults);
 
@@ -187,7 +179,7 @@ public class GameNightController : Controller
             IsOnlyForAdults = isForAdults, Organizer = user
         };
 
-        _gameNightRepository.UpdateGameNight(updatedGameNight);
+        _gameNightService!.UpdateGameNight(updatedGameNight);
 
         return RedirectToAction(nameof(Organized));
     }
@@ -195,17 +187,34 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Delete()
     {
-        var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
+        var id = GetId();
 
-        _gameNightRepository.DeleteGameNight(id);
+        _gameNightService!.DeleteGameNight(id);
 
         return RedirectToAction(nameof(Organized));
     }
     
+    // General methods
+    public User GetUser()
+    {
+        var identity = HttpContext.User.Identity;
+        return _userRepository!.GetUserByEmail(identity!.Name!);
+    }
+
+    public int GetId()
+    {
+        return int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
+    }
+    
     // Methods for testing
+    public void AddGameNight(GameNight gameNight)
+    {
+        _gameNightRepository.AddGameNight(gameNight);
+    }
+    
     public string Participate(GameNight gameNight, User user)
     {
-        return _gameNightService.Participate(gameNight, user);
+        return _gameNightService!.Participate(gameNight, user);
     }
     
     public GameNight GetGameNightById(int id)
