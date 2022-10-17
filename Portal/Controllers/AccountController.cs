@@ -13,10 +13,10 @@ namespace Portal.Controllers;
 public class AccountController : Controller
 {
     private readonly IUserRepository _repository;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<IdentityUser>? _userManager;
+    private readonly SignInManager<IdentityUser>? _signInManager;
 
-    public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
+    public AccountController(UserManager<IdentityUser>? userManager, SignInManager<IdentityUser>? signInManager,
         IUserRepository repository)
     {
         _repository = repository;
