@@ -12,6 +12,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IGameNightRepository, GameNightEFRepository>();
 builder.Services.AddScoped<IGameRepository, GameEFRepository>();
 builder.Services.AddScoped<IUserRepository, UserEFRepository>();
+builder.Services.AddScoped<IAllergyRepository, AllergyEFRepository>();
+
 builder.Services.AddScoped<IGameNightService, GameNightService>();
 
 builder.Services.AddDbContext<DomainDbContext>(options =>

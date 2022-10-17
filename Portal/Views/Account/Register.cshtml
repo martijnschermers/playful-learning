@@ -45,10 +45,10 @@
         <select class="form-select" asp-for="UserType" asp-items="ViewBag.UserTypes"></select>
     </div>
 
-    @* @foreach (var allergy in ViewBag.Allergies) { *@
-    @*     <label>@allergy["Description"]</label> *@
-    @*     <input onclick="@Model.Allergies.Add(allergy)" type="checkbox" value="@allergy["Answer"]"/> *@
-    @* } *@
+    @foreach (var allergy in Model.Allergies) {
+        <label>@allergy.Description</label>
+        <input name="Allergy" type="checkbox" value="@allergy.Id"/>
+    }
 
     <div class="form-group">
         <label asp-for="Password">Wachtwoord: </label>

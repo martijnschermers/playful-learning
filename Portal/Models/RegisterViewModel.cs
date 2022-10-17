@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Core.Domain;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Portal.Models;
 
@@ -26,7 +27,8 @@ public class RegisterViewModel
     
     public UserType UserType { get; set; }
     
-    // public List<Allergy> Allergies { get; set; }
+    [ValidateNever]
+    public ICollection<Allergy> Allergies { get; set; }
     
     [DataType(DataType.Password)]
     [Required(ErrorMessage = "Wachtwoord is verplicht!")]
