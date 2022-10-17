@@ -10,4 +10,11 @@ public class User
     public Address Address { get; set; }
     public UserType Type { get; set; }
     public ICollection<Allergy> Allergies { get; set; }
+
+    public int GetAge()
+    {
+        var age = DateTime.Now.Year - BirthDate.Year;
+        if (BirthDate.Date > DateTime.Now.AddYears(-age)) age--;
+        return age; 
+    }
 }
