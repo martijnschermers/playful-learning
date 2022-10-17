@@ -16,11 +16,12 @@ public class GameNightTest
         var repositoryMock = new Mock<IGameNightRepository>();
         var gameRepoMock = new Mock<IGameRepository>(); 
         var userRepoMock = new Mock<IUserRepository>(); 
+        var gameNightServiceMock = new Mock<IGameNightService>(); 
         repositoryMock
             .Setup(r => r.GetGameNightById(1))
             .Returns(new GameNight { Id = 1, DateTime = new DateTime(2022, 4, 2) });
 
-        var controller = new GameNightController(repositoryMock.Object, gameRepoMock.Object, userRepoMock.Object);
+        var controller = new GameNightController(repositoryMock.Object, gameRepoMock.Object, userRepoMock.Object, gameNightServiceMock.Object);
 
         // Act
         var gameNight = controller.GetGameNightById(1);
@@ -40,11 +41,12 @@ public class GameNightTest
         var repositoryMock = new Mock<IGameNightRepository>();
         var gameRepoMock = new Mock<IGameRepository>(); 
         var userRepoMock = new Mock<IUserRepository>(); 
+        var gameNightServiceMock = new Mock<IGameNightService>();
         repositoryMock
             .Setup(r => r.GetAllGameNights())
             .Returns(new List<GameNight> { gameNight1, gameNight2 });
 
-        var controller = new GameNightController(repositoryMock.Object, gameRepoMock.Object, userRepoMock.Object);
+        var controller = new GameNightController(repositoryMock.Object, gameRepoMock.Object, userRepoMock.Object, gameNightServiceMock.Object);
 
         // Act
         var games = controller.GetAllGameNights();
@@ -67,11 +69,12 @@ public class GameNightTest
         var repositoryMock = new Mock<IGameNightRepository>();
         var gameRepoMock = new Mock<IGameRepository>(); 
         var userRepoMock = new Mock<IUserRepository>(); 
+        var gameNightServiceMock = new Mock<IGameNightService>();
         repositoryMock
             .Setup(r => r.GetParticipating(kees))
             .Returns(new List<GameNight> { gameNight1 });
 
-        var controller = new GameNightController(repositoryMock.Object, gameRepoMock.Object, userRepoMock.Object);
+        var controller = new GameNightController(repositoryMock.Object, gameRepoMock.Object, userRepoMock.Object, gameNightServiceMock.Object);
 
         // Act
         var gameNights = controller.GetParticipating(kees);

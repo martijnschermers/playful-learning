@@ -12,21 +12,21 @@ public class UserTest
     public void GetUserByEmail()
     {
         // Arrange
+        var user = new User { Id = 1, Email = "kees@gmail.com", Name = "Kees" };
+        
         var repositoryMock = new Mock<IUserRepository>();
-        var signInManagerMock = new Mock<SignInManager<IdentityUser>>();
-        var userManagerMock = new Mock<UserManager<IdentityUser>>(); 
         repositoryMock
             .Setup(r => r.GetUserByEmail("kees@gmail.com"))
-            .Returns(new User { Id = 1, Email = "kees@gmail.com", Name = "Kees" });
+            .Returns(user);
 
-        var controller = new AccountController(userManagerMock.Object, signInManagerMock.Object, repositoryMock.Object);
+        var controller = new AccountController(null, null, repositoryMock.Object);
 
         // Act
-        var user = controller.GetUserByEmail("kees@gmail.com");
+        var result = controller.GetUserByEmail("kees@gmail.com");
 
         // Assert
         repositoryMock.Verify(r => r.GetUserByEmail("kees@gmail.com"));
-        Assert.Equal("Kees", user.Name);
+        Assert.Equal("Kees", result.Name);
     }
 
     // [Fact]
@@ -42,12 +42,10 @@ public class UserTest
         };
         
         var repositoryMock = new Mock<IUserRepository>();
-        var signInManagerMock = new Mock<SignInManager<IdentityUser>>();
-        var userManagerMock = new Mock<UserManager<IdentityUser>>(); 
         repositoryMock
             .Setup(r => r.AddUser(user));
         
-        var controller = new AccountController(userManagerMock.Object, signInManagerMock.Object, repositoryMock.Object);
+        var controller = new AccountController(null, null, repositoryMock.Object);
 
         // Act
         // var user = controller.GetUserByEmail("kees@gmail.com");
