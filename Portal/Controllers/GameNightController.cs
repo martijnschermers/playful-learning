@@ -12,13 +12,15 @@ public class GameNightController : Controller
     private readonly IGameNightRepository _gameNightRepository;
     private readonly IGameRepository _gameRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IGameNightService _gameNightService;
 
     public GameNightController(IGameNightRepository gameNightRepository, IGameRepository gameRepository,
-        IUserRepository userRepository)
+        IUserRepository userRepository, IGameNightService gameNightService)
     {
         _gameNightRepository = gameNightRepository;
         _gameRepository = gameRepository;
         _userRepository = userRepository;
+        _gameNightService = gameNightService;
     }
     
     public IActionResult Index()
@@ -113,9 +115,9 @@ public class GameNightController : Controller
 
         var id = int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
 
-        gameNight = _gameNightRepository.GetGameNightById(id); 
-    
-        var result = _gameNightRepository.Participate(id, user);
+        gameNight = _gameNightRepository.GetGameNightById(id);
+
+        var result = _gameNightService.Participate(gameNight, user);
 
         if (result != "") {
             ModelState.AddModelError("", result);
@@ -201,6 +203,11 @@ public class GameNightController : Controller
     }
     
     // Methods for testing
+    public string Participate(GameNight gameNight, User user)
+    {
+        return _gameNightService.Participate(gameNight, user);
+    }
+    
     public GameNight GetGameNightById(int id)
     {
         return _gameNightRepository.GetGameNightById(id);
