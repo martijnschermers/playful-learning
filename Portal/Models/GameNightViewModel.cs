@@ -5,16 +5,6 @@ namespace Portal.Models;
 
 public class GameNightViewModel
 {
-    public GameNightViewModel()
-    {
-        Games = new List<Game>();
-    }
-
-    public GameNightViewModel(ICollection<Game> games)
-    {
-        Games = games; 
-    }
-    
     [Display(Name = "Adres: ")]
     [Required(ErrorMessage = "Stad is verplicht!")]
     public string City { get; set; }

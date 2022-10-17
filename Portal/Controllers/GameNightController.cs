@@ -53,9 +53,7 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Organize()
     {
-        var games = _gameRepository!.GetAllGames();
-                
-        return View(new GameNightViewModel(games));
+        return View(new GameNightViewModel{ Games = _gameRepository!.GetAllGames() });
     }
 
     [HttpPost]
@@ -63,7 +61,7 @@ public class GameNightController : Controller
     public IActionResult Organize(GameNightViewModel gameNightViewModel)
     {
         if (!ModelState.IsValid) {
-            return View(gameNightViewModel);
+            return View(new GameNightViewModel { Games = _gameRepository!.GetAllGames() });
         }
 
         var gameIds = Request.Form.First(f => f.Key == "Game");
