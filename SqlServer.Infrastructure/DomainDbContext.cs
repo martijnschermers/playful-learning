@@ -8,6 +8,7 @@ public class DomainDbContext : DbContext
     public DbSet<GameNight> GameNights { get; set; }
     public DbSet<Game> Games { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Allergy> Allergies { get; set; }
     
     public DomainDbContext(DbContextOptions<DomainDbContext> options) : base(options)
     {
@@ -23,8 +24,18 @@ public class DomainDbContext : DbContext
             new Game { Id = 3, Name = "Monopoly", Description = "Het spel met geld.", Genre = Genre.Kids, Image = "", Type = GameType.Board, IsOnlyForAdults = false }
         };
 
+        var allergies = new List<Allergy>
+        {
+            new Allergy { Id = 1, Name = AllergyEnum.Gluten, Description = "Gluten"},
+            new Allergy { Id = 2, Name = AllergyEnum.Lactose, Description = "Lactose"},
+            new Allergy { Id = 3, Name = AllergyEnum.Nuts, Description = "Noten"},
+            new Allergy { Id = 4, Name = AllergyEnum.Soya, Description = "Soja" },
+            new Allergy { Id = 5, Name = AllergyEnum.Wheat, Description = "Tarwe"}
+        };
+
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Game>().HasData(games);
+        modelBuilder.Entity<Allergy>().HasData(allergies);
     }
 }
