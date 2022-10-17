@@ -19,7 +19,7 @@ public class UserTest
             .Setup(r => r.GetUserByEmail("kees@gmail.com"))
             .Returns(user);
 
-        var controller = new AccountController(null, null, repositoryMock.Object);
+        var controller = new AccountController(repositoryMock.Object, null, null, null);
 
         // Act
         var result = controller.GetUserByEmail("kees@gmail.com");
@@ -45,7 +45,7 @@ public class UserTest
         repositoryMock
             .Setup(r => r.AddUser(user));
         
-        var controller = new AccountController(null, null, repositoryMock.Object);
+        var controller = new AccountController(repositoryMock.Object, null, null, null);
 
         // Act
         // var user = controller.GetUserByEmail("kees@gmail.com");
