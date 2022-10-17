@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Core.Domain;
 using Moq;
-using Portal.Controllers;
 using Xunit;
 
 namespace Core.DomainServices.Tests;
@@ -70,5 +69,27 @@ public class GameNightServiceTest
 
         // Assert
         Assert.Equal("Het is niet mogelijk om in te schrijven, omdat de spelavond vol is!", result);
+    }
+
+    // [Fact]
+    public void Deleting_GameNight_Successful()
+    {
+        // Arrange
+        var gameNight = new GameNight { Id = 1, DateTime = new DateTime(2022, 3, 4), Players = new List<User>(), IsOnlyForAdults = false, MaxPlayers = 0 };
+
+        var repositoryMock = new Mock<IGameNightRepository>();
+        var gameNightServiceMock = new Mock<IGameNightService>();
+        gameNightServiceMock
+            .Setup(r => r.DeleteGameNight(gameNight.Id));
+
+        var service = new GameNightService(repositoryMock.Object);
+
+        // Act
+        //Add the gamenight
+        service.DeleteGameNight(gameNight.Id);
+        var result = new List<GameNight>(); // Get all gamenights
+            
+        // Assert
+        Assert.DoesNotContain(gameNight, result);
     }
 }
