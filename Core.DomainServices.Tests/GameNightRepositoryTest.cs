@@ -10,18 +10,15 @@ namespace Core.DomainServices.Tests;
 public class GameNightTest
 {
     [Fact]
-    public void GetGameNightById()
+    public void GetGameNightById_Returns_Correct_GameNight()
     {
         // Arrange
         var repositoryMock = new Mock<IGameNightRepository>();
-        var gameRepoMock = new Mock<IGameRepository>(); 
-        var userRepoMock = new Mock<IUserRepository>(); 
-        var gameNightServiceMock = new Mock<IGameNightService>(); 
         repositoryMock
             .Setup(r => r.GetGameNightById(1))
             .Returns(new GameNight { Id = 1, DateTime = new DateTime(2022, 4, 2) });
 
-        var controller = new GameNightController(repositoryMock.Object, gameRepoMock.Object, userRepoMock.Object, gameNightServiceMock.Object);
+        var controller = new GameNightController(repositoryMock.Object, null, null, null);
 
         // Act
         var gameNight = controller.GetGameNightById(1);
@@ -32,21 +29,18 @@ public class GameNightTest
     }
 
     [Fact]
-    public void GetAllGameNights()
+    public void GetAllGameNights_Returns_All_GameNights()
     {
         // Arrange
         var gameNight1 = new GameNight { Id = 1, DateTime = new DateTime(2022, 3, 4) };
         var gameNight2 = new GameNight { Id = 2, DateTime = new DateTime(2022, 5, 8) };
 
         var repositoryMock = new Mock<IGameNightRepository>();
-        var gameRepoMock = new Mock<IGameRepository>(); 
-        var userRepoMock = new Mock<IUserRepository>(); 
-        var gameNightServiceMock = new Mock<IGameNightService>();
         repositoryMock
             .Setup(r => r.GetAllGameNights())
             .Returns(new List<GameNight> { gameNight1, gameNight2 });
 
-        var controller = new GameNightController(repositoryMock.Object, gameRepoMock.Object, userRepoMock.Object, gameNightServiceMock.Object);
+        var controller = new GameNightController(repositoryMock.Object, null, null, null);
 
         // Act
         var games = controller.GetAllGameNights();
@@ -58,7 +52,7 @@ public class GameNightTest
     }
 
     [Fact]
-    public void GetParticipating()
+    public void GetParticipating_Returns_All_GameNights_In_Which_You_Participate()
     {
         // Arrange
         var kees = new User { Id = 1, Name = "Kees" };
@@ -67,14 +61,11 @@ public class GameNightTest
         var gameNight2 = new GameNight { Id = 2, DateTime = new DateTime(2022, 5, 8), Players = new List<User>{ jan } };
 
         var repositoryMock = new Mock<IGameNightRepository>();
-        var gameRepoMock = new Mock<IGameRepository>(); 
-        var userRepoMock = new Mock<IUserRepository>(); 
-        var gameNightServiceMock = new Mock<IGameNightService>();
         repositoryMock
             .Setup(r => r.GetParticipating(kees))
             .Returns(new List<GameNight> { gameNight1 });
 
-        var controller = new GameNightController(repositoryMock.Object, gameRepoMock.Object, userRepoMock.Object, gameNightServiceMock.Object);
+        var controller = new GameNightController(repositoryMock.Object, null, null, null);
 
         // Act
         var gameNights = controller.GetParticipating(kees);
@@ -85,23 +76,23 @@ public class GameNightTest
         Assert.DoesNotContain(gameNight2, gameNights);
     }
 
-    [Fact]
-    public void AddGameNight()
+    // [Fact]
+    public void AddGameNight_Adds_A_GameNight()
     {
-    }
+        // Arrange
+        var gameNight = new GameNight { Id = 1, DateTime = new DateTime(2022, 3, 4), Players = new List<User>() };
 
-    [Fact]
-    public void UpdateGameNight()
-    {
-    }
+        var repositoryMock = new Mock<IGameNightRepository>();
+        repositoryMock
+            .Setup(r => r.AddGameNight(gameNight));
+        
+        var controller = new GameNightController(repositoryMock.Object, null, null, null);
 
-    [Fact]
-    public void DeleteGameNight()
-    {
-    }
+        // Act
+        var gameNights = controller.GetAllGameNights();
 
-    [Fact]
-    public void Participate()
-    {
+        // Assert
+        repositoryMock.Verify(r => r.AddGameNight(gameNight));
+        Assert.Contains(gameNight, gameNights);
     }
 }

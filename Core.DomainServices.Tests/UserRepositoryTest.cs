@@ -9,7 +9,7 @@ namespace Core.DomainServices.Tests;
 public class UserTest
 {
     [Fact]
-    public void GetUserByEmail()
+    public void GetUserByEmail_Returns_The_Correct_User_By_Email()
     {
         // Arrange
         var user = new User { Id = 1, Email = "kees@gmail.com", Name = "Kees" };
@@ -31,7 +31,7 @@ public class UserTest
 
     // [Fact]
     //TODO:
-    public void AddUser()
+    public void AddUser_Adds_A_User()
     {
         // Arrange
         var user = new User

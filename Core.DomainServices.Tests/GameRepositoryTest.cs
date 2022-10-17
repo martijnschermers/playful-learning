@@ -9,7 +9,7 @@ namespace Core.DomainServices.Tests;
 public class GameTest
 {
     [Fact]
-    public void GetGameById()
+    public void GetGameById_Returns_The_Correct_Game()
     {
         // Arrange
         var repositoryMock = new Mock<IGameRepository>();
@@ -28,7 +28,7 @@ public class GameTest
     }
 
     [Fact]
-    public void GetAllGames()
+    public void GetAllGames_Returns_All_Games()
     {
         var game1 = new Game { Id = 1, Name = "Uno", Description = "Leuk spel" };
         var game2 = new Game { Id = 2, Name = "Monopoly", Description = "Leuk spel" };
