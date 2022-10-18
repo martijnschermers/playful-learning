@@ -45,14 +45,8 @@
         
         @foreach (var game in Model.Games) {
             <div class="form-group">
-                <label>@game.Name</label>
-                
-                @if (TempData.Contains(new KeyValuePair<string, object?>(game.Id.ToString(), game.Name))) {
-                    <input type="checkbox" checked name="Game" value="@game.Id"/>
-                } else {
-                    <input type="checkbox"  name="Game" value="@game.Id"/>
-                }
-                
+                <label>@game.Description</label>
+                <input type="checkbox" checked="@game.IsChecked" name="Game" value="@game.Value"/>
             </div>
         }
     </div>

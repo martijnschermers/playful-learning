@@ -22,7 +22,7 @@ public class GameNightController : Controller
         _userRepository = userRepository;
         _gameNightService = gameNightService;
     }
-    
+
     public IActionResult Index()
     {
         var gameNights = _gameNightRepository.GetAllGameNights();
@@ -43,9 +43,9 @@ public class GameNightController : Controller
     public IActionResult Participating()
     {
         var user = GetUser();
-        
+
         var gameNights = _gameNightRepository.GetParticipating(user);
-        
+
         return View(gameNights);
     }
 
@@ -53,7 +53,12 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Organize()
     {
-        return View(new GameNightViewModel{ Games = _gameRepository!.GetAllGames() });
+        var games = _gameRepository!.GetAllGames()
+            .Select(game => new CheckboxOption
+                { Description = game.Name, Value = game.Id, IsChecked = false })
+            .ToList();
+
+        return View(new GameNightViewModel { Games = games });
     }
 
     [HttpPost]
@@ -61,11 +66,16 @@ public class GameNightController : Controller
     public IActionResult Organize(GameNightViewModel gameNightViewModel)
     {
         if (!ModelState.IsValid) {
-            return View(new GameNightViewModel { Games = _gameRepository!.GetAllGames() });
+            var checkboxOptions = _gameRepository!.GetAllGames()
+                .Select(game => new CheckboxOption { Description = game.Name, Value = game.Id, IsChecked = false })
+                .ToList();
+
+            return View(new GameNightViewModel { Games = checkboxOptions });
         }
 
-        var gameIds = Request.Form.First(f => f.Key == "Game");
-        var games = gameIds.Value.Select(gameId => _gameRepository!.GetGameById(int.Parse(gameId))).ToList();
+        var games = gameNightViewModel.Game
+            .Select(gameId => _gameRepository!.GetGameById(gameId))
+            .ToList();
 
         var isForAdults = gameNightViewModel.IsOnlyForAdults || games.Any(g => g.IsOnlyForAdults);
 
@@ -114,25 +124,27 @@ public class GameNightController : Controller
             ModelState.AddModelError("", result);
             return View(gameNight);
         }
-        
-        return RedirectToAction(nameof(Participating)); 
+
+        return RedirectToAction(nameof(Participating));
     }
 
     [HttpGet]
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Update()
     {
-        TempData.Clear();
-        
         var id = GetId();
 
         var gameNight = _gameNightRepository.GetGameNightById(id);
         var games = _gameRepository!.GetAllGames();
 
+        var checkBoxes = new List<CheckboxOption>();
         foreach (var game in games) {
-            if (gameNight.Games.Contains(game)) {
-                TempData.Add(game.Id.ToString(), game.Name);
-            }
+            var isChecked = gameNight.Games.Contains(game);
+
+            checkBoxes.Add(new CheckboxOption()
+            {
+                Description = game.Name, Value = game.Id, IsChecked = isChecked,
+            });
         }
 
         var viewModel = new GameNightViewModel
@@ -140,7 +152,7 @@ public class GameNightController : Controller
             City = gameNight.Address.City,
             Street = gameNight.Address.Street,
             HouseNumber = gameNight.Address.HouseNumber,
-            Games = games,
+            Games = checkBoxes,
             DateTime = gameNight.DateTime,
             IsPotluck = gameNight.IsPotluck,
             MaxPlayers = gameNight.MaxPlayers,
@@ -156,11 +168,28 @@ public class GameNightController : Controller
     {
         var user = GetUser();
         var id = GetId();
-
-        //TODO: Maybe move this logic to GameNightService?? 
-        var gameIds = Request.Form.First(f => f.Key == "Game");
-        var games = gameIds.Value.Select(gameId => _gameRepository!.GetGameById(int.Parse(gameId))).ToList();
         
+        if (!ModelState.IsValid) {
+            var gameNight = _gameNightRepository.GetGameNightById(id);
+            var allGames = _gameRepository!.GetAllGames();
+
+            var checkBoxes = new List<CheckboxOption>();
+            foreach (var game in allGames) {
+                var isChecked = gameNight.Games.Contains(game);
+
+                checkBoxes.Add(new CheckboxOption()
+                {
+                    Description = game.Name, Value = game.Id, IsChecked = isChecked,
+                });
+            }
+
+            return View(new GameNightViewModel { Games = checkBoxes });
+        }
+
+        var games = gameNightViewModel.Game
+            .Select(gameId => _gameRepository!.GetGameById(gameId))
+            .ToList();
+
         var isForAdults = gameNightViewModel.IsOnlyForAdults || games.Any(g => g.IsOnlyForAdults);
 
         var updatedGameNight = new GameNight
@@ -191,7 +220,7 @@ public class GameNightController : Controller
 
         return RedirectToAction(nameof(Organized));
     }
-    
+
     // General methods
     public User GetUser()
     {
@@ -203,18 +232,18 @@ public class GameNightController : Controller
     {
         return int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
     }
-    
+
     // Methods for testing
     public void AddGameNight(GameNight gameNight)
     {
         _gameNightRepository.AddGameNight(gameNight);
     }
-    
+
     public string Participate(GameNight gameNight, User user)
     {
         return _gameNightService!.Participate(gameNight, user);
     }
-    
+
     public GameNight GetGameNightById(int id)
     {
         return _gameNightRepository.GetGameNightById(id);
@@ -222,11 +251,11 @@ public class GameNightController : Controller
 
     public ICollection<GameNight> GetAllGameNights()
     {
-        return _gameNightRepository.GetAllGameNights(); 
+        return _gameNightRepository.GetAllGameNights();
     }
 
     public ICollection<GameNight> GetParticipating(User user)
     {
-        return _gameNightRepository.GetParticipating(user); 
+        return _gameNightRepository.GetParticipating(user);
     }
 }

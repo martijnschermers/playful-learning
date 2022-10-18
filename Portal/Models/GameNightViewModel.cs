@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Core.Domain;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Portal.Models;
 
@@ -29,7 +29,10 @@ public class GameNightViewModel
     [Display(Name = "Alleen voor volwassenen?")]
     public bool IsOnlyForAdults { get; set; }
 
-    [Required(ErrorMessage = "Spellen zijn verplicht!")]
     [Display(Name = "Spellen")]
-    public ICollection<Game> Games { get; set; }
+    [ValidateNever]
+    public List<CheckboxOption> Games { get; set; }
+    
+    [Required(ErrorMessage = "Spellen zijn verplicht!")]
+    public List<int> Game { get; set; }
 }

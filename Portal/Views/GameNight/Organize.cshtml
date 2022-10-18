@@ -45,8 +45,8 @@
         
         @foreach (var game in Model.Games) {
             <div class="form-group">
-                <label>@game.Name</label>
-                <input type="checkbox" name="Game" value="@game.Id"/>
+                <label>@game.Description</label>
+                <input type="checkbox" name="Game" value="@game.Value"/>
             </div>
         }
     </div>
