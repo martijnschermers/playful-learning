@@ -74,15 +74,31 @@ public class AccountController : Controller
 
         FillViewBag();
 
-        return View(new RegisterViewModel { Allergies = _allergyRepository!.GetAllAllergies() });
+        var allergies = _allergyRepository!.GetAllAllergies()
+            .Select(allergy => new CheckboxOption
+                { Description = allergy.Description, Value = allergy.Id, IsChecked = false })
+            .ToList();
+
+        return View(new RegisterViewModel { Allergies = allergies });
     }
 
     [HttpPost]
     public async Task<IActionResult> RegisterAsync(RegisterViewModel registerViewModel)
     {
-        var returnViewModel = new RegisterViewModel { Allergies = _allergyRepository!.GetAllAllergies() };
+        var incomingAllergies = _allergyRepository!.GetAllAllergies()
+            .Select(allergy => new CheckboxOption
+                { Description = allergy.Description, Value = allergy, IsChecked = false })
+            .ToList();
+
+        var returnViewModel = new RegisterViewModel { Allergies = incomingAllergies };
 
         if (!ModelState.IsValid) {
+            FillViewBag();
+            return View(returnViewModel);
+        }
+
+        if (registerViewModel.BirthDate > DateTime.Now) {
+            ModelState.AddModelError("", "De geboortedatum mag niet in de toekomst liggen!");
             FillViewBag();
             return View(returnViewModel);
         }
@@ -94,8 +110,8 @@ public class AccountController : Controller
         }
 
         //TODO: Maybe move this to service???
-        var allergyIds = Request.Form.First(f => f.Key == "Allergy");
-        var allergies = allergyIds.Value.Select(allergyId => _allergyRepository!.GetAllergyById(int.Parse(allergyId)))
+        var allergies = registerViewModel.Allergy
+            .Select(allergyId => _allergyRepository!.GetAllergyById(allergyId))
             .ToList();
 
         var user = new User
@@ -109,6 +125,13 @@ public class AccountController : Controller
             Email = registerViewModel.Email, Gender = registerViewModel.Gender, Name = registerViewModel.Username,
             BirthDate = registerViewModel.BirthDate
         };
+
+        if (registerViewModel.UserType == UserType.Organizer && user.GetAge() < 18) {
+            ModelState.AddModelError("", "Je moet 18 jaar oud zijn om een organisator te zijn!");
+            FillViewBag();
+            return View(returnViewModel);
+        }
+
         _repository.AddUser(user);
 
         var identityUser = new IdentityUser(registerViewModel.Email)

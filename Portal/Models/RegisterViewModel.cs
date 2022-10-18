@@ -32,12 +32,15 @@ public class RegisterViewModel
     
     [Display(Name = "Type gebruiker: ")]
     public UserType UserType { get; set; }
-    [Display(Name = "Vegetariër: ")]
+    [Display(Name = "Vegetariër ")]
     public bool IsVegetarian { get; set; }
     
     [ValidateNever]
-    [Display(Name = "Allergieën: ")]
-    public ICollection<Allergy> Allergies { get; set; }
+    [Display(Name = "Dieetwensen/Allergieën: ")]
+    public List<CheckboxOption> Allergies { get; set; }
+    
+    [ValidateNever]
+    public List<int> Allergy { get; set; }
     
     [Display(Name = "Wachtwoord: ")]
     [DataType(DataType.Password)]
