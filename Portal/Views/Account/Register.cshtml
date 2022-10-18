@@ -8,22 +8,22 @@
 
 <form asp-action="Register" class="row g-2" method="post">
     <div class="form-group">
-        <label asp-for="Username">Gebruikersnaam: </label>
+        <label asp-for="Username"></label>
         <input class="form-control" asp-for="Username"/>
     </div>
 
     <div class="form-group">
-        <label asp-for="Email">Emailadres: </label>
+        <label asp-for="Email"></label>
         <input class="form-control" asp-for="Email"/>
     </div>
 
     <div class="form-group">
-        <label asp-for="BirthDate">Geboortedatum: </label>
+        <label asp-for="BirthDate"></label>
         <input class="form-control" asp-for="BirthDate"/>
     </div>
-    
+
     <div class="row g-2">
-        <label>Adres: </label>
+        <label asp-for="City"></label>
         <div class="col-7">
             <input asp-for="City" class="form-control" placeholder="Stad">
         </div>
@@ -36,27 +36,38 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Gender">Geslacht: </label>
+        <label asp-for="Gender"></label>
         <select class="form-select" asp-for="Gender" asp-items="ViewBag.Gender"></select>
     </div>
 
     <div class="form-group">
-        <label asp-for="UserType">Type gebruiker: </label>
+        <label asp-for="UserType"></label>
         <select class="form-select" asp-for="UserType" asp-items="ViewBag.UserTypes"></select>
     </div>
 
-    @foreach (var allergy in Model.Allergies) {
-        <label>@allergy.Description</label>
-        <input name="Allergy" type="checkbox" value="@allergy.Id"/>
-    }
+    <div class="form-group">
+        <label asp-for="IsVegetarian"></label>
+        <input asp-for="IsVegetarian">
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <label asp-for="Allergies"></label>
+
+        @foreach (var allergy in Model.Allergies) {
+            <div class="form-group">
+                <label>@allergy.Description</label>
+                <input name="Allergy" type="checkbox" value="@allergy.Id"/>
+            </div>
+        }
+    </div>
 
     <div class="form-group">
-        <label asp-for="Password">Wachtwoord: </label>
+        <label asp-for="Password"></label>
         <input class="form-control" asp-for="Password"/>
     </div>
 
     <div class="form-group">
-        <label asp-for="RepeatPassword">Herhaal wachtwoord: </label>
+        <label asp-for="RepeatPassword"></label>
         <input class="form-control" asp-for="RepeatPassword"/>
     </div>
 
