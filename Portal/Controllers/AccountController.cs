@@ -105,7 +105,7 @@ public class AccountController : Controller
                 City = registerViewModel.City, Street = registerViewModel.Street,
                 HouseNumber = registerViewModel.HouseNumber
             },
-            Allergies = allergies,
+            Allergies = allergies, IsVegetarian = registerViewModel.IsVegetarian,
             Email = registerViewModel.Email, Gender = registerViewModel.Gender, Name = registerViewModel.Username,
             BirthDate = registerViewModel.BirthDate
         };
