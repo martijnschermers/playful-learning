@@ -8,16 +8,9 @@ namespace WebService.Controllers;
 [Route("[controller]")]
 public class GameNightController : ControllerBase
 {
-    private readonly IGameNightRepository _repository;
-
-    public GameNightController(IGameNightRepository repository)
-    {
-        _repository = repository; 
-    }
-
     [HttpGet(Name = "GetAllGameNights")]
-    public IEnumerable<GameNight> Get()
+    public IEnumerable<GameNight> Get([Service] IGameNightRepository repository)
     {
-        return _repository.GetAllGameNights(); 
+        return repository.GetAllGameNights(); 
     }
 }
