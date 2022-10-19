@@ -14,4 +14,9 @@ public class DomainQuery
     {
         return repository.GetAllGameNights();
     }
+
+    public ICollection<Game> GetAllGames([Service] IGameRepository repository)
+    {
+        return repository.GetAllGames();
+    }
 }
