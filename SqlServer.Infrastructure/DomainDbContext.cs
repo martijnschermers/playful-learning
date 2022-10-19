@@ -5,15 +5,12 @@ namespace SqlServer.Infrastructure;
 
 public class DomainDbContext : DbContext
 {
+    public DomainDbContext(DbContextOptions<DomainDbContext> options) : base(options) { }
+    
     public DbSet<GameNight> GameNights { get; set; }
     public DbSet<Game> Games { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Allergy> Allergies { get; set; }
-    
-    public DomainDbContext(DbContextOptions<DomainDbContext> options) : base(options)
-    {
-        
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

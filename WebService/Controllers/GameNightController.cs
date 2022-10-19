@@ -9,15 +9,13 @@ namespace WebService.Controllers;
 public class GameNightController : ControllerBase
 {
     private readonly IGameNightRepository _repository;
-    private readonly ILogger<GameNightController> _logger;
 
-    public GameNightController(ILogger<GameNightController> logger, IGameNightRepository repository)
+    public GameNightController(IGameNightRepository repository)
     {
-        _logger = logger;
         _repository = repository; 
     }
 
-    [HttpGet(Name = "GetGameNight")]
+    [HttpGet(Name = "GetAllGameNights")]
     public IEnumerable<GameNight> Get()
     {
         return _repository.GetAllGameNights(); 

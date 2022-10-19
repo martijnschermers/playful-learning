@@ -1,20 +1,26 @@
+using Core.DomainServices;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SqlServer.Infrastructure;
 using WebService.GraphQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IGameNightRepository, GameNightEFRepository>(); 
+
+builder.Services.AddDbContext<DomainDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Domain")));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddGraphQLServer()
     .RegisterDbContext<DomainDbContext>()
-    .AddQueryType<UserQuery>();
-    // .AddQueryType<GameNightQuery>();
-
+    .AddQueryType<DomainQuery>();
 
 var app = builder.Build();
 
