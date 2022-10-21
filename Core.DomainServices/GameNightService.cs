@@ -13,7 +13,7 @@ public class GameNightService : IGameNightService
 
     public void UpdateGameNight(GameNight updatedGameNight)
     {
-        var originalGameNight = _repository.GetGameNightById(updatedGameNight.Id); 
+        var originalGameNight = _repository.GetGameNightById(updatedGameNight.Id)!; 
         
         // When there are participants, updating is not allowed 
         if (originalGameNight.Players.Count > 0) {
@@ -25,7 +25,7 @@ public class GameNightService : IGameNightService
 
     public void DeleteGameNight(int gameNightId)
     {
-        var gameNight = _repository.GetGameNightById(gameNightId);
+        var gameNight = _repository.GetGameNightById(gameNightId)!;
         
         // When there are participants, deleting is not allowed 
         if (gameNight.Players.Count > 0) {

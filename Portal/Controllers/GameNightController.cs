@@ -54,8 +54,7 @@ public class GameNightController : Controller
     public IActionResult Organize()
     {
         var games = _gameRepository!.GetAllGames()
-            .Select(game => new CheckboxOption
-                { Description = game.Name, Value = game.Id, IsChecked = false })
+            .Select(game => new CheckboxOption(false, game.Name, game.Id))
             .ToList();
 
         return View(new GameNightViewModel { Games = games });
@@ -67,7 +66,7 @@ public class GameNightController : Controller
     {
         if (!ModelState.IsValid) {
             var checkboxOptions = _gameRepository!.GetAllGames()
-                .Select(game => new CheckboxOption { Description = game.Name, Value = game.Id, IsChecked = false })
+                .Select(game => new CheckboxOption(false, game.Name, game.Id))
                 .ToList();
 
             return View(new GameNightViewModel { Games = checkboxOptions });
@@ -144,10 +143,7 @@ public class GameNightController : Controller
         foreach (var game in games) {
             var isChecked = gameNight.Games.Contains(game);
 
-            checkBoxes.Add(new CheckboxOption()
-            {
-                Description = game.Name, Value = game.Id, IsChecked = isChecked,
-            });
+            checkBoxes.Add(new CheckboxOption(isChecked, game.Name, game.Id));
         }
 
         var viewModel = new GameNightViewModel
@@ -180,10 +176,7 @@ public class GameNightController : Controller
             foreach (var game in allGames) {
                 var isChecked = gameNight.Games.Contains(game);
 
-                checkBoxes.Add(new CheckboxOption()
-                {
-                    Description = game.Name, Value = game.Id, IsChecked = isChecked,
-                });
+                checkBoxes.Add(new CheckboxOption(isChecked, game.Name, game.Id));
             }
 
             return View(new GameNightViewModel { Games = checkBoxes });

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WebService.Models;
+namespace ApplicationServices;
 
 public class AuthenticationCredentials
 

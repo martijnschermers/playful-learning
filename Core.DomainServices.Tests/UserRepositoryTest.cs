@@ -1,5 +1,4 @@
 using Core.Domain;
-using Microsoft.AspNetCore.Identity;
 using Moq;
 using Portal.Controllers;
 using Xunit;

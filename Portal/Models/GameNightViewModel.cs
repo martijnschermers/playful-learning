@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Core.Domain;
 
 namespace Portal.Models;
 
@@ -7,10 +8,10 @@ public class GameNightViewModel
 {
     [Display(Name = "Adres: ")]
     [Required(ErrorMessage = "Stad is verplicht!")]
-    public string City { get; set; }
+    public string? City { get; set; }
     
     [Required(ErrorMessage = "Straat is verplicht!")]
-    public string Street { get; set; }
+    public string? Street { get; set; }
     
     [Required(ErrorMessage = "Huisnummer is verplicht!")]
     public int HouseNumber { get; set; }
@@ -31,8 +32,8 @@ public class GameNightViewModel
 
     [Display(Name = "Spellen")]
     [ValidateNever]
-    public List<CheckboxOption> Games { get; set; }
+    public List<CheckboxOption>? Games { get; set; }
     
     [Required(ErrorMessage = "Spellen zijn verplicht!")]
-    public List<int> Game { get; set; }
+    public List<int>? Game { get; set; }
 }

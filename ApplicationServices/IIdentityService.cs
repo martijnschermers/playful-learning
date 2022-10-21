@@ -1,5 +1,3 @@
-using WebService.Models;
-
 namespace ApplicationServices;
 
 public interface IIdentityService<T>

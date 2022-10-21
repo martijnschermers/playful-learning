@@ -21,7 +21,7 @@ public class GameNightTest
         var controller = new GameNightController(repositoryMock.Object, null, null, null);
 
         // Act
-        var gameNight = controller.GetGameNightById(1);
+        var gameNight = controller.GetGameNightById(1)!;
 
         // Assert
         repositoryMock.Verify(r => r.GetGameNightById(1));
