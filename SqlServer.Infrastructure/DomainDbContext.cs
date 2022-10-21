@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 namespace SqlServer.Infrastructure;
 
 public class DomainDbContext : DbContext
-{
+{ 
     public DomainDbContext(DbContextOptions<DomainDbContext> options) : base(options) { }
     
-    public DbSet<GameNight> GameNights { get; set; }
-    public DbSet<Game> Games { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<Allergy> Allergies { get; set; }
-
+    public DbSet<GameNight> GameNights { get; set; } = null!;
+    public DbSet<Game> Games { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Allergy> Allergies { get; set; } = null!;
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var games = new List<Game>
