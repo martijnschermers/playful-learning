@@ -3,14 +3,15 @@
 @{
     ViewBag.Title = "Georganiseerd";
 }
-    
 
 <body>
-<div>
-    <h1>Georganiseerde spelavonden</h1>
-    
-    @foreach (var gameNight in Model) {
-        <partial model="gameNight" name="_GameNight" />
-    }
-</div>
+    <div>
+        <h1 class="text-center">Georganiseerde spelavonden</h1>
+
+        <div class="row row-cols-1 row-cols-md-3 g-2">
+            @foreach (var gameNight in Model) {
+                <partial model="gameNight" name="_GameNight"/>
+            }
+        </div>
+    </div>
 </body>
