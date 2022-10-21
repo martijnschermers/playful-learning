@@ -10,21 +10,34 @@
 <p>@Model.Address</p>
 <p>Aantal inschrijvingen: @Model.Players.Count</p>
 
-<p>Eten: </p>
-@foreach (var food in Model.Foods) {
-    <p>@food.Name</p>
+@if (Model.IsPotluck) {
+    if (Model.Foods.Any()) {
+        <p>Eten: </p>
+        foreach (var food in Model.Foods) {
+            <p>@food.Name</p>
+        }
+        
+        <p>Eten voor vegetarische mensen en mensem met een noten/lactose allergie: </p>
+        foreach (var food in Model.Foods) {
+            if (food.Allergies.Any(allergy => allergy.Name is AllergyEnum.Lactose or AllergyEnum.Nuts or AllergyEnum.Vegan)) {
+                <p>@food.Name</p>
+            }
+        }
+    }
+    
+    <a asp-controller="Food" asp-action="Index" asp-all-route-data="routeData">Eten meenemen!</a>
 }
 
+<p>Drinken: </p>
+@if (Model.Drinks.Any(drink => !drink.ContainsAlcohol)) {
+    <p>Drinken aanwezig voor mensen die geen alcohol willen drinken.</p>
+}
 
 <div class="row">
     @foreach (var game in Model.Games) {
         <partial model="game" name="_Game"/>
     }
 </div>
-
-@if (Model.IsPotluck) {
-    <a asp-controller="Food" asp-action="Index" asp-all-route-data="routeData">Eten meenemen!</a>
-}
 
 <form asp-action="Details" method="post">
     <button class="btn btn-primary" asp-all-route-data="routeData">Inschrijven</button>

@@ -45,7 +45,9 @@ public class GameNightEFRepository : IGameNightRepository
             .Include(g => g.Games)
             .Include(g => g.Organizer)
             .Include(g => g.Players)
+            .Include(g => g.Drinks)
             .Include(g => g.Foods)
+            .ThenInclude(f => f.Allergies)
             .FirstOrDefault();
     }
 

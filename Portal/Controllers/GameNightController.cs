@@ -116,8 +116,10 @@ public class GameNightController : Controller
 
         gameNight = _gameNightRepository.GetGameNightById(id)!;
 
-        if (gameNight.IsPotluck) {
-            return RedirectToAction(); 
+        //TODO: Implement check if person added food himself, this is too global
+        if (gameNight.IsPotluck && !gameNight.Foods.Any()) {
+            ModelState.AddModelError("", "Je moet op zijn minst een ding meenemen!");
+            return View(gameNight); 
         }
 
         var result = _gameNightService!.Participate(gameNight, user);
