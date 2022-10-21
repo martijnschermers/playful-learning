@@ -3,6 +3,7 @@ using Core.Domain;
 using Core.DomainServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Portal.Models;
 
 namespace Portal.Controllers;
@@ -143,7 +144,7 @@ public class GameNightController : Controller
 
             checkBoxes.Add(new CheckboxOption(isChecked, game.Name, game.Id));
         }
-
+        
         var viewModel = new GameNightViewModel
         {
             City = gameNight.Address.City,
@@ -199,8 +200,13 @@ public class GameNightController : Controller
             IsOnlyForAdults = isForAdults, Organizer = user
         };
 
-        _gameNightService!.UpdateGameNight(updatedGameNight);
+        var result = _gameNightService!.UpdateGameNight(id, updatedGameNight);
 
+        if (result != "") {
+            ModelState.AddModelError("", result);
+            return View(); 
+        }
+        
         return RedirectToAction(nameof(Organized));
     }
 

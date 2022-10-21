@@ -11,28 +11,39 @@ public class GameNightService : IGameNightService
         _repository = repository;
     }
 
-    public void UpdateGameNight(GameNight updatedGameNight)
+    //TODO: Validate if requesting user is organizer, for deleting as well 
+    public string UpdateGameNight(int id, GameNight updatedGameNight)
     {
-        var originalGameNight = _repository.GetGameNightById(updatedGameNight.Id)!; 
+        var originalGameNight = _repository.GetGameNightById(id);
+
+        if (originalGameNight == null) {
+            return "Spelavond niet gevonden.";
+        }
         
         // When there are participants, updating is not allowed 
         if (originalGameNight.Players.Count > 0) {
-            return;
+            return "Het is niet toegestaan om de spelavond aan te passen, omdat er al deelnemers zijn.";
         }
         
         _repository.UpdateGameNight(originalGameNight, updatedGameNight);
+        return ""; 
     }
 
-    public void DeleteGameNight(int gameNightId)
+    public string DeleteGameNight(int gameNightId)
     {
-        var gameNight = _repository.GetGameNightById(gameNightId)!;
+        var gameNight = _repository.GetGameNightById(gameNightId);
+
+        if (gameNight == null) {
+            return "Spelavond niet gevonden.";
+        }
         
         // When there are participants, deleting is not allowed 
         if (gameNight.Players.Count > 0) {
-            return;
+            return "Het is niet toegestaan om de spelavond te verwijderen, omdat er al deelnemers zijn.";
         }
         
         _repository.DeleteGameNight(gameNight);
+        return ""; 
     }
     
     public string Participate(GameNight gameNight, User user)

@@ -1,4 +1,5 @@
 using System.Text;
+using ApplicationServices;
 using Core.DomainServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,8 @@ builder.Services.AddScoped<IUserRepository, UserEFRepository>();
 builder.Services.AddScoped<IGameRepository, GameEFRepository>();
 
 builder.Services.AddScoped<IGameNightService, GameNightService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IHelperService, HelperService>();
 
 builder.Services.AddDbContext<DomainDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Domain")));
