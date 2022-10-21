@@ -8,7 +8,10 @@
 
     <ItemGroup>
         <PackageReference Include="HotChocolate.AspNetCore" Version="12.15.0" />
+        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="12.15.0" />
         <PackageReference Include="HotChocolate.Data.EntityFramework" Version="12.15.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
@@ -20,9 +23,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ApplicationServices\ApplicationServices.csproj" />
       <ProjectReference Include="..\Core.DomainServices\Core.DomainServices.csproj" />
       <ProjectReference Include="..\Core.Domain\Core.Domain.csproj" />
       <ProjectReference Include="..\SqlServer.Infrastructure\SqlServer.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Models" />
     </ItemGroup>
 
 </Project>

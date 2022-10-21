@@ -1,13 +1,17 @@
 using Core.Domain;
 using Core.DomainServices;
+using HotChocolate.AspNetCore.Authorization;
 
 namespace WebService.GraphQL;
 
-public class DomainQuery
+[Authorize]
+public class Query
 {
-    public GameNight GetGameNightById([Service] IGameNightRepository repository, int id)
+    public GameNight? GetGameNightById([Service] IGameNightRepository repository, int id)
     {
-        return repository.GetGameNightById(id); 
+        var gameNight = repository.GetGameNightById(id);
+
+        return gameNight ?? null;
     }
     
     public ICollection<GameNight> GetAllGameNights([Service] IGameNightRepository repository)
