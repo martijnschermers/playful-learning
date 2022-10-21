@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SqlServer.Infrastructure;
 
@@ -11,9 +12,10 @@ using SqlServer.Infrastructure;
 namespace SqlServer.Infrastructure.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    partial class DomainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221021074927_RemoveIsVegetarianField")]
+    partial class RemoveIsVegetarianField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,7 +111,7 @@ namespace SqlServer.Infrastructure.Migrations
                         new
                         {
                             Id = 6,
-                            Description = "Vegetarisch",
+                            Description = "Vegetariër",
                             Name = 5
                         });
                 });
@@ -149,6 +151,9 @@ namespace SqlServer.Infrastructure.Migrations
 
                     b.Property<int?>("GameNightId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsVegetarian")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
