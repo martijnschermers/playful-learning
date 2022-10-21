@@ -1,3 +1,4 @@
+using ApplicationServices;
 using Core.Domain;
 using Core.DomainServices;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +16,8 @@ builder.Services.AddScoped<IUserRepository, UserEFRepository>();
 builder.Services.AddScoped<IAllergyRepository, AllergyEFRepository>();
 
 builder.Services.AddScoped<IGameNightService, GameNightService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IHelperService, HelperService>();
 
 builder.Services.AddDbContext<DomainDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Domain"))
