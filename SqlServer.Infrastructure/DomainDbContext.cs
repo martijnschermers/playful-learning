@@ -27,7 +27,8 @@ public class DomainDbContext : DbContext
             new Allergy { Id = 2, Name = AllergyEnum.Lactose, Description = "Lactose"},
             new Allergy { Id = 3, Name = AllergyEnum.Nuts, Description = "Noten"},
             new Allergy { Id = 4, Name = AllergyEnum.Soya, Description = "Soja" },
-            new Allergy { Id = 5, Name = AllergyEnum.Wheat, Description = "Tarwe"}
+            new Allergy { Id = 5, Name = AllergyEnum.Wheat, Description = "Tarwe"},
+            new Allergy { Id = 6, Name = AllergyEnum.Vegan, Description = "Vegetarisch"}
         };
 
         base.OnModelCreating(modelBuilder);

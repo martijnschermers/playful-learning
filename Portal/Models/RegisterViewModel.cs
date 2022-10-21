@@ -32,8 +32,6 @@ public class RegisterViewModel
     
     [Display(Name = "Type gebruiker: ")]
     public UserType UserType { get; set; }
-    [Display(Name = "Vegetariër ")]
-    public bool IsVegetarian { get; set; }
     
     [ValidateNever]
     [Display(Name = "Dieetwensen/Allergieën: ")]

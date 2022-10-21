@@ -9,7 +9,6 @@ public class User
     public Gender Gender { get; set; }
     public Address Address { get; set; }
     public UserType Type { get; set; }
-    public bool IsVegetarian { get; set; }
     public ICollection<Allergy> Allergies { get; set; }
 
     public int GetAge()

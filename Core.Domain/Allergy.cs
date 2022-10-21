@@ -13,5 +13,6 @@ public enum AllergyEnum
     Lactose, 
     Soya,
     Wheat, 
-    Gluten
+    Gluten,
+    Vegan
 }
