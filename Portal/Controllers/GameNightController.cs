@@ -1,3 +1,4 @@
+using ApplicationServices;
 using Core.Domain;
 using Core.DomainServices;
 using Microsoft.AspNetCore.Authorization;
@@ -11,15 +12,15 @@ public class GameNightController : Controller
 {
     private readonly IGameNightRepository _gameNightRepository;
     private readonly IGameRepository? _gameRepository;
-    private readonly IUserRepository? _userRepository;
+    private readonly IHelperService? _helperService;
     private readonly IGameNightService? _gameNightService;
 
     public GameNightController(IGameNightRepository gameNightRepository, IGameRepository? gameRepository,
-        IUserRepository? userRepository, IGameNightService? gameNightService)
+        IHelperService? helperService, IGameNightService? gameNightService)
     {
         _gameNightRepository = gameNightRepository;
         _gameRepository = gameRepository;
-        _userRepository = userRepository;
+        _helperService = helperService;
         _gameNightService = gameNightService;
     }
 
@@ -33,7 +34,7 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Organized()
     {
-        var user = GetUser();
+        var user = _helperService!.GetUser(HttpContext);
 
         var gameNights = _gameNightRepository.GetAllGameNights().Where(g => g.Organizer == user);
 
@@ -42,7 +43,7 @@ public class GameNightController : Controller
 
     public IActionResult Participating()
     {
-        var user = GetUser();
+        var user = _helperService!.GetUser(HttpContext);
 
         var gameNights = _gameNightRepository.GetParticipating(user);
 
@@ -78,7 +79,7 @@ public class GameNightController : Controller
 
         var isForAdults = gameNightViewModel.IsOnlyForAdults || games.Any(g => g.IsOnlyForAdults);
 
-        var user = GetUser();
+        var user = _helperService!.GetUser(HttpContext);
 
         var gameNight = new GameNight
         {
@@ -99,20 +100,17 @@ public class GameNightController : Controller
     }
 
     [HttpGet]
-    public IActionResult Details()
+    public IActionResult Details(int id)
     {
-        var id = GetId();
-
         var gameNight = _gameNightRepository.GetGameNightById(id);
         
         return View(gameNight);
     }
 
     [HttpPost]
-    public ActionResult Details(GameNight gameNight)
+    public ActionResult Details(int id, GameNight gameNight)
     {
-        var user = GetUser();
-        var id = GetId();
+        var user = _helperService!.GetUser(HttpContext);
 
         gameNight = _gameNightRepository.GetGameNightById(id)!;
 
@@ -134,10 +132,8 @@ public class GameNightController : Controller
 
     [HttpGet]
     [Authorize(Policy = "OnlyOrganizers")]
-    public IActionResult Update()
+    public IActionResult Update(int id)
     {
-        var id = GetId();
-
         var gameNight = _gameNightRepository.GetGameNightById(id)!;
         var games = _gameRepository!.GetAllGames();
 
@@ -165,10 +161,9 @@ public class GameNightController : Controller
 
     [HttpPost]
     [Authorize(Policy = "OnlyOrganizers")]
-    public IActionResult Update(GameNightViewModel gameNightViewModel)
+    public IActionResult Update(int id, GameNightViewModel gameNightViewModel)
     {
-        var user = GetUser();
-        var id = GetId();
+        var user = _helperService!.GetUser(HttpContext);
         
         if (!ModelState.IsValid) {
             var gameNight = _gameNightRepository.GetGameNightById(id)!;
@@ -210,27 +205,13 @@ public class GameNightController : Controller
     }
 
     [Authorize(Policy = "OnlyOrganizers")]
-    public IActionResult Delete()
+    public IActionResult Delete(int id)
     {
-        var id = GetId();
-
         _gameNightService!.DeleteGameNight(id);
 
         return RedirectToAction(nameof(Organized));
     }
-
-    // General methods
-    public User GetUser()
-    {
-        var identity = HttpContext.User.Identity;
-        return _userRepository!.GetUserByEmail(identity!.Name!);
-    }
-
-    public int GetId()
-    {
-        return int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
-    }
-
+    
     // Methods for testing
     public void AddGameNight(GameNight gameNight)
     {

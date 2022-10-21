@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Details spelavond";
-    var routeData = new Dictionary<string, string> { { "id", Model.Id.ToString() } };
 }
 
 <h2>Details spelavond</h2>
@@ -25,7 +24,7 @@
         }
     }
     
-    <a asp-controller="Food" asp-action="Index" asp-all-route-data="routeData">Eten meenemen!</a>
+    <a asp-controller="Food" asp-action="Index" asp-route-id="@Model.Id">Eten meenemen!</a>
 }
 
 <p>Drinken: </p>
@@ -40,7 +39,7 @@
 </div>
 
 <form asp-action="Details" method="post">
-    <button class="btn btn-primary" asp-all-route-data="routeData">Inschrijven</button>
+    <button class="btn btn-primary" asp-route-id="@Model.Id">Inschrijven</button>
 </form>
 
 <div class="text-danger" asp-validation-summary="ModelOnly"></div>

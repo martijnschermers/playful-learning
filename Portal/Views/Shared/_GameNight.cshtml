@@ -1,7 +1,6 @@
 @model GameNight
 
 @{
-    var routeData = new Dictionary<string, string> { { "id", Model.Id.ToString() } };
     var action = ViewContext.RouteData.Values["action"];
 }
 
@@ -16,11 +15,11 @@
             <p class="card-text">Voor volwassenen: @Model.IsOnlyForAdults</p>
 
             @if (Model.Players.Count == 0 && action!.Equals("Organized")) {
-                <a asp-action="Update" asp-all-route-data="routeData" asp-controller="GameNight" class="card-link">Aanpassen</a>
-                <a asp-action="Delete" asp-all-route-data="routeData" asp-controller="GameNight" class="card-link">Verwijderen</a>
+                <a asp-action="Update" asp-route-id="@Model.Id" asp-controller="GameNight" class="card-link">Aanpassen</a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" asp-controller="GameNight" class="card-link">Verwijderen</a>
             }
 
-            <a asp-action="Details" asp-all-route-data="routeData" asp-controller="GameNight" class="card-link">Details</a>
+            <a asp-action="Details" asp-route-id="@Model.Id" asp-controller="GameNight" class="card-link">Details</a>
         </div>
     </div>
 </div>

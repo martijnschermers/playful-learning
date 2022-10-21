@@ -1,3 +1,4 @@
+using ApplicationServices;
 using Core.Domain;
 using Core.DomainServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,13 +14,13 @@ namespace WebService.Controllers;
 public class GameNightController : ControllerBase
 {
     private readonly IGameNightRepository _repository;
-    private readonly IUserRepository _userRepository;
+    private readonly IHelperService _helperService;
     private readonly IGameNightService _gameNightService;
 
-    public GameNightController(IGameNightRepository repository, IUserRepository userRepository, IGameNightService gameNightService)
+    public GameNightController(IGameNightRepository repository, IHelperService helperService, IGameNightService gameNightService)
     {
         _repository = repository;
-        _userRepository = userRepository;
+        _helperService = helperService;
         _gameNightService = gameNightService;
     }
 
@@ -51,7 +52,7 @@ public class GameNightController : ControllerBase
     [HttpGet("{id}/participate")]
     public IActionResult Participate(int id)
     {
-        var user = GetUser(); 
+        var user = _helperService.GetUser(HttpContext); 
         
         var gameNight = _repository.GetGameNightById(id);
 
@@ -67,10 +68,18 @@ public class GameNightController : ControllerBase
         
         return Ok(); 
     }
-    
-    public User GetUser()
+
+    [HttpPut("{id}")]
+    public IActionResult Put(int id, [FromBody] GameNight gameNight)
     {
-        var identity = HttpContext.User.Identity;
-        return _userRepository!.GetUserByEmail(identity!.Name!);
+        var originalGameNight = _repository.GetGameNightById(id);
+
+        if (originalGameNight == null) {
+            return NotFound(new { Message = "Spelavond niet gevonden." });
+        }
+
+        _repository.UpdateGameNight(originalGameNight, gameNight);
+        
+        return Ok(); 
     }
 }

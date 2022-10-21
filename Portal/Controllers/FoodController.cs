@@ -19,7 +19,7 @@ public class FoodController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        var allergies = _allergyRepository!.GetAllAllergies()
+        var allergies = _allergyRepository.GetAllAllergies()
             .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
             .ToList();
 
@@ -27,9 +27,9 @@ public class FoodController : Controller
     }
 
     [HttpPost]
-    public IActionResult Index(FoodViewModel foodViewModel)
+    public IActionResult Index(int id, FoodViewModel foodViewModel)
     {
-        var checkboxOptions = _allergyRepository!.GetAllAllergies()
+        var checkboxOptions = _allergyRepository.GetAllAllergies()
             .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
             .ToList();
 
@@ -38,11 +38,9 @@ public class FoodController : Controller
         if (!ModelState.IsValid) {
             return View(returnViewModel);
         }
-
-        var id = GetId(); 
         
         var allergies = foodViewModel.Allergy
-            .Select(allergyId => _allergyRepository!.GetAllergyById(allergyId))
+            .Select(allergyId => _allergyRepository.GetAllergyById(allergyId))
             .ToList();
 
         var food = new Food
@@ -59,10 +57,5 @@ public class FoodController : Controller
         }
         
         return Redirect($"/GameNight/Details/{id}"); 
-    }
-    
-    public int GetId()
-    {
-        return int.Parse(Url.ActionContext.RouteData.Values["id"]!.ToString()!);
     }
 }
