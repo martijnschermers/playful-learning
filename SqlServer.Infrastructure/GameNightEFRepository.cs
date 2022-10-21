@@ -37,7 +37,7 @@ public class GameNightEFRepository : IGameNightRepository
         _context.SaveChanges();
     }
 
-    public GameNight GetGameNightById(int id)
+    public GameNight? GetGameNightById(int id)
     {
         return _context.GameNights
             .Where(g => g.Id == id)
@@ -45,7 +45,7 @@ public class GameNightEFRepository : IGameNightRepository
             .Include(g => g.Games)
             .Include(g => g.Organizer)
             .Include(g => g.Players)
-            .First();
+            .FirstOrDefault();
     }
 
     public void UpdateGameNight(GameNight originalGameNight, GameNight updatedGameNight)

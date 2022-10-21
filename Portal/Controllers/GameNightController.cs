@@ -105,18 +105,21 @@ public class GameNightController : Controller
         var id = GetId();
 
         var gameNight = _gameNightRepository.GetGameNightById(id);
-
+        
         return View(gameNight);
     }
 
     [HttpPost]
-    public IActionResult Details(GameNight gameNight)
+    public ActionResult Details(GameNight gameNight)
     {
         var user = GetUser();
-
         var id = GetId();
 
-        gameNight = _gameNightRepository.GetGameNightById(id);
+        gameNight = _gameNightRepository.GetGameNightById(id)!;
+
+        if (gameNight.IsPotluck) {
+            return RedirectToAction(); 
+        }
 
         var result = _gameNightService!.Participate(gameNight, user);
 
@@ -134,7 +137,7 @@ public class GameNightController : Controller
     {
         var id = GetId();
 
-        var gameNight = _gameNightRepository.GetGameNightById(id);
+        var gameNight = _gameNightRepository.GetGameNightById(id)!;
         var games = _gameRepository!.GetAllGames();
 
         var checkBoxes = new List<CheckboxOption>();
@@ -170,7 +173,7 @@ public class GameNightController : Controller
         var id = GetId();
         
         if (!ModelState.IsValid) {
-            var gameNight = _gameNightRepository.GetGameNightById(id);
+            var gameNight = _gameNightRepository.GetGameNightById(id)!;
             var allGames = _gameRepository!.GetAllGames();
 
             var checkBoxes = new List<CheckboxOption>();
@@ -244,7 +247,7 @@ public class GameNightController : Controller
         return _gameNightService!.Participate(gameNight, user);
     }
 
-    public GameNight GetGameNightById(int id)
+    public GameNight? GetGameNightById(int id)
     {
         return _gameNightRepository.GetGameNightById(id);
     }
