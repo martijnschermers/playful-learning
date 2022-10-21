@@ -13,11 +13,8 @@ public class UnitTest1
     {
         // Arrange
         var repositoryMock = new Mock<IGameNightRepository>();
-        var gameRepoMock = new Mock<IGameRepository>(); 
-        var userRepoMock = new Mock<IUserRepository>(); 
-        var gameNightServiceMock = new Mock<IGameNightService>();
 
-        var controller = new GameNightController(repositoryMock.Object, gameRepoMock.Object, userRepoMock.Object, gameNightServiceMock.Object);
+        var controller = new GameNightController(repositoryMock.Object, null, null, null);
         
         // Act
         var result = controller.Organized() as ViewResult;
