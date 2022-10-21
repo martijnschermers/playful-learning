@@ -45,6 +45,7 @@ public class GameNightEFRepository : IGameNightRepository
             .Include(g => g.Games)
             .Include(g => g.Organizer)
             .Include(g => g.Players)
+            .Include(g => g.Foods)
             .FirstOrDefault();
     }
 
@@ -71,5 +72,19 @@ public class GameNightEFRepository : IGameNightRepository
     {
         gameNight.Players.Add(user);
         _context.SaveChanges();
+    }
+
+    public bool AddFood(int id, Food food)
+    {
+        var gameNight = GetGameNightById(id);
+
+        if (gameNight == null) {
+            return false; 
+        }
+        
+        gameNight.Foods.Add(food);
+
+        _context.SaveChanges();
+        return true;
     }
 }

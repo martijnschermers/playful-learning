@@ -10,5 +10,6 @@ public interface IGameNightRepository
     void AddGameNight(GameNight gameNight);
     void UpdateGameNight(GameNight originalGameNight, GameNight updatedGameNight);
     void DeleteGameNight(GameNight gameNight);
-    void Participate(GameNight gameNight, User user); 
+    void Participate(GameNight gameNight, User user);
+    bool AddFood(int id, Food food); 
 }

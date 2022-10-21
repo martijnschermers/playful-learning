@@ -1,0 +1,21 @@
+@model FoodViewModel
+
+@{
+    ViewBag.Title = "Eten meenemen";
+}
+
+<h1>Neem ff wat lekkers mee!</h1>
+
+<form asp-action="Index" method="POST">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input class="form-control" asp-for="Name">
+    </div>
+
+    <label asp-for="Allergies"></label>
+    <partial name="_Allergies" model="Model.Allergies" />
+
+    <button class="btn btn-primary" type="submit">Toevoegen</button>
+    
+    <div class="text-danger" asp-validation-summary="All"></div>
+</form>
