@@ -7,49 +7,7 @@
 <h2>Spelavond Organiseren</h2>
 
 <form asp-action="Organize" class="row g-2" method="post">
-    <div class="row g-2">
-        <label asp-for="City"></label>
-        <div class="col-4">
-            <input asp-for="City" class="form-control" placeholder="Stad">
-        </div>
-        <div class="col">
-            <input asp-for="Street" class="form-control" placeholder="Straat">
-        </div>
-        <div class="col-1">
-            <input asp-for="HouseNumber" class="form-control" placeholder="Huisnummer">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="MaxPlayers"></label>
-        <input class="form-control" asp-for="MaxPlayers"/>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="DateTime"></label>
-        <input class="form-control" asp-for="DateTime"/>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="IsPotluck"></label>
-        <input asp-for="IsPotluck"/>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="IsOnlyForAdults"></label>
-        <input asp-for="IsOnlyForAdults"/>
-    </div>
-
-    <div class="d-flex flex-column">
-        <label asp-for="Games"></label>
-        
-        @foreach (var game in Model.Games) {
-            <div class="form-group">
-                <label>@game.Description</label>
-                <input type="checkbox" name="Game" value="@game.Value"/>
-            </div>
-        }
-    </div>
+    <partial name="_GameNightForm" model="Model" />
 
     <button class="btn btn-primary col-4 my-2" type="submit">Organiseer</button>
 
