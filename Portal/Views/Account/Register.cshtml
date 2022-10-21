@@ -46,19 +46,7 @@
     </div>
 
     <label asp-for="Allergies"></label>
-    <div class="d-flex justify-content-between">
-        @foreach (var allergy in Model.Allergies) {
-            <div class="form-group">
-                <label>@allergy.Description</label>
-                <input name="Allergy" type="checkbox" value="@allergy.Value"/>
-            </div>
-        }
-
-        <div class="form-group">
-            <label asp-for="IsVegetarian"></label>
-            <input asp-for="IsVegetarian">
-        </div>
-    </div>
+    <partial name="_Allergies" model="Model.Allergies" />
 
     <div class="form-group">
         <label asp-for="Password"></label>

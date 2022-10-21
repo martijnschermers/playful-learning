@@ -1,0 +1,10 @@
+@model List<CheckboxOption>
+
+<div class="d-flex justify-content-between">
+    @foreach (var allergy in Model) {
+        <div class="form-group">
+            <label>@allergy.Description</label>
+            <input name="Allergy" type="checkbox" value="@allergy.Value"/>
+        </div>
+    }
+</div>
