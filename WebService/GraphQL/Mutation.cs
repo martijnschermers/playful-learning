@@ -1,5 +1,4 @@
 using ApplicationServices;
-using WebService.Models;
 
 namespace WebService.GraphQL;
 
