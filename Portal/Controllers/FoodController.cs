@@ -32,8 +32,6 @@ public class FoodController : Controller
     [HttpPost]
     public IActionResult Index(int id, FoodViewModel foodViewModel)
     {
-        var user = _helperService.GetUser(HttpContext); 
-        
         var checkboxOptions = _allergyRepository.GetAllAllergies()
             .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
             .ToList();
@@ -43,6 +41,8 @@ public class FoodController : Controller
         if (!ModelState.IsValid) {
             return View(returnViewModel);
         }
+        
+        var user = _helperService.GetUser(HttpContext);
 
         var allergyIds = foodViewModel.Allergy ?? new List<int>();
         
