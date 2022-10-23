@@ -1,3 +1,4 @@
+using System.Net;
 using ApplicationServices;
 using Core.Domain;
 using Core.DomainServices;
@@ -199,7 +200,7 @@ public class GameNightController : Controller
             IsOnlyForAdults = isForAdults, Organizer = user
         };
 
-        var result = _gameNightService!.UpdateGameNight(id, updatedGameNight);
+        var result = _gameNightService!.UpdateGameNight(id, updatedGameNight, user);
 
         if (result != "") {
             ModelState.AddModelError("", result);
@@ -212,7 +213,9 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Delete(int id)
     {
-        _gameNightService!.DeleteGameNight(id);
+        var user = _helperService!.GetUser(HttpContext);
+        
+        _gameNightService!.DeleteGameNight(id, user);
 
         return RedirectToAction(nameof(Organized));
     }

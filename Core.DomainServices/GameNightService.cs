@@ -12,12 +12,16 @@ public class GameNightService : IGameNightService
     }
 
     //TODO: Validate if requesting user is organizer, for deleting as well 
-    public string UpdateGameNight(int id, GameNight updatedGameNight)
+    public string UpdateGameNight(int id, GameNight updatedGameNight, User user)
     {
         var originalGameNight = _repository.GetGameNightById(id);
 
         if (originalGameNight == null) {
             return "Spelavond niet gevonden.";
+        }
+
+        if (originalGameNight.Organizer != user) {
+            return "Het is niet toegestaan om een spelavond aan te passen die je niet hebt georganiseerd!"; 
         }
         
         // When there are participants, updating is not allowed 
@@ -29,12 +33,16 @@ public class GameNightService : IGameNightService
         return ""; 
     }
 
-    public string DeleteGameNight(int gameNightId)
+    public string DeleteGameNight(int gameNightId, User user)
     {
         var gameNight = _repository.GetGameNightById(gameNightId);
 
         if (gameNight == null) {
             return "Spelavond niet gevonden.";
+        }
+        
+        if (gameNight.Organizer != user) {
+            return "Het is niet toegestaan om een spelavond te verwijderen die je niet hebt georganiseerd!"; 
         }
         
         // When there are participants, deleting is not allowed 

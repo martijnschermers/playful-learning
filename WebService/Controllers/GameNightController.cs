@@ -73,7 +73,8 @@ public class GameNightController : ControllerBase
     [HttpPut("{id:int}")]
     public IActionResult Put(int id, [FromBody] GameNight gameNight)
     {
-        var result = _gameNightService.UpdateGameNight(id, gameNight);
+        var user = _helperService.GetUser(HttpContext);
+        var result = _gameNightService.UpdateGameNight(id, gameNight, user);
 
         if (result != "") {
             return BadRequest(new { Message = result });
@@ -85,7 +86,8 @@ public class GameNightController : ControllerBase
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        var result = _gameNightService.DeleteGameNight(id);
+        var user = _helperService.GetUser(HttpContext);
+        var result = _gameNightService.DeleteGameNight(id, user);
 
         if (result != "") {
             return BadRequest(new { Message = result });
