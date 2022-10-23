@@ -3,6 +3,7 @@ using Core.Domain;
 using Core.DomainServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Portal.Models;
 
 namespace Portal.Controllers;
@@ -57,6 +58,9 @@ public class GameNightController : Controller
         var games = _gameRepository!.GetAllGames()
             .Select(game => new CheckboxOption(false, game.Name, game.Id))
             .ToList();
+        
+        TempData.Clear();
+        TempData.Add("Games", JsonConvert.SerializeObject(games));
 
         return View(new GameNightViewModel { Games = games });
     }
@@ -66,9 +70,7 @@ public class GameNightController : Controller
     public IActionResult Organize(GameNightViewModel gameNightViewModel)
     {
         if (!ModelState.IsValid) {
-            var checkboxOptions = _gameRepository!.GetAllGames()
-                .Select(game => new CheckboxOption(false, game.Name, game.Id))
-                .ToList();
+            var checkboxOptions = JsonConvert.DeserializeObject<List<CheckboxOption>>(TempData["Games"]!.ToString()!)!;
 
             return View(new GameNightViewModel { Games = checkboxOptions });
         }
@@ -148,6 +150,9 @@ public class GameNightController : Controller
             IsOnlyForAdults = gameNight.IsOnlyForAdults
         };
 
+        TempData.Clear();
+        TempData.Add("Checkboxes", JsonConvert.SerializeObject(checkBoxes));
+        
         return View(viewModel);
     }
 
@@ -155,22 +160,13 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Update(int id, GameNightViewModel gameNightViewModel)
     {
-        var user = _helperService!.GetUser(HttpContext);
+        var checkBoxes = JsonConvert.DeserializeObject<List<CheckboxOption>>(TempData["CheckBoxes"]!.ToString()!)!;
         
-        //TODO: CLEAN this code pls 
         if (!ModelState.IsValid) {
-            var gameNight = _gameNightRepository.GetGameNightById(id)!;
-            var allGames = _gameRepository!.GetAllGames();
-
-            var checkBoxes = new List<CheckboxOption>();
-            foreach (var game in allGames) {
-                var isChecked = gameNight.Games.Contains(game);
-
-                checkBoxes.Add(new CheckboxOption(isChecked, game.Name, game.Id));
-            }
-
             return View(new GameNightViewModel { Games = checkBoxes });
         }
+        
+        var user = _helperService!.GetUser(HttpContext);
 
         var games = gameNightViewModel.Game
             .Select(gameId => _gameRepository!.GetGameById(gameId))
@@ -194,8 +190,10 @@ public class GameNightController : Controller
 
         if (result != "") {
             ModelState.AddModelError("", result);
-            return View(); 
+            return View(new GameNightViewModel { Games = checkBoxes }); 
         }
+
+        TempData.Remove("OrginalGameNight"); 
         
         return RedirectToAction(nameof(Organized));
     }
