@@ -25,6 +25,6 @@ public class UserTest
 
         // Assert
         repositoryMock.Verify(r => r.GetUserByEmail("kees@gmail.com"));
-        Assert.Equal("Kees", result.Name);
+        Assert.Equal("Kees", result!.Name);
     }
 }

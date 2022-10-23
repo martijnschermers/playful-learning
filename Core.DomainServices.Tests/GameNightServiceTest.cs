@@ -33,7 +33,7 @@ public class GameNightServiceTest
     public void Participate_For_Adult_Evening_While_Under_18()
     {
         // Arrange
-        var user = new User { Id = 1, Name = "Kees", BirthDate = new DateTime(2009, 10, 20) };
+        var user = new User { Id = 1, Name = "Kees", Type = UserType.Participant, BirthDate = new DateTime(2009, 10, 20) };
         var gameNight = new GameNight { Id = 1, DateTime = new DateTime(2022, 3, 4), Players = new List<User>(), IsOnlyForAdults = true, MaxPlayers = 4 };
 
         var repositoryMock = new Mock<IGameNightRepository>();
@@ -54,7 +54,7 @@ public class GameNightServiceTest
     public void Participate_For_Evening_Where_MaxPlayers_Is_Exceeded()
     {
         // Arrange
-        var user = new User { Id = 1, Name = "Kees", BirthDate = new DateTime(2009, 10, 20) };
+        var user = new User { Id = 1, Name = "Kees", BirthDate = new DateTime(2000, 10, 20) };
         var gameNight = new GameNight { Id = 1, DateTime = new DateTime(2022, 3, 4), Players = new List<User>(), IsOnlyForAdults = false, MaxPlayers = 0 };
 
         var repositoryMock = new Mock<IGameNightRepository>();
