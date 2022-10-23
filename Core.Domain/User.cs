@@ -16,6 +16,10 @@ public class User
                 throw new InvalidOperationException("De geboortedatum mag niet in de toekomst liggen!"); 
             }
 
+            if (GetAge(value) < 16) {
+                throw new InvalidOperationException("Je moet minimaal 16 jaar oud zijn om een account te registreren!"); 
+            }
+
             if (Type == UserType.Organizer && GetAge(value) < 18) {
                 throw new InvalidOperationException("Je moet 18 jaar oud zijn om een organisator te zijn!");
             }

@@ -60,4 +60,23 @@ public class UserTest
         // Assert
         Assert.Equal("Je moet 18 jaar oud zijn om een organisator te zijn!", act.Message);
     }
+
+    [Fact]
+    public void Age_Lower_Than_16_Should_Throw_InvalidOperationException()
+    {
+        // Arrange
+        var user = new User
+        {
+            Id = 1,
+            Name = "Jan",
+            Email = "jan@gmail.com", 
+            Type = UserType.Organizer
+        };
+
+        // Act
+        var act = Assert.Throws<InvalidOperationException>(() => user.BirthDate = new DateTime(2009, 3, 20));
+        
+        // Assert
+        Assert.Equal("Je moet minimaal 16 jaar oud zijn om een account te registreren!", act.Message);
+    }
 }
