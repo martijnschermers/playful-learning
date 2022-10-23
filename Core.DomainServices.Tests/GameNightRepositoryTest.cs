@@ -75,24 +75,4 @@ public class GameNightTest
         Assert.Contains(gameNight1, gameNights);
         Assert.DoesNotContain(gameNight2, gameNights);
     }
-
-    // [Fact]
-    public void AddGameNight_Adds_A_GameNight()
-    {
-        // Arrange
-        var gameNight = new GameNight { Id = 1, DateTime = new DateTime(2022, 3, 4), Players = new List<User>() };
-
-        var repositoryMock = new Mock<IGameNightRepository>();
-        repositoryMock
-            .Setup(r => r.AddGameNight(gameNight));
-        
-        var controller = new GameNightController(repositoryMock.Object, null, null, null);
-
-        // Act
-        var gameNights = controller.GetAllGameNights();
-
-        // Assert
-        repositoryMock.Verify(r => r.AddGameNight(gameNight));
-        Assert.Contains(gameNight, gameNights);
-    }
 }

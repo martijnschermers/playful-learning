@@ -12,7 +12,7 @@ public class AllergyEFRepository : IAllergyRepository
         _context = context;
     }
     
-    public ICollection<Allergy> GetAllAllergies()
+    public IEnumerable<Allergy> GetAllAllergies()
     {
         return _context.Allergies.ToList();
     }

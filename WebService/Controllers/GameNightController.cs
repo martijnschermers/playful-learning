@@ -31,7 +31,7 @@ public class GameNightController : ControllerBase
         return _repository.GetAllGameNights();
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public IActionResult Get(int id)
     {
         var gameNight = _repository.GetGameNightById(id);
@@ -50,7 +50,7 @@ public class GameNightController : ControllerBase
         return Ok(gameNight);
     }
 
-    [HttpGet("{id}/participate")]
+    [HttpGet("{id:int}/participate")]
     public IActionResult Participate(int id)
     {
         var user = _helperService.GetUser(HttpContext);
@@ -70,7 +70,7 @@ public class GameNightController : ControllerBase
         return Ok();
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public IActionResult Put(int id, [FromBody] GameNight gameNight)
     {
         var result = _gameNightService.UpdateGameNight(id, gameNight);
@@ -82,7 +82,7 @@ public class GameNightController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
         var result = _gameNightService.DeleteGameNight(id);

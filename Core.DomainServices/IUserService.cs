@@ -4,5 +4,5 @@ namespace Core.DomainServices;
 
 public interface IUserService
 {
-    User GetUserByEmail(string email); 
+    User? GetUserByEmail(string email); 
 }

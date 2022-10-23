@@ -4,6 +4,6 @@ namespace Core.DomainServices;
 
 public interface IAllergyRepository
 {
-    ICollection<Allergy> GetAllAllergies();
+    IEnumerable<Allergy> GetAllAllergies();
     Allergy GetAllergyById(int id); 
 }

@@ -27,30 +27,4 @@ public class UserTest
         repositoryMock.Verify(r => r.GetUserByEmail("kees@gmail.com"));
         Assert.Equal("Kees", result.Name);
     }
-
-    // [Fact]
-    //TODO:
-    public void AddUser_Adds_A_User()
-    {
-        // Arrange
-        var user = new User
-        {
-            Id = 1,
-            Name = "Jan",
-            Email = "jan@gmail.com"
-        };
-        
-        var repositoryMock = new Mock<IUserRepository>();
-        repositoryMock
-            .Setup(r => r.AddUser(user));
-        
-        var controller = new AccountController(repositoryMock.Object, null, null, null);
-
-        // Act
-        // var user = controller.GetUserByEmail("kees@gmail.com");
-
-        // Assert
-        repositoryMock.Verify(r => r.GetUserByEmail("kees@gmail.com"));
-        Assert.Equal("Kees", user.Name);
-    }
 }

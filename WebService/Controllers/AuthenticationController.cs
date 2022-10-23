@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace WebService.Controllers;
 
 [ApiController]
+[Route("api")]
 public class AuthenticationController : ControllerBase
 {
     private readonly UserManager<IdentityUser> _userManager;
@@ -21,7 +22,7 @@ public class AuthenticationController : ControllerBase
         _configuration = configuration;
     }
     
-    [HttpPost("api/signin")]
+    [HttpPost("signin")]
     public async Task<IActionResult> SignIn([FromBody] AuthenticationCredentials authenticationCredentials)
     {
         var user = await _userManager.FindByNameAsync(authenticationCredentials.Email);
@@ -44,7 +45,7 @@ public class AuthenticationController : ControllerBase
         return Ok(new { Succes = true, Token = handler.WriteToken(securityToken) });
     }
 
-    [HttpPost("api/signout")]
+    [HttpPost("signout")]
     public new async Task<IActionResult> SignOut() 
     {
         await _signInManager.SignOutAsync();
