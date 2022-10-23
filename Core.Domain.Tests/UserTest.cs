@@ -55,7 +55,7 @@ public class UserTest
         };
 
         // Act
-        var act = Assert.Throws<InvalidOperationException>(() => user.BirthDate = new DateTime(2009, 3, 20));
+        var act = Assert.Throws<InvalidOperationException>(() => user.BirthDate = new DateTime(2005, 3, 20));
         
         // Assert
         Assert.Equal("Je moet 18 jaar oud zijn om een organisator te zijn!", act.Message);
