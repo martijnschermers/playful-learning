@@ -76,9 +76,7 @@ public class GameNightController : Controller
         var games = gameNightViewModel.Game
             .Select(gameId => _gameRepository!.GetGameById(gameId))
             .ToList();
-
-        var isForAdults = gameNightViewModel.IsOnlyForAdults || games.Any(g => g.IsOnlyForAdults);
-
+        
         var user = _helperService!.GetUser(HttpContext);
 
         var gameNight = new GameNight
@@ -91,10 +89,10 @@ public class GameNightController : Controller
             Drinks = new List<Drink>(), Foods = new List<Food>(), Games = games, Players = new List<User>(),
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
-            IsOnlyForAdults = isForAdults, Organizer = user
+            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
         };
 
-        _gameNightRepository.AddGameNight(gameNight);
+        _gameNightService!.AddGameNight(gameNight);
 
         return RedirectToAction(nameof(Organized));
     }
@@ -159,6 +157,7 @@ public class GameNightController : Controller
     {
         var user = _helperService!.GetUser(HttpContext);
         
+        //TODO: CLEAN this code pls 
         if (!ModelState.IsValid) {
             var gameNight = _gameNightRepository.GetGameNightById(id)!;
             var allGames = _gameRepository!.GetAllGames();
@@ -176,9 +175,7 @@ public class GameNightController : Controller
         var games = gameNightViewModel.Game
             .Select(gameId => _gameRepository!.GetGameById(gameId))
             .ToList();
-
-        var isForAdults = gameNightViewModel.IsOnlyForAdults || games.Any(g => g.IsOnlyForAdults);
-
+        
         var updatedGameNight = new GameNight
         {
             Id = id,
@@ -190,7 +187,7 @@ public class GameNightController : Controller
             Games = games,
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
-            IsOnlyForAdults = isForAdults, Organizer = user
+            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
         };
 
         var result = _gameNightService!.UpdateGameNight(id, updatedGameNight, user);

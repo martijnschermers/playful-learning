@@ -11,6 +11,12 @@ public class GameNightService : IGameNightService
         _repository = repository;
     }
 
+    public void AddGameNight(GameNight gameNight)
+    {
+        gameNight.IsOnlyForAdults = gameNight.IsOnlyForAdults || gameNight.Games.Any(g => g.IsOnlyForAdults);
+        _repository.AddGameNight(gameNight);
+    }
+
     public string UpdateGameNight(int id, GameNight updatedGameNight, User user)
     {
         var originalGameNight = _repository.GetGameNightById(id);
@@ -28,6 +34,7 @@ public class GameNightService : IGameNightService
             return "Het is niet toegestaan om de spelavond aan te passen, omdat er al deelnemers zijn.";
         }
         
+        updatedGameNight.IsOnlyForAdults = updatedGameNight.IsOnlyForAdults || updatedGameNight.Games.Any(g => g.IsOnlyForAdults);
         _repository.UpdateGameNight(originalGameNight, updatedGameNight);
         return ""; 
     }
@@ -65,8 +72,10 @@ public class GameNightService : IGameNightService
             return "Het is niet mogelijk om in te schrijven, omdat de spelavond vol is!";
         }
 
-        if (!user.Allergies.Any(allergy => gameNight.Foods.Any(f => f.Allergies.Contains(allergy)))) {
-            return "Uw allergieën of dieetwensen sluiten niet aan op deze spelavond!";
+        if (user.Allergies.Any()) {
+            if (!user.Allergies.Any(allergy => gameNight.Foods.Any(f => f.Allergies.Contains(allergy)))) {
+                return "Uw allergieën of dieetwensen sluiten niet aan op deze spelavond!";
+            }
         }
 
         if (gameNight.IsPotluck && gameNight.Foods.All(f => f.UserId != user.Id)) {
