@@ -16,6 +16,6 @@ public class HelperService : IHelperService
     public User GetUser(HttpContext context)
     {
         var identity = context.User.Identity;
-        return _userService.GetUserByEmail(identity!.Name!);
+        return _userService.GetUserByEmail(identity!.Name!)!;
     }
 }
