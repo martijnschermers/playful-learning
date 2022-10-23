@@ -1,3 +1,4 @@
+using ApplicationServices;
 using Core.Domain;
 using Core.DomainServices;
 using Microsoft.AspNetCore.Mvc;
@@ -8,12 +9,14 @@ namespace Portal.Controllers;
 public class FoodController : Controller
 {
     private readonly IGameNightRepository _repository; 
-    private readonly IAllergyRepository _allergyRepository; 
+    private readonly IAllergyRepository _allergyRepository;
+    private readonly IHelperService _helperService;
     
-    public FoodController(IGameNightRepository repository, IAllergyRepository allergyRepository)
+    public FoodController(IGameNightRepository repository, IAllergyRepository allergyRepository, IHelperService helperService)
     {
         _repository = repository;
         _allergyRepository = allergyRepository;
+        _helperService = helperService;
     }
     
     [HttpGet]
@@ -29,6 +32,8 @@ public class FoodController : Controller
     [HttpPost]
     public IActionResult Index(int id, FoodViewModel foodViewModel)
     {
+        var user = _helperService.GetUser(HttpContext); 
+        
         var checkboxOptions = _allergyRepository.GetAllAllergies()
             .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
             .ToList();
@@ -38,15 +43,18 @@ public class FoodController : Controller
         if (!ModelState.IsValid) {
             return View(returnViewModel);
         }
+
+        var allergyIds = foodViewModel.Allergy ?? new List<int>();
         
-        var allergies = foodViewModel.Allergy
+        var allergies = allergyIds
             .Select(allergyId => _allergyRepository.GetAllergyById(allergyId))
             .ToList();
 
         var food = new Food
         {
             Name = foodViewModel.Name,
-            Allergies = allergies
+            Allergies = allergies, 
+            UserId = user.Id
         };
 
         var result = _repository.AddFood(id, food);

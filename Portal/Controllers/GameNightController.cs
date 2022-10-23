@@ -1,4 +1,3 @@
-using System.Net;
 using ApplicationServices;
 using Core.Domain;
 using Core.DomainServices;
@@ -114,12 +113,6 @@ public class GameNightController : Controller
         var user = _helperService!.GetUser(HttpContext);
 
         gameNight = _gameNightRepository.GetGameNightById(id)!;
-
-        //TODO: Implement check if person added food himself, this is too global
-        if (gameNight.IsPotluck && !gameNight.Foods.Any()) {
-            ModelState.AddModelError("", "Je moet op zijn minst een ding meenemen!");
-            return View(gameNight); 
-        }
 
         var result = _gameNightService!.Participate(gameNight, user);
 

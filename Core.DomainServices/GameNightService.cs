@@ -11,7 +11,6 @@ public class GameNightService : IGameNightService
         _repository = repository;
     }
 
-    //TODO: Validate if requesting user is organizer, for deleting as well 
     public string UpdateGameNight(int id, GameNight updatedGameNight, User user)
     {
         var originalGameNight = _repository.GetGameNightById(id);
@@ -66,6 +65,14 @@ public class GameNightService : IGameNightService
             return "Het is niet mogelijk om in te schrijven, omdat de spelavond vol is!";
         }
 
+        if (!user.Allergies.Any(allergy => gameNight.Foods.Any(f => f.Allergies.Contains(allergy)))) {
+            return "Uw allergieën of dieetwensen sluiten niet aan op deze spelavond!";
+        }
+
+        if (gameNight.IsPotluck && gameNight.Foods.All(f => f.UserId != user.Id)) {
+            return "Je moet op zijn minst een ding meenemen!";
+        }
+        
         _repository.Participate(gameNight, user);
         return ""; 
     }
