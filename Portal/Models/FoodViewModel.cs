@@ -13,5 +13,5 @@ public class FoodViewModel
     public List<CheckboxOption> Allergies { get; set; }
     
     [ValidateNever]
-    public List<int> Allergy { get; set; }
+    public List<int>? Allergy { get; set; }
 }
