@@ -5,12 +5,12 @@ public class User
     public int Id { get; set; }
     public string Email { get; set; }
     public string Name { get; set; }
-    private readonly DateTime _birthDate;
+    private DateTime _birthDate;
 
     public DateTime BirthDate
     {
         get => _birthDate;
-        init
+        set
         {
             if (value > DateTime.Now) {
                 throw new InvalidOperationException("De geboortedatum mag niet in de toekomst liggen!"); 
