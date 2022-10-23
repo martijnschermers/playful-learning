@@ -48,7 +48,7 @@ public class GameNightService : IGameNightService
     
     public string Participate(GameNight gameNight, User user)
     {
-        var age = user.GetAge();
+        var age = user.GetAge(null);
 
         if (age < 18 && gameNight.IsOnlyForAdults) {
             return "Het is niet toegestaan om deel te nemen aan een spelavond voor volwassenen als iemand jonger dan 18 jaar!";

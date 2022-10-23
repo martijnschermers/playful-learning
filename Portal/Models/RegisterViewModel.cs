@@ -38,7 +38,7 @@ public class RegisterViewModel
     public List<CheckboxOption> Allergies { get; set; }
     
     [ValidateNever]
-    public List<int> Allergy { get; set; }
+    public List<int>? Allergy { get; set; }
     
     [Display(Name = "Wachtwoord: ")]
     [DataType(DataType.Password)]

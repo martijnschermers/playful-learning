@@ -94,42 +94,38 @@ public class AccountController : Controller
             FillViewBag();
             return View(returnViewModel);
         }
-
-        if (registerViewModel.BirthDate > DateTime.Now) {
-            ModelState.AddModelError("", "De geboortedatum mag niet in de toekomst liggen!");
-            FillViewBag();
-            return View(returnViewModel);
-        }
-
+        
         if (await _userManager!.FindByEmailAsync(registerViewModel.Email) != null) {
             ModelState.AddModelError("", "Emailadres is al in gebruik!");
             FillViewBag();
             return View(returnViewModel);
         }
 
-        //TODO: Maybe move this to service???
-        var allergies = registerViewModel.Allergy
+        var allergyIds = registerViewModel.Allergy ?? new List<int>();
+
+        var allergies = allergyIds
             .Select(allergyId => _allergyRepository!.GetAllergyById(allergyId))
             .ToList();
 
-        var user = new User
-        {
-            Address = new Address
+        User? user; 
+        try {
+            user = new User
             {
-                City = registerViewModel.City, Street = registerViewModel.Street,
-                HouseNumber = registerViewModel.HouseNumber
-            },
-            Allergies = allergies,
-            Email = registerViewModel.Email, Gender = registerViewModel.Gender, Name = registerViewModel.Username,
-            BirthDate = registerViewModel.BirthDate
-        };
-
-        if (registerViewModel.UserType == UserType.Organizer && user.GetAge() < 18) {
-            ModelState.AddModelError("", "Je moet 18 jaar oud zijn om een organisator te zijn!");
+                Address = new Address
+                {
+                    City = registerViewModel.City, Street = registerViewModel.Street,
+                    HouseNumber = registerViewModel.HouseNumber
+                },
+                Allergies = allergies,
+                Email = registerViewModel.Email, Gender = registerViewModel.Gender, Name = registerViewModel.Username,
+                BirthDate = registerViewModel.BirthDate
+            };
+        } catch (InvalidOperationException e) {
+            ModelState.AddModelError("", e.Message);
             FillViewBag();
             return View(returnViewModel);
         }
-
+        
         _repository.AddUser(user);
 
         var identityUser = new IdentityUser(registerViewModel.Email)
@@ -185,7 +181,7 @@ public class AccountController : Controller
     }
 
     // Method for testing
-    public User GetUserByEmail(string email)
+    public User? GetUserByEmail(string email)
     {
         return _repository.GetUserByEmail(email);
     }

@@ -17,7 +17,7 @@ public class UserTest
         };
 
         // Act
-        var age = user.GetAge();
+        var age = user.GetAge(null);
         
         // Assert
         Assert.Equal(22, age);
