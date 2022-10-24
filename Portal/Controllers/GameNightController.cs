@@ -56,7 +56,7 @@ public class GameNightController : Controller
     public IActionResult Organize()
     {
         var games = _gameRepository!.GetAllGames()
-            .Select(game => new CheckboxOption(false, game.Name, game.Id))
+            .Select(game => new CheckboxOption(false, game.Name, game.Id!))
             .ToList();
         
         TempData.Clear();
@@ -133,7 +133,7 @@ public class GameNightController : Controller
         foreach (var game in games) {
             var isChecked = gameNight.Games.Contains(game);
 
-            checkBoxes.Add(new CheckboxOption(isChecked, game.Name, game.Id));
+            checkBoxes.Add(new CheckboxOption(isChecked, game.Name, game.Id!));
         }
         
         var viewModel = new GameNightViewModel
@@ -185,7 +185,7 @@ public class GameNightController : Controller
             IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
         };
 
-        var result = _gameNightService!.UpdateGameNight(id, updatedGameNight, user);
+        var result = _gameNightService!.UpdateGameNight(id, updatedGameNight);
 
         if (result != "") {
             ModelState.AddModelError("", result);
@@ -198,9 +198,7 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Delete(int id)
     {
-        var user = _helperService!.GetUser(HttpContext);
-        
-        _gameNightService!.DeleteGameNight(id, user);
+        _gameNightService!.DeleteGameNight(id);
 
         return RedirectToAction(nameof(Organized));
     }

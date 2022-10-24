@@ -105,7 +105,7 @@ public class GameNightController : ControllerBase
             IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
         };
 
-        var result = _gameNightService.UpdateGameNight(id, gameNight, user);
+        var result = _gameNightService.UpdateGameNight(id, gameNight);
 
         if (result != "") {
             return BadRequest(new { Message = result });
@@ -117,8 +117,7 @@ public class GameNightController : ControllerBase
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        var user = _helperService.GetUser(HttpContext);
-        var result = _gameNightService.DeleteGameNight(id, user);
+        var result = _gameNightService.DeleteGameNight(id);
 
         if (result != "") {
             return BadRequest(new { Message = result });

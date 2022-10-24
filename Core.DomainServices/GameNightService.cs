@@ -17,7 +17,7 @@ public class GameNightService : IGameNightService
         _repository.AddGameNight(gameNight);
     }
 
-    public string UpdateGameNight(int id, GameNight updatedGameNight, User user)
+    public string UpdateGameNight(int id, GameNight updatedGameNight)
     {
         var originalGameNight = _repository.GetGameNightById(id);
 
@@ -25,10 +25,6 @@ public class GameNightService : IGameNightService
             return "Spelavond niet gevonden.";
         }
 
-        if (originalGameNight.Organizer != user) {
-            return "Het is niet toegestaan om een spelavond aan te passen die je niet hebt georganiseerd!"; 
-        }
-        
         // When there are participants, updating is not allowed 
         if (originalGameNight.Players.Count > 0) {
             return "Het is niet toegestaan om de spelavond aan te passen, omdat er al deelnemers zijn.";
@@ -39,18 +35,14 @@ public class GameNightService : IGameNightService
         return ""; 
     }
 
-    public string DeleteGameNight(int gameNightId, User user)
+    public string DeleteGameNight(int gameNightId)
     {
         var gameNight = _repository.GetGameNightById(gameNightId);
 
         if (gameNight == null) {
             return "Spelavond niet gevonden.";
         }
-        
-        if (gameNight.Organizer != user) {
-            return "Het is niet toegestaan om een spelavond te verwijderen die je niet hebt georganiseerd!"; 
-        }
-        
+
         // When there are participants, deleting is not allowed 
         if (gameNight.Players.Count > 0) {
             return "Het is niet toegestaan om de spelavond te verwijderen, omdat er al deelnemers zijn.";

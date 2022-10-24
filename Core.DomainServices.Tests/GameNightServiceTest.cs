@@ -143,12 +143,12 @@ public class GameNightServiceTest
 
         var gameNightServiceMock = new Mock<IGameNightService>();
         gameNightServiceMock
-            .Setup(r => r.UpdateGameNight(originalGameNight.Id, updatedGameNight, user));
+            .Setup(r => r.UpdateGameNight(originalGameNight.Id, updatedGameNight));
 
         var service = new GameNightService(repositoryMock.Object);
 
         // Act
-        var result = service.UpdateGameNight(originalGameNight.Id, updatedGameNight, user);
+        var result = service.UpdateGameNight(originalGameNight.Id, updatedGameNight);
 
         // Assert
         Assert.Equal("Het is niet toegestaan om de spelavond aan te passen, omdat er al deelnemers zijn.", result);
@@ -172,12 +172,12 @@ public class GameNightServiceTest
 
         var gameNightServiceMock = new Mock<IGameNightService>();
         gameNightServiceMock
-            .Setup(r => r.DeleteGameNight(originalGameNight.Id, user));
+            .Setup(r => r.DeleteGameNight(originalGameNight.Id));
 
         var service = new GameNightService(repositoryMock.Object);
 
         // Act
-        var result = service.DeleteGameNight(originalGameNight.Id, user);
+        var result = service.DeleteGameNight(originalGameNight.Id);
 
         // Assert
         Assert.Equal("Het is niet toegestaan om de spelavond te verwijderen, omdat er al deelnemers zijn.", result);
