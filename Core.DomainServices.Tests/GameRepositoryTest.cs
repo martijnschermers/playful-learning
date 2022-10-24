@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Core.DomainServices.Tests;
 
-public class GameTest
+public class GameRepositoryTest
 {
     [Fact]
     public void GetGameById_Returns_The_Correct_Game()

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Core.DomainServices.Tests;
 
-public class GameNightTest
+public class GameNightRepositoryTest
 {
     [Fact]
     public void GetGameNightById_Returns_Correct_GameNight()
