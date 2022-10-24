@@ -13,19 +13,19 @@ namespace Portal.Controllers;
 public class AccountController : Controller
 {
     private readonly IUserRepository _repository;
-    private readonly IAllergyRepository? _allergyRepository;
-    private readonly UserManager<IdentityUser>? _userManager;
-    private readonly SignInManager<IdentityUser>? _signInManager;
+    private readonly IAllergyRepository _allergyRepository;
+    private readonly UserManager<IdentityUser> _userManager;
+    private readonly SignInManager<IdentityUser> _signInManager;
 
-    public AccountController(IUserRepository repository, IAllergyRepository? allergyRepository,
-        UserManager<IdentityUser>? userManager, SignInManager<IdentityUser>? signInManager)
+    public AccountController(IUserRepository repository, IAllergyRepository allergyRepository,
+        UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
     {
         _repository = repository;
         _userManager = userManager;
         _signInManager = signInManager;
         _allergyRepository = allergyRepository;
 
-        IdentitySeedData.SeedUsers(userManager!, repository).Wait(); 
+        IdentitySeedData.SeedUsers(userManager, repository).Wait(); 
     }
 
     [HttpGet]
@@ -50,13 +50,13 @@ public class AccountController : Controller
             return View();
         }
 
-        var user = await _userManager!.FindByEmailAsync(loginViewModel.Email);
+        var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
         if (user == null) {
             ModelState.AddModelError("", "Invalide emailadres of wachtwoord!");
             return View();
         }
 
-        var signinResult = await _signInManager!.PasswordSignInAsync(user, loginViewModel.Password, true, false);
+        var signinResult = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, true, false);
 
         if (!signinResult.Succeeded) {
             ModelState.AddModelError("", "Invalide emailadres of wachtwoord!");
@@ -76,7 +76,7 @@ public class AccountController : Controller
 
         FillViewBag();
 
-        var allergies = _allergyRepository!.GetAllAllergies()
+        var allergies = _allergyRepository.GetAllAllergies()
             .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
             .ToList();
         
@@ -86,7 +86,7 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> RegisterAsync(RegisterViewModel registerViewModel)
     {
-        var incomingAllergies = _allergyRepository!.GetAllAllergies()
+        var incomingAllergies = _allergyRepository.GetAllAllergies()
             .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
             .ToList();
 
@@ -97,7 +97,7 @@ public class AccountController : Controller
             return View(returnViewModel);
         }
         
-        if (await _userManager!.FindByEmailAsync(registerViewModel.Email) != null) {
+        if (await _userManager.FindByEmailAsync(registerViewModel.Email) != null) {
             ModelState.AddModelError("", "Emailadres is al in gebruik!");
             FillViewBag();
             return View(returnViewModel);
@@ -106,7 +106,7 @@ public class AccountController : Controller
         var allergyIds = registerViewModel.Allergy ?? new List<int>();
 
         var allergies = allergyIds
-            .Select(allergyId => _allergyRepository!.GetAllergyById(allergyId))
+            .Select(allergyId => _allergyRepository.GetAllergyById(allergyId))
             .ToList();
 
         User? user; 
@@ -154,7 +154,7 @@ public class AccountController : Controller
     [Authorize]
     public async Task<IActionResult> Logout()
     {
-        await _signInManager!.SignOutAsync();
+        await _signInManager.SignOutAsync();
 
         return RedirectToAction("Index", "Home");
     }
