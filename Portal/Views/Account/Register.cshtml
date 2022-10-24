@@ -4,64 +4,130 @@
     ViewBag.Title = "Registreer";
 }
 
-<h2>Registreer</h2>
+<h2 class="text-center">Registreer</h2>
 
-<form asp-action="Register" class="row g-2" method="post">
-    <div class="form-group">
+@* TODO: Extract inputs to partial view *@
+
+<form class="m-auto col-12 col-md-8 row g-2" asp-action="Register" method="post">
+    <div class="form-floating mb-2">
+        <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["Username"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="Username" placeholder="Gebruikersnaam"/>
         <label asp-for="Username"></label>
-        <input class="form-control" asp-for="Username"/>
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Username"]!.Errors.Count > 0) {
+            <div class="invalid-feedback">
+                @ViewData.ModelState["Username"]!.Errors[0].ErrorMessage
+            </div>
+        }
     </div>
 
-    <div class="form-group">
+    <div class="form-floating mb-2">
+        <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["Email"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="Email" placeholder="Emailadres"/>
         <label asp-for="Email"></label>
-        <input class="form-control" asp-for="Email"/>
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Email"]!.Errors.Count > 0) {
+            <div class="invalid-feedback">
+                @ViewData.ModelState["Email"]!.Errors[0].ErrorMessage
+            </div>
+        }
     </div>
 
-    <div class="form-group">
+    <div class="form-floating mb-2">
+        <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["BirthDate"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="BirthDate" placeholder="Geboortedatum"/>
         <label asp-for="BirthDate"></label>
-        <input class="form-control" asp-for="BirthDate"/>
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState["BirthDate"]!.Errors.Count > 0) {
+            <div class="invalid-feedback">
+                @ViewData.ModelState["BirthDate"]!.Errors[0].ErrorMessage
+            </div>
+        }
     </div>
 
-    <div class="row g-2">
-        <label asp-for="City"></label>
-        <div class="col-7">
-            <input asp-for="City" class="form-control" placeholder="Stad">
+    <div class="md-row g-2 m-0 md-p-0">
+        <div class="form-floating col-12 md-col-6 mb-2">
+            <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["City"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="City" placeholder="Stad"/>
+            <label asp-for="City"></label>
+
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState["City"]!.Errors.Count > 0) {
+                <div class="invalid-feedback">
+                    @ViewData.ModelState["City"]!.Errors[0].ErrorMessage
+                </div>
+            }
         </div>
-        <div class="col">
-            <input asp-for="Street" class="form-control" placeholder="Straat">
+
+        <div class="form-floating col-12 md-col-4 mb-2">
+            <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["Street"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="Street" placeholder="Straat"/>
+            <label asp-for="Street"></label>
+
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Street"]!.Errors.Count > 0) {
+                <div class="invalid-feedback">
+                    @ViewData.ModelState["Street"]!.Errors[0].ErrorMessage
+                </div>
+            }
         </div>
-        <div class="col">
-            <input asp-for="HouseNumber" class="form-control">
+
+        <div class="form-floating col-12 md-col-2 mb-2">
+            <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["HouseNumber"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="HouseNumber" placeholder="Huisnummer"/>
+            <label asp-for="HouseNumber"></label>
+
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState["HouseNumber"]!.Errors.Count > 0) {
+                <div class="invalid-feedback">
+                    @ViewData.ModelState["HouseNumber"]!.Errors[0].ErrorMessage
+                </div>
+            }
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-floating col-12 md-col-6 mb-2">
+        <select class="form-select @(!ViewData.ModelState.IsValid && ViewData.ModelState["Gender"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="Gender" asp-items="ViewBag.Gender" placeholder="Geslacht"></select>
         <label asp-for="Gender"></label>
-        <select class="form-select" asp-for="Gender" asp-items="ViewBag.Gender"></select>
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Gender"]!.Errors.Count > 0) {
+            <div class="invalid-feedback">
+                @ViewData.ModelState["Gender"]!.Errors[0].ErrorMessage
+            </div>
+        }
     </div>
 
-    <div class="form-group">
+    <div class="form-floating col-12 md-col-6 mb-2">
+        <select class="form-select @(!ViewData.ModelState.IsValid && ViewData.ModelState["UserType"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="UserType" asp-items="ViewBag.UserTypes" placeholder="Type gebruiker"></select>
         <label asp-for="UserType"></label>
-        <select class="form-select" asp-for="UserType" asp-items="ViewBag.UserTypes"></select>
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState["UserType"]!.Errors.Count > 0) {
+            <div class="invalid-feedback">
+                @ViewData.ModelState["UserType"]!.Errors[0].ErrorMessage
+            </div>
+        }
     </div>
 
     <label asp-for="Allergies"></label>
-    <partial name="_Allergies" model="Model.Allergies" />
+    <partial name="_Allergies" model="Model.Allergies"/>
 
-    <div class="form-group">
+    <div class="form-floating mb-2">
+        <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["Password"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="Password" placeholder="Wachtwoord"/>
         <label asp-for="Password"></label>
-        <input class="form-control" asp-for="Password"/>
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Password"]!.Errors.Count > 0) {
+            <div class="invalid-feedback">
+                @ViewData.ModelState["Password"]!.Errors[0].ErrorMessage
+            </div>
+        }
     </div>
 
-    <div class="form-group">
+    <div class="form-floating">
+        <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["RepeatPassword"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="RepeatPassword" placeholder="Wachtwoord herhalen"/>
         <label asp-for="RepeatPassword"></label>
-        <input class="form-control" asp-for="RepeatPassword"/>
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState["RepeatPassword"]!.Errors.Count > 0) {
+            <div class="invalid-feedback">
+                @ViewData.ModelState["RepeatPassword"]!.Errors[0].ErrorMessage
+            </div>
+        }
     </div>
 
-    <div class="d-flex flex-column mt-2 justify-center">
-        <button class="btn btn-primary col-4" type="submit">Registreer</button>
+    <div class="d-flex flex-column mt-3 align-items-center justify-center">
+        <button class="btn btn-primary col-6" type="submit">Registreer</button>
         <a class="link-primary w-fit my-2" asp-action="Login">Al een account? Login!</a>
     </div>
 
-    <div class="text-danger" asp-validation-summary="All"></div>
+    <div class="alert alert-danger text-center" role="alert" asp-validation-summary="ModelOnly"></div>
 </form>

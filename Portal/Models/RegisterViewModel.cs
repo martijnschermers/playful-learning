@@ -20,13 +20,15 @@ public class RegisterViewModel
     [Display(Name = "Geboortedatum: ")]
     public DateTime BirthDate { get; set; }
 
-    [Display(Name = "Adres: ")]
+    [Display(Name = "Stad: ")]
     [Required(ErrorMessage = "Stad is verplicht!")]
     public string City { get; set; }
     
+    [Display(Name = "Straat: ")]
     [Required(ErrorMessage = "Straat is verplicht!")]
     public string Street { get; set; }
     
+    [Display(Name = "Huisnummer: ")]
     public int HouseNumber { get; set; }
 
     [Display(Name = "Geslacht: ")]

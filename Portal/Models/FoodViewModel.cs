@@ -8,6 +8,7 @@ namespace Portal.Models;
 public class FoodViewModel
 {
     [Display(Name = "Naam: ")]
+    [Required(ErrorMessage = "Naam is verplicht!")]
     public string Name { get; set; }
     
     [ValidateNever]

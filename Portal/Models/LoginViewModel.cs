@@ -10,10 +10,12 @@ public class LoginViewModel
 {
     [EmailAddress]
     [Required(ErrorMessage = "Emailadres is verplicht!")]
+    [Display(Name = "Emailadres")]
     public string Email { get; set; }
     
     [DataType(DataType.Password)]
     [Required(ErrorMessage = "Wachtwoord is verplicht!")]
+    [Display(Name = "Wachtwoord")]
     public string Password { get; set; }
     
     [HiddenInput]
