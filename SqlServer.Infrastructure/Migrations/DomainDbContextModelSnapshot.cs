@@ -41,7 +41,7 @@ namespace SqlServer.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("Core.Domain.Allergy", b =>
@@ -70,7 +70,7 @@ namespace SqlServer.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Allergies");
+                    b.ToTable("Allergies", (string)null);
 
                     b.HasData(
                         new
@@ -132,7 +132,7 @@ namespace SqlServer.Infrastructure.Migrations
 
                     b.HasIndex("GameNightId");
 
-                    b.ToTable("Drinks");
+                    b.ToTable("Drinks", (string)null);
 
                     b.HasData(
                         new
@@ -188,7 +188,7 @@ namespace SqlServer.Infrastructure.Migrations
 
                     b.HasIndex("GameNightId");
 
-                    b.ToTable("Food");
+                    b.ToTable("Food", (string)null);
                 });
 
             modelBuilder.Entity("Core.Domain.Game", b =>
@@ -224,7 +224,7 @@ namespace SqlServer.Infrastructure.Migrations
 
                     b.HasIndex("GameNightId");
 
-                    b.ToTable("Games");
+                    b.ToTable("Games", (string)null);
 
                     b.HasData(
                         new
@@ -291,7 +291,7 @@ namespace SqlServer.Infrastructure.Migrations
 
                     b.HasIndex("OrganizerId");
 
-                    b.ToTable("GameNights");
+                    b.ToTable("GameNights", (string)null);
                 });
 
             modelBuilder.Entity("Core.Domain.User", b =>
@@ -329,7 +329,7 @@ namespace SqlServer.Infrastructure.Migrations
 
                     b.HasIndex("GameNightId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Core.Domain.Allergy", b =>

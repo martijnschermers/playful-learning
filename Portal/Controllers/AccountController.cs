@@ -24,6 +24,8 @@ public class AccountController : Controller
         _userManager = userManager;
         _signInManager = signInManager;
         _allergyRepository = allergyRepository;
+
+        IdentitySeedData.SeedUsers(userManager!, repository).Wait(); 
     }
 
     [HttpGet]
@@ -77,7 +79,7 @@ public class AccountController : Controller
         var allergies = _allergyRepository!.GetAllAllergies()
             .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
             .ToList();
-
+        
         return View(new RegisterViewModel { Allergies = allergies });
     }
 
@@ -85,7 +87,7 @@ public class AccountController : Controller
     public async Task<IActionResult> RegisterAsync(RegisterViewModel registerViewModel)
     {
         var incomingAllergies = _allergyRepository!.GetAllAllergies()
-            .Select(allergy => new CheckboxOption(false, allergy.Description, allergy))
+            .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
             .ToList();
 
         var returnViewModel = new RegisterViewModel { Allergies = incomingAllergies };

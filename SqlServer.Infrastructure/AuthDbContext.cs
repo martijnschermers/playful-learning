@@ -5,8 +5,5 @@ namespace SqlServer.Infrastructure;
 
 public class AuthDbContext : IdentityDbContext
 {
-    public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
-    {
-        
-    }
+    public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options) { }
 }
