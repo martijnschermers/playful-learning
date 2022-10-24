@@ -4,6 +4,7 @@ using Core.DomainServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebService.Models;
 
 namespace WebService.Controllers;
 
@@ -44,9 +45,28 @@ public class GameNightController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] GameNight gameNight)
+    public IActionResult Post([FromBody] GameNightViewModel gameNightViewModel)
     {
-        _repository.AddGameNight(gameNight);
+        if (!ModelState.IsValid) {
+            return BadRequest();
+        }
+        
+        var user = _helperService.GetUser(HttpContext);
+        
+        var gameNight = new GameNight
+        {
+            Address = new Address
+            {
+                Street = gameNightViewModel.Street, City = gameNightViewModel.City,
+                HouseNumber = gameNightViewModel.HouseNumber
+            },
+            Drinks = new List<Drink>(), Foods = new List<Food>(), Games = gameNightViewModel.Games, Players = new List<User>(),
+            DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
+            MaxPlayers = gameNightViewModel.MaxPlayers,
+            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
+        };
+        
+        _gameNightService.AddGameNight(gameNight);
         return Ok(gameNight);
     }
 

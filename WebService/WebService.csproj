@@ -29,8 +29,4 @@
       <ProjectReference Include="..\SqlServer.Infrastructure\SqlServer.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Models" />
-    </ItemGroup>
-
 </Project>
