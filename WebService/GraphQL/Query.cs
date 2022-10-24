@@ -23,4 +23,16 @@ public class Query
     {
         return repository.GetAllGames();
     }
+
+    public ICollection<User> GetAllUsers([Service] IUserRepository repository)
+    {
+        return repository.GetAllUsers();
+    }
+
+    public User? GetUserByEmail([Service] IUserRepository repository, string email)
+    {
+        var user = repository.GetUserByEmail(email);
+
+        return user ?? null;
+    }
 }

@@ -21,8 +21,25 @@ public class UserEFRepository : IUserRepository
 
     public User? GetUserByEmail(string email)
     {
-        return _context.Users.Where(u => u.Email == email)
+        return _context.Users
+            .Where(u => u.Email == email)
             .Include(u => u.Allergies)
             .FirstOrDefault(); 
+    }
+
+    public User? GetUserById(int id)
+    {
+        return _context.Users
+            .Where(u => u.Id == id)
+            .Include(u => u.Allergies)
+            .Include(u => u.Address)
+            .FirstOrDefault();
+    }
+
+    public ICollection<User> GetAllUsers()
+    {
+        return _context.Users
+            .Include(u => u.Allergies)
+            .ToList();
     }
 }
