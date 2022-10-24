@@ -47,12 +47,8 @@ public class GameNightController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] GameNightViewModel gameNightViewModel)
     {
-        if (!ModelState.IsValid) {
-            return BadRequest();
-        }
-        
         var user = _helperService.GetUser(HttpContext);
-        
+
         var gameNight = new GameNight
         {
             Address = new Address
@@ -60,12 +56,13 @@ public class GameNightController : ControllerBase
                 Street = gameNightViewModel.Street, City = gameNightViewModel.City,
                 HouseNumber = gameNightViewModel.HouseNumber
             },
-            Drinks = new List<Drink>(), Foods = new List<Food>(), Games = gameNightViewModel.Games, Players = new List<User>(),
+            Drinks = new List<Drink>(), Foods = new List<Food>(), Games = gameNightViewModel.Games,
+            Players = new List<User>(),
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
             IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
         };
-        
+
         _gameNightService.AddGameNight(gameNight);
         return Ok(gameNight);
     }
@@ -91,15 +88,29 @@ public class GameNightController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public IActionResult Put(int id, [FromBody] GameNight gameNight)
+    public IActionResult Put(int id, [FromBody] GameNightViewModel gameNightViewModel)
     {
         var user = _helperService.GetUser(HttpContext);
+
+        var gameNight = new GameNight
+        {
+            Address = new Address
+            {
+                Street = gameNightViewModel.Street, City = gameNightViewModel.City,
+                HouseNumber = gameNightViewModel.HouseNumber
+            },
+            Games = gameNightViewModel.Games,
+            DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
+            MaxPlayers = gameNightViewModel.MaxPlayers,
+            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
+        };
+
         var result = _gameNightService.UpdateGameNight(id, gameNight, user);
 
         if (result != "") {
             return BadRequest(new { Message = result });
         }
-        
+
         return Ok();
     }
 
