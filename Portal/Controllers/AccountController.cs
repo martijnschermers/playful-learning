@@ -105,9 +105,7 @@ public class AccountController : Controller
 
         var allergyIds = registerViewModel.Allergy ?? new List<int>();
 
-        var allergies = allergyIds
-            .Select(allergyId => _allergyRepository.GetAllergyById(allergyId))
-            .ToList();
+        var allergies = _allergyRepository.GetAllergiesByIds(allergyIds);
 
         User? user; 
         try {

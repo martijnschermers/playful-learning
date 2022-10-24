@@ -46,9 +46,7 @@ public class FoodController : Controller
 
         var allergyIds = foodViewModel.Allergy ?? new List<int>();
         
-        var allergies = allergyIds
-            .Select(allergyId => _allergyRepository.GetAllergyById(allergyId))
-            .ToList();
+        var allergies = _allergyRepository.GetAllergiesByIds(allergyIds);
 
         var food = new Food
         {
