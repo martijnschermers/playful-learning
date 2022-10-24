@@ -160,9 +160,12 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Update(int id, GameNightViewModel gameNightViewModel)
     {
-        var checkBoxes = JsonConvert.DeserializeObject<List<CheckboxOption>>(TempData["CheckBoxes"]!.ToString()!)!;
+        var checkBoxes = JsonConvert.DeserializeObject<List<CheckboxOption>>(TempData["Checkboxes"]!.ToString()!)!;
         
         if (!ModelState.IsValid) {
+            TempData.Clear();
+            TempData.Add("Checkboxes", JsonConvert.SerializeObject(checkBoxes));
+            
             return View(new GameNightViewModel { Games = checkBoxes });
         }
         
@@ -192,8 +195,6 @@ public class GameNightController : Controller
             ModelState.AddModelError("", result);
             return View(new GameNightViewModel { Games = checkBoxes }); 
         }
-
-        TempData.Remove("OrginalGameNight"); 
         
         return RedirectToAction(nameof(Organized));
     }
