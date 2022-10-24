@@ -31,4 +31,6 @@ public class GameNightViewModel
 
     [Required(ErrorMessage = "Games zijn verplicht!")]
     public List<Game> Games { get; set; }
+    
+    public int? OrganizerId { get; set; }
 }
