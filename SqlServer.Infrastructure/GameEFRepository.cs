@@ -21,4 +21,11 @@ public class GameEFRepository : IGameRepository
     {
         return _context.Games.Find(id)!;
     }
+
+    public ICollection<Game> GetGamesByIds(List<int> gameIds)
+    {
+        return gameIds
+            .Select(gameId => GetGameById(gameId))
+            .ToList();
+    }
 }

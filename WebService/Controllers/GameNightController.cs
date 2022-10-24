@@ -84,7 +84,7 @@ public class GameNightController : ControllerBase
             return Problem(result, null, 400);
         }
 
-        return Ok();
+        return Ok(new { Message = "Succesvol deelgenomen." });
     }
 
     [HttpPut("{id:int}")]
@@ -111,7 +111,7 @@ public class GameNightController : ControllerBase
             return BadRequest(new { Message = result });
         }
 
-        return Ok();
+        return Ok(new { Message = "Succesvol aangepast." });
     }
 
     [HttpDelete("{id:int}")]

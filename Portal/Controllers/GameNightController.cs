@@ -75,10 +75,8 @@ public class GameNightController : Controller
             return View(new GameNightViewModel { Games = checkboxOptions });
         }
 
-        var games = gameNightViewModel.Game
-            .Select(gameId => _gameRepository!.GetGameById(gameId))
-            .ToList();
-        
+        var games = _gameRepository!.GetGamesByIds(gameNightViewModel.Game);
+
         var user = _helperService!.GetUser(HttpContext);
 
         var gameNight = new GameNight
@@ -171,9 +169,7 @@ public class GameNightController : Controller
         
         var user = _helperService!.GetUser(HttpContext);
 
-        var games = gameNightViewModel.Game
-            .Select(gameId => _gameRepository!.GetGameById(gameId))
-            .ToList();
+        var games = _gameRepository!.GetGamesByIds(gameNightViewModel.Game);
         
         var updatedGameNight = new GameNight
         {
