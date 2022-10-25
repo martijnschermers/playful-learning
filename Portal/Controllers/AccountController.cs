@@ -77,7 +77,7 @@ public class AccountController : Controller
         FillViewBag();
 
         var allergies = _allergyRepository.GetAllAllergies()
-            .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
+            .Select(allergy => new CheckboxOption<Allergy>(false, allergy.Description, allergy))
             .ToList();
         
         return View(new RegisterViewModel { Allergies = allergies });
@@ -87,7 +87,7 @@ public class AccountController : Controller
     public async Task<IActionResult> RegisterAsync(RegisterViewModel registerViewModel)
     {
         var incomingAllergies = _allergyRepository.GetAllAllergies()
-            .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
+            .Select(allergy => new CheckboxOption<Allergy>(false, allergy.Description, allergy))
             .ToList();
 
         var returnViewModel = new RegisterViewModel { Allergies = incomingAllergies };

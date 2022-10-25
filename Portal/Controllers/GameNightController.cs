@@ -56,12 +56,12 @@ public class GameNightController : Controller
     public IActionResult Organize()
     {
         var games = _gameRepository!.GetAllGames()
-            .Select(game => new CheckboxOption(false, game.Name, game.Id!))
+            .Select(game => new CheckboxOption<Game>(false, game.Name, game))
             .ToList();
         
-        TempData.Clear();
-        TempData.Add("Games", JsonConvert.SerializeObject(games));
-
+        HttpContext.Session.Clear();
+        HttpContext.Session.SetString("Games", JsonConvert.SerializeObject(games));
+        
         return View(new GameNightViewModel { Games = games });
     }
 
@@ -70,7 +70,7 @@ public class GameNightController : Controller
     public IActionResult Organize(GameNightViewModel gameNightViewModel)
     {
         if (!ModelState.IsValid) {
-            var checkboxOptions = JsonConvert.DeserializeObject<List<CheckboxOption>>(TempData["Games"]!.ToString()!)!;
+            var checkboxOptions = JsonConvert.DeserializeObject<List<CheckboxOption<Game>>>(HttpContext.Session.GetString("Games")!)!;
 
             return View(new GameNightViewModel { Games = checkboxOptions });
         }
@@ -129,11 +129,11 @@ public class GameNightController : Controller
         var gameNight = _gameNightRepository.GetGameNightById(id)!;
         var games = _gameRepository!.GetAllGames();
 
-        var checkBoxes = new List<CheckboxOption>();
+        var checkBoxes = new List<CheckboxOption<Game>>();
         foreach (var game in games) {
             var isChecked = gameNight.Games.Contains(game);
 
-            checkBoxes.Add(new CheckboxOption(isChecked, game.Name, game.Id!));
+            checkBoxes.Add(new CheckboxOption<Game>(isChecked, game.Name, game));
         }
         
         var viewModel = new GameNightViewModel
@@ -148,8 +148,8 @@ public class GameNightController : Controller
             IsOnlyForAdults = gameNight.IsOnlyForAdults
         };
 
-        TempData.Clear();
-        TempData.Add("Checkboxes", JsonConvert.SerializeObject(checkBoxes));
+        HttpContext.Session.Clear();
+        HttpContext.Session.SetString("Checkboxes", JsonConvert.SerializeObject(checkBoxes));
         
         return View(viewModel);
     }
@@ -158,12 +158,9 @@ public class GameNightController : Controller
     [Authorize(Policy = "OnlyOrganizers")]
     public IActionResult Update(int id, GameNightViewModel gameNightViewModel)
     {
-        var checkBoxes = JsonConvert.DeserializeObject<List<CheckboxOption>>(TempData["Checkboxes"]!.ToString()!)!;
+        var checkBoxes = JsonConvert.DeserializeObject<List<CheckboxOption<Game>>>(HttpContext.Session.GetString("Checkboxes")!)!;
         
         if (!ModelState.IsValid) {
-            TempData.Clear();
-            TempData.Add("Checkboxes", JsonConvert.SerializeObject(checkBoxes));
-            
             return View(new GameNightViewModel { Games = checkBoxes });
         }
         

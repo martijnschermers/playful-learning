@@ -1,6 +1,6 @@
 namespace Core.Domain;
 
-public class Game
+public class Game : ICheckboxOption
 {
     public int? Id { get; set; }
     public string Name { get; set; }

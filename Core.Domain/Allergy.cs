@@ -1,6 +1,6 @@
 namespace Core.Domain;
 
-public class Allergy
+public class Allergy : ICheckboxOption
 {
     public int Id { get; set; }
     public AllergyEnum Name { get; set; }

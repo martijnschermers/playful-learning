@@ -23,7 +23,7 @@ public class FoodController : Controller
     public IActionResult Index()
     {
         var allergies = _allergyRepository.GetAllAllergies()
-            .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
+            .Select(allergy => new CheckboxOption<Allergy>(false, allergy.Description, allergy))
             .ToList();
 
         return View(new FoodViewModel { Allergies = allergies });
@@ -33,7 +33,7 @@ public class FoodController : Controller
     public IActionResult Index(int id, FoodViewModel foodViewModel)
     {
         var checkboxOptions = _allergyRepository.GetAllAllergies()
-            .Select(allergy => new CheckboxOption(false, allergy.Description, allergy.Id))
+            .Select(allergy => new CheckboxOption<Allergy>(false, allergy.Description, allergy))
             .ToList();
 
         var returnViewModel = new FoodViewModel { Allergies = checkboxOptions };
