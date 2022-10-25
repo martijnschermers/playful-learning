@@ -5,21 +5,34 @@
 }
 
 <div class="col">
-    <div class="card">
+    <div class="card shadow">
         <div class="card-body">
             <h5 class="card-title">@Model.Organizer.Name</h5>
             <h6 class="card-subtitle mb-2">@Model.DateTime</h6>
-            <p class="card-text">Adres: @Model.Address</p>
-            <p class="card-text">Maximaal aantal deelnemers: @Model.MaxPlayers</p>
-            <p class="card-text">Potluck: @Model.IsPotluck</p>
-            <p class="card-text">Voor volwassenen: @Model.IsOnlyForAdults</p>
+            <p class="card-text">
+                Adres: @Model.Address <br>
+                Maximaal aantal deelnemers: @Model.MaxPlayers <br>
+                Potluck:
+                @if (Model.IsPotluck) {
+                    <i class="bi bi-check-lg"></i>
+                } else {
+                    <i class="bi bi-x-lg"></i>
+                }
+                <br>
+                Voor volwassenen:
+                @if (Model.IsOnlyForAdults) {
+                    <i class="bi bi-check-lg"></i>
+                } else {
+                    <i class="bi bi-x-lg"></i>
+                }
+            </p>
 
             @if (Model.Players.Count == 0 && action!.Equals("Organized")) {
                 <a asp-action="Update" asp-route-id="@Model.Id" asp-controller="GameNight" class="card-link">Aanpassen</a>
                 <a asp-action="Delete" asp-route-id="@Model.Id" asp-controller="GameNight" class="card-link">Verwijderen</a>
             }
 
-            <a asp-action="Details" asp-route-id="@Model.Id" asp-controller="GameNight" class="card-link">Details</a>
+            <a asp-action="Details" asp-route-id="@Model.Id" asp-controller="GameNight" class="card-link @(!action!.Equals("Organized") ? "stretched-link" : string.Empty)">Details</a>
         </div>
     </div>
 </div>

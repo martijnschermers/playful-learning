@@ -1,56 +1,80 @@
 ﻿<!DOCTYPE html>
-<html lang="nl">
+<html class="h-100" lang="nl">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - PlayfulLearning</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
 </head>
-<body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand text-primary text-bold" asp-controller="Home" asp-action="Index">
-                  <img src="~/images/logo.png" alt="Logo" width="64" height="48" class="d-inline-block align-text-center">
-                  PlayfulLearning
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+<body class="d-flex flex-column h-100">
+<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between p-3 mb-4 border-bottom">
+    <a class="navbar-brand d-flex align-items-center py-2" asp-controller="Home" asp-action="Index">
+        <img src="~/images/logo.png" alt="Logo" width="64" height="48" class="align-text-center">
+        <h1 class="mx-3 mb-0 opacity-75 fw-bold">PlayfulLearning</h1>
+    </a>
+
+    <div class="col-md-6 d-flex justify-content-end text-end">
+        @if (ViewContext.HttpContext.User.Identity is not { IsAuthenticated: true }) {
+            <a class="btn btn-primary me-2" asp-controller="Account" asp-action="Login"><i class="bi bi-person"></i> Inloggen</a>
+        } else {
+            <a class="btn btn-primary me-2" asp-controller="Account" asp-action="Logout"><i class="bi bi-person"></i> Uitloggen</a>
+        }
+
+        <div class="dropdown">
+            <button class="btn btn-warning dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-dice-5"></i> Spelavonden
             </button>
-            <div class="navbar-collapse collapse d-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="GameNight" asp-action="Index">Spelavonden</a>
+
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" asp-action="Index" asp-controller="GameNight">Alle spelavonden</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-action="Participating" asp-controller="GameNight">Deelnemende spelavonden</a>
+                </li>
+                @if (User.HasClaim("UserType", "Organizer")) {
+                    <li>
+                        <a class="dropdown-item" asp-action="Organized" asp-controller="GameNight">Georganiseerde spelavonden</a>
                     </li>
-                    @if (ViewContext.HttpContext.User.Identity!.IsAuthenticated) {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Uitloggen</a>
-                        </li>
-                    } else {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Inloggen</a>
-                        </li>
-                    }
-                </ul>
-            </div>
+                }
+            </ul>
         </div>
-    </nav>
+    </div>
 </header>
 
+
 <div class="container">
-    <main role="main" class="pb-3">
+    <main role="main" class="flex-shrink-0 pb-3">
         @RenderBody()
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; @DateTime.Now.Year - PlayfulLearning
+<footer class="d-flex flex-wrap justify-content-between footer mt-auto align-items-center p-3 border-top">
+    <div class="col-md-4 d-flex align-items-center">
+        <p class="mb-3 mb-md-0">© @DateTime.Now.Year - PlayfulLearning, Inc</p>
     </div>
+
+    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+        <li class="ms-3">
+            <a href="https://twitter.com/">
+                <i class="bi-twitter" style="font-size: 2rem; color: #1da1f2;"></i>
+            </a>
+        </li>
+        <li class="ms-3">
+            <a href="https://instagram.com/">
+                <i class="bi-instagram" style="font-size: 2rem; color: #f53b02;"></i>
+            </a>
+        </li>
+        <li class="ms-3">
+            <a href="https://facebook.com/">
+                <i class="bi-facebook" style="font-size: 2rem; color: #1278f3;"></i>
+            </a>
+        </li>
+    </ul>
 </footer>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>

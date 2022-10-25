@@ -1,7 +1,10 @@
 @model Game
 
-<div class="col-sm-6">
-    <div class="card">
+<div class="col-3">
+    <div class="card col-12 h-100">
+        @if (Model.Image != "") {
+            <img src="@Model.Image" class="card-img-top img-fluid" alt="Game image">
+        }
         <div class="card-body">
             <h5 class="card-title">@Model.Name</h5>
             <h6 class="card-subtitle mb-2">Genre: @Model.Genre</h6>

@@ -1,8 +1,30 @@
-﻿@{
+﻿@model ICollection<GameNight>
+
+@{
     ViewData["Title"] = "Home Page";
-    var user = User.Identity!.Name ?? "Placeholder";
 }
 
-<div class="text-center">
-    <h1>Welcome @user</h1>
+<div class="row align-items-center g-5 py-5">
+    <div class="col-lg-6">
+        <h1 class="display-5 fw-bold lh-1 mb-3">Speel bordspellen en verbeter uw Nederlands!</h1>
+        <p class="lead">Deze website geeft u de mogelijkheid om plezier te hebben en te leren op hetzelfde moment. Schrijf je nu in voor een spelavond of organiseer er zelf eentje! Samen verbeteren we uw Nederlandse taalvaardigheid!</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <a asp-action="Index" asp-controller="GameNight" class="btn btn-primary btn-lg px-4 me-md-2">Bekijk spelavonden!</a>
+        </div>
+    </div>
+    <div class="col-12 col-sm-12 col-lg-6">
+        <img src="~/images/boardgames.png" class="d-block m-auto img-fluid" alt="Boardgames icon">
+    </div>
+</div>
+
+<div class="d-flex flex-column">
+    <h2 class="fw-semibold">Populaire spelavonden: </h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-3">
+        @foreach (var gameNight in Model) {
+            <partial name="_GameNight" model="gameNight"/>
+        }
+    </div>
+
+    <a class="text-end mt-2 fw-semibold fs-5" asp-action="Index" asp-controller="GameNight">Alle spelavonden -></a>
 </div>
