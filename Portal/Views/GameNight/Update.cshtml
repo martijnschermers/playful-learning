@@ -4,12 +4,12 @@
     ViewBag.Title = "Aanpassen";
 }
 
-<h2>Spelavond aanpassen</h2>
+<h2 class="text-center">Spelavond aanpassen</h2>
 
-<form asp-action="Update" class="row g-2" method="post">
+<form class="m-auto col-12 col-md-8 row g-2" asp-action="Update" method="post">
     <partial name="_GameNightForm" model="Model" />
 
-    <button class="btn btn-primary my-2" type="submit">Aanpassen</button>
+    <button class="btn btn-primary col-4 my-2 m-auto" type="submit">Aanpassen</button>
 
-    <div class="text-danger" asp-validation-summary="All"></div>
+    <div class="alert alert-danger text-center" role="alert" asp-validation-summary="ModelOnly"></div>
 </form>

@@ -1,10 +1,10 @@
-@model List<CheckboxOption>
+@model List<CheckboxOption<Allergy>>
 
-<div class="row m-auto md-d-flex md-justify-content-between mb-2">
+<div class="row m-auto d-flex justify-content-center align-items-center mb-2">
     @foreach (var allergy in Model) {
         <div class="form-check form-check-inline col">
             <label class="form-check-label">@allergy.Description</label>
-            <input class="form-check-input" name="Allergy" type="checkbox" value="@allergy.Value"/>
+            <input class="form-check-input" name="Allergy" type="checkbox" value="@allergy.Value.Id"/>
         </div>
     }
 </div>

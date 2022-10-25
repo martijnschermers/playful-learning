@@ -15,8 +15,11 @@
     </div>
 
     <div class="d-flex flex-column gap-2">
-        <a asp-action="Organize">Organiseer een spelavond</a>
-        <a asp-action="Organized">Georganiseerde spelavonden</a>
+        @if (User.HasClaim("UserType", "Organizer")) {
+            <a asp-action="Organize">Organiseer een spelavond</a>
+            <a asp-action="Organized">Georganiseerde spelavonden</a>
+        }
+        
         <a asp-action="Participating">Spelavonden waaraan ik deelneem</a>
     </div>
 </div>

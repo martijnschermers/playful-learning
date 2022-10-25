@@ -42,8 +42,8 @@
         }
     </div>
 
-    <div class="md-row g-2 m-0 md-p-0">
-        <div class="form-floating col-12 md-col-6 mb-2">
+    <div class="row row-cols-md-3 g-2 m-0 p-0">
+        <div class="form-floating col-12 col-md-6 mb-2">
             <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["City"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="City" placeholder="Stad"/>
             <label asp-for="City"></label>
 
@@ -54,7 +54,7 @@
             }
         </div>
 
-        <div class="form-floating col-12 md-col-4 mb-2">
+        <div class="form-floating col-12 col-md-4 mb-2">
             <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["Street"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="Street" placeholder="Straat"/>
             <label asp-for="Street"></label>
 
@@ -65,7 +65,7 @@
             }
         </div>
 
-        <div class="form-floating col-12 md-col-2 mb-2">
+        <div class="form-floating col-12 col-md-2 mb-2">
             <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["HouseNumber"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="HouseNumber" placeholder="Huisnummer"/>
             <label asp-for="HouseNumber"></label>
 

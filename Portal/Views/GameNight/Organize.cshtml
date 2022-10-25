@@ -4,12 +4,12 @@
     ViewBag.Title = "Organiseer";
 }
 
-<h2>Spelavond Organiseren</h2>
+<h2 class="text-center">Spelavond Organiseren</h2>
 
-<form asp-action="Organize" class="row g-2" method="post">
+<form class="m-auto col-12 col-md-8 row g-2"  asp-action="Organize" method="post">
     <partial name="_GameNightForm" model="Model" />
 
-    <button class="btn btn-primary col-4 my-2" type="submit">Organiseer</button>
+    <button class="btn btn-primary col-4 my-2 m-auto" type="submit">Organiseer</button>
 
-    <div class="text-danger" asp-validation-summary="All"></div>
+    <div class="alert alert-danger text-center" role="alert" asp-validation-summary="ModelOnly"></div>
 </form>

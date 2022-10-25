@@ -4,9 +4,9 @@
     ViewBag.Title = "Eten meenemen";
 }
 
-<h2 class="text-center">Neem ff wat lekkers mee!</h2>
+<h2 class="text-center">Eten meenemen!</h2>
 
-<form asp-action="Index" method="POST">
+<form class="m-auto col-md-8" asp-action="Index" method="POST">
     <div class="form-floating mb-3">
         <input class="form-control @(!ViewData.ModelState.IsValid && ViewData.ModelState["Name"]!.Errors.Count > 0 ? "is-invalid" : string.Empty)" asp-for="Name" placeholder="Naam"/>
         <label asp-for="Name"></label>
@@ -22,6 +22,6 @@
     <partial name="_Allergies" model="Model.Allergies"/>
 
     <div class="d-flex justify-content-center">
-        <button class="btn btn-primary" type="submit">Toevoegen</button>
+        <button class="btn btn-primary col-4" type="submit">Toevoegen</button>
     </div>
 </form>
