@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Core.DomainServices;
 using Microsoft.AspNetCore.Mvc;
 using Portal.Models;
 
@@ -6,14 +7,18 @@ namespace Portal.Controllers;
 
 public class HomeController : Controller
 {
+    private readonly IGameNightRepository _repository;
+    
+    public HomeController(IGameNightRepository repository)
+    {
+        _repository = repository;
+    }
+    
     public IActionResult Index()
     {
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
+        var gameNights = _repository.GetPopularGameNights(); 
+        
+        return View(gameNights);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

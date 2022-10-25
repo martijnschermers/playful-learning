@@ -5,6 +5,7 @@ namespace Core.DomainServices;
 public interface IGameNightRepository
 {
     ICollection<GameNight> GetAllGameNights();
+    ICollection<GameNight> GetPopularGameNights(); 
     GameNight? GetGameNightById(int id);
     ICollection<GameNight> GetParticipating(User user);
     void AddGameNight(GameNight gameNight);

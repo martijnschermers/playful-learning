@@ -22,6 +22,14 @@ public class GameNightEFRepository : IGameNightRepository
             .ToList();
     }
 
+    public ICollection<GameNight> GetPopularGameNights()
+    {
+        return GetAllGameNights()
+            .OrderByDescending(g => g.Players.Count)
+            .Take(3)
+            .ToList();
+    }
+
     public ICollection<GameNight> GetParticipating(User user)
     {
         return _context.GameNights.Where(g => g.Players.Contains(user))  
