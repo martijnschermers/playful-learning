@@ -7,8 +7,19 @@ using SqlServer.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//TODO: Specify bootstrap icon files to download, for load times
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddScoped<IGameNightRepository, GameNightEFRepository>();
 builder.Services.AddScoped<IGameRepository, GameEFRepository>();
@@ -55,6 +66,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
