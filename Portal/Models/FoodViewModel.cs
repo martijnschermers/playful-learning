@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Core.Domain;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 #pragma warning disable CS8618
@@ -13,7 +14,7 @@ public class FoodViewModel
     
     [ValidateNever]
     [Display(Name = "Dieetwensen/Allergieën: ")]
-    public List<CheckboxOption> Allergies { get; set; }
+    public List<CheckboxOption<Allergy>> Allergies { get; set; }
     
     [ValidateNever]
     public List<int>? Allergy { get; set; }

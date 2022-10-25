@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using ApplicationServices;
 using Core.Domain;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
@@ -18,6 +19,7 @@ public class RegisterViewModel
     public string Email { get; set; }
     
     [Display(Name = "Geboortedatum: ")]
+    [PastDateTime(ErrorMessage = "Datum mag niet in de toekomst liggen!")]
     public DateTime BirthDate { get; set; }
 
     [Display(Name = "Stad: ")]
@@ -29,6 +31,7 @@ public class RegisterViewModel
     public string Street { get; set; }
     
     [Display(Name = "Huisnummer: ")]
+    [Range(1, 1000, ErrorMessage = "Groter dan nul!")]
     public int HouseNumber { get; set; }
 
     [Display(Name = "Geslacht: ")]
@@ -39,7 +42,7 @@ public class RegisterViewModel
     
     [ValidateNever]
     [Display(Name = "Dieetwensen/Allergieën: ")]
-    public List<CheckboxOption> Allergies { get; set; }
+    public List<CheckboxOption<Allergy>> Allergies { get; set; }
     
     [ValidateNever]
     public List<int>? Allergy { get; set; }

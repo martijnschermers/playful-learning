@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using ApplicationServices;
 using Core.Domain;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 #pragma warning disable CS8618
 
@@ -15,12 +15,15 @@ public class GameNightViewModel
     public string Street { get; set; }
     
     [Required(ErrorMessage = "HouseNumber is verplicht!")]
+    [Range(1, 1000, ErrorMessage = "Getal moet groter dan nul zijn!")]
     public int HouseNumber { get; set; }
     
     [Required(ErrorMessage = "MaxPlayers is verplicht!")]
+    [Range(1, 1000, ErrorMessage = "Getal moet groter dan nul zijn!")]
     public int MaxPlayers { get; set; }
     
     [Required(ErrorMessage = "DateTime is verplicht!")]
+    [FutureDateTime(ErrorMessage = "Datum moet in de toekomst liggen!")]
     public DateTime DateTime { get; set; }
     
     [Display(Name = "Potluck?")]
