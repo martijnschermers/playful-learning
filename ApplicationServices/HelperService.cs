@@ -12,7 +12,12 @@ public class HelperService : IHelperService
     {
         _userService = userService;
     }
-    
+
+    public User GetUserById(int id)
+    {
+        return _userService.GetUserById(id);
+    }
+
     public User GetUser(HttpContext context)
     {
         var identity = context.User.Identity;

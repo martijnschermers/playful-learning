@@ -102,6 +102,8 @@ public class GameNightController : Controller
     public IActionResult Details(int id)
     {
         var gameNight = _gameNightRepository.GetGameNightById(id);
+
+        ViewBag.Organizer = _helperService!.GetUserById(gameNight!.OrganizerId);
         
         return View(gameNight);
     }

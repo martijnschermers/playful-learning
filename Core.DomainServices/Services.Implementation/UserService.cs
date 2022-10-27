@@ -12,7 +12,12 @@ public class UserService : IUserService
     {
         _repository = repository;
     }
-    
+
+    public User? GetUserById(int id)
+    {
+        return _repository.GetUserById(id);
+    }
+
     public User? GetUserByEmail(string email)
     {
         return _repository.GetUserByEmail(email); 
