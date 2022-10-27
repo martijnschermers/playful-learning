@@ -17,7 +17,8 @@ public class GameNightServiceTest
         // Arrange
         var user = new User
         {
-            Id = 1, Name = "Kees", BirthDate = new DateTime(1990, 10, 20), Allergies = new List<Allergy>()
+            Id = 1, Name = "Kees", BirthDate = new DateTime(1990, 10, 20), Allergies = new List<Allergy>(),
+            GameNights = new List<GameNight>()
         };
         var gameNight = new GameNight
         {
@@ -73,7 +74,8 @@ public class GameNightServiceTest
     public void Participate_For_Evening_Where_MaxPlayers_Is_Exceeded()
     {
         // Arrange
-        var user = new User { Id = 1, Name = "Kees", BirthDate = new DateTime(2000, 10, 20) };
+        var user = new User
+            { Id = 1, Name = "Kees", BirthDate = new DateTime(2000, 10, 20), GameNights = new List<GameNight>() };
         var gameNight = new GameNight
         {
             Id = 1, DateTime = new DateTime(2022, 3, 4), Players = new List<User>(),
@@ -101,14 +103,16 @@ public class GameNightServiceTest
         var user = new User
         {
             Id = 1, Name = "Kees", BirthDate = new DateTime(2000, 10, 20),
-            Allergies = new List<Allergy> { new Allergy { Name = AllergyEnum.Lactose } }
+            Allergies = new List<Allergy> { new Allergy { Name = AllergyEnum.Lactose } },
+            GameNights = new List<GameNight>()
         };
 
         var gameNight = new GameNight
         {
             Id = 1, DateTime = new DateTime(2022, 3, 4), Players = new List<User>(),
             IsOnlyForAdults = false, MaxPlayers = 12,
-            Foods = new List<Food> { new Food { Allergies = new List<Allergy> { new Allergy { Name = AllergyEnum.Gluten } } } }
+            Foods = new List<Food>
+                { new Food { Allergies = new List<Allergy> { new Allergy { Name = AllergyEnum.Gluten } } } }
         };
 
         var repositoryMock = new Mock<IGameNightRepository>();
@@ -126,6 +130,47 @@ public class GameNightServiceTest
     }
 
     [Fact]
+    public void Participate_For_Evening_On_Same_Day_Returns_Error()
+    {
+        // Arrange
+        var gameNight1 = new GameNight
+        {
+            Id = 1, DateTime = new DateTime(2022, 3, 4), Players = new List<User>(),
+            IsOnlyForAdults = false, MaxPlayers = 12,
+            Foods = new List<Food>
+                { new Food { Allergies = new List<Allergy> { new Allergy { Name = AllergyEnum.Gluten } } } }
+        };
+
+        var gameNight2 = new GameNight
+        {
+            Id = 2, DateTime = new DateTime(2022, 3, 4), Players = new List<User>(),
+            IsOnlyForAdults = false, MaxPlayers = 12,
+            Foods = new List<Food>
+                { new Food { Allergies = new List<Allergy> { new Allergy { Name = AllergyEnum.Gluten } } } }
+        };
+
+        var user = new User
+        {
+            Id = 1, Name = "Kees", BirthDate = new DateTime(2000, 10, 20),
+            Allergies = new List<Allergy> { new Allergy { Name = AllergyEnum.Lactose } },
+            GameNights = new List<GameNight> { gameNight1 }
+        };
+
+        var repositoryMock = new Mock<IGameNightRepository>();
+        var gameNightServiceMock = new Mock<IGameNightService>();
+        gameNightServiceMock
+            .Setup(r => r.Participate(gameNight2, user));
+
+        var service = new GameNightService(repositoryMock.Object);
+
+        // Act
+        var result = service.Participate(gameNight2, user);
+
+        // Assert
+        Assert.Equal("Je mag je maar inschrijven voor 1 spelavond per dag!", result);
+    }
+
+    [Fact]
     public void Updating_GameNight_With_Participants_Returns_Error()
     {
         // Arrange
@@ -133,7 +178,7 @@ public class GameNightServiceTest
         var originalGameNight = new GameNight
         {
             Id = 1, DateTime = new DateTime(2022, 3, 4), Players = new List<User> { user },
-            IsOnlyForAdults = false, MaxPlayers = 12, Organizer = user
+            IsOnlyForAdults = false, MaxPlayers = 12, OrganizerId = user.Id
         };
 
         var updatedGameNight = originalGameNight;
@@ -165,7 +210,7 @@ public class GameNightServiceTest
         var originalGameNight = new GameNight
         {
             Id = 1, DateTime = new DateTime(2022, 3, 4), Players = new List<User> { user },
-            IsOnlyForAdults = false, MaxPlayers = 12, Organizer = user
+            IsOnlyForAdults = false, MaxPlayers = 12, OrganizerId = user.Id
         };
 
         var repositoryMock = new Mock<IGameNightRepository>();

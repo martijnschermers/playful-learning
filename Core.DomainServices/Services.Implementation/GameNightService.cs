@@ -62,6 +62,10 @@ public class GameNightService : IGameNightService
             return "Het is niet toegestaan om deel te nemen aan een spelavond voor volwassenen als iemand jonger dan 18 jaar!";
         }
 
+        if (user.GameNights.Any(g => g.DateTime.Date == gameNight.DateTime.Date)) {
+            return "Je mag je maar inschrijven voor 1 spelavond per dag!"; 
+        }
+
         if (gameNight.Players.Count + 1 > gameNight.MaxPlayers) {
             return "Het is niet mogelijk om in te schrijven, omdat de spelavond vol is!";
         }
