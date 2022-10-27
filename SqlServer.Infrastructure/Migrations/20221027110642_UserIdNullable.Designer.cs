@@ -12,8 +12,8 @@ using SqlServer.Infrastructure;
 namespace SqlServer.Infrastructure.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20221026182629_Initial")]
-    partial class Initial
+    [Migration("20221027110642_UserIdNullable")]
+    partial class UserIdNullable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -183,7 +183,7 @@ namespace SqlServer.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -294,14 +294,12 @@ namespace SqlServer.Infrastructure.Migrations
                     b.Property<int>("MaxPlayers")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OrganizerId")
+                    b.Property<int>("OrganizerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
-
-                    b.HasIndex("OrganizerId");
 
                     b.ToTable("GameNights");
                 });
@@ -323,9 +321,6 @@ namespace SqlServer.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GameNightId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
@@ -339,9 +334,22 @@ namespace SqlServer.Infrastructure.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("GameNightId");
-
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("GameNightUser", b =>
+                {
+                    b.Property<int>("GameNightsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GameNightsId", "PlayersId");
+
+                    b.HasIndex("PlayersId");
+
+                    b.ToTable("GameNightUser");
                 });
 
             modelBuilder.Entity("Core.Domain.Allergy", b =>
@@ -384,13 +392,7 @@ namespace SqlServer.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domain.User", "Organizer")
-                        .WithMany("GameNights")
-                        .HasForeignKey("OrganizerId");
-
                     b.Navigation("Address");
-
-                    b.Navigation("Organizer");
                 });
 
             modelBuilder.Entity("Core.Domain.User", b =>
@@ -399,11 +401,22 @@ namespace SqlServer.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("AddressId");
 
-                    b.HasOne("Core.Domain.GameNight", null)
-                        .WithMany("Players")
-                        .HasForeignKey("GameNightId");
-
                     b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("GameNightUser", b =>
+                {
+                    b.HasOne("Core.Domain.GameNight", null)
+                        .WithMany()
+                        .HasForeignKey("GameNightsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("PlayersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Core.Domain.Food", b =>
@@ -418,15 +431,11 @@ namespace SqlServer.Infrastructure.Migrations
                     b.Navigation("Foods");
 
                     b.Navigation("Games");
-
-                    b.Navigation("Players");
                 });
 
             modelBuilder.Entity("Core.Domain.User", b =>
                 {
                     b.Navigation("Allergies");
-
-                    b.Navigation("GameNights");
                 });
 #pragma warning restore 612, 618
         }
