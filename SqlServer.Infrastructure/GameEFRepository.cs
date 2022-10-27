@@ -1,5 +1,6 @@
 using Core.Domain;
 using Core.DomainServices.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace SqlServer.Infrastructure;
 
@@ -7,9 +8,10 @@ public class GameEFRepository : IGameRepository
 {
     private readonly DomainDbContext _context; 
     
-    public GameEFRepository(DomainDbContext context)
+    public GameEFRepository(DomainDbContext context, IDbContextFactory<DomainDbContext>? contextFactory)
     {
         _context = context; 
+        if (contextFactory != null) _context = contextFactory.CreateDbContext();
     }
     
     public ICollection<Game> GetAllGames()

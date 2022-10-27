@@ -1,4 +1,3 @@
-using ApplicationServices;
 using Core.Domain;
 using Core.DomainServices.Repositories.Interface;
 using Core.DomainServices.Services.Interface;
@@ -7,11 +6,19 @@ using WebService.Models;
 namespace WebService.GraphQL;
 
 public class Mutation
-{ 
-    public GameNightPayload AddGameNight([Service] IGameNightService service, [Service] IUserRepository repository,
-        GameNightViewModel gameNightViewModel)
+{
+    private readonly IUserRepository _userRepository;
+    private readonly IGameNightService _service;
+
+    public Mutation(IUserRepository userRepository, IGameNightService service)
     {
-        var user = repository.GetUserById(gameNightViewModel.OrganizerId!.Value);
+        _userRepository = userRepository;
+        _service = service;
+    }
+
+    public GameNightPayload AddGameNight(GameNightViewModel gameNightViewModel)
+    {
+        var user = _userRepository.GetUserById(gameNightViewModel.OrganizerId!.Value);
 
         if (user == null) {
             return new GameNightPayload { Message = "Organisator met dat id bestaat niet!" };
@@ -31,15 +38,14 @@ public class Mutation
             IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, OrganizerId = user.Id
         };
 
-        service.AddGameNight(gameNight);
+        _service.AddGameNight(gameNight);
 
         return new GameNightPayload { GameNight = gameNight, Message = "Succesvol toegevoegd!" };
     }
-    
-    public GameNightPayload UpdateGameNight([Service] IGameNightService service, [Service] IUserRepository repository,
-        GameNightViewModel gameNightViewModel, int id)
+
+    public GameNightPayload UpdateGameNight(GameNightViewModel gameNightViewModel, int id)
     {
-        var user = repository.GetUserById(gameNightViewModel.OrganizerId!.Value);
+        var user = _userRepository.GetUserById(gameNightViewModel.OrganizerId!.Value);
 
         if (user == null) {
             return new GameNightPayload { Message = "Organisator met dat id bestaat niet!" };
@@ -58,7 +64,7 @@ public class Mutation
             IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, OrganizerId = user.Id
         };
 
-        var result = service.UpdateGameNight(id, gameNight);
+        var result = _service.UpdateGameNight(id, gameNight);
 
         if (result != "") {
             return new GameNightPayload { Message = result };
@@ -67,9 +73,9 @@ public class Mutation
         return new GameNightPayload { GameNight = gameNight, Message = "Succesvol aangepast!" };
     }
 
-    public GameNightPayload DeleteGameNight([Service] IGameNightService service, int id)
+    public GameNightPayload DeleteGameNight(int id)
     {
-        var result = service.DeleteGameNight(id);
+        var result = _service.DeleteGameNight(id);
 
         if (result != "") {
             return new GameNightPayload { Message = result };
@@ -77,11 +83,9 @@ public class Mutation
 
         return new GameNightPayload { Message = "Succesvol verwijderd!" };
     }
-    
-    //TODO: Implement participate mutation
-    
-    public Task<string> SignIn([Service] IIdentityService<string> identityService, string email, string password)
-    {
-        return identityService.SignIn(new AuthenticationCredentials(email, password));
-    }
+
+    // public Task<string> SignIn([Service] IIdentityService<string> identityService, string email, string password)
+    // {
+    //     return identityService.SignIn(new AuthenticationCredentials(email, password));
+    // }
 }

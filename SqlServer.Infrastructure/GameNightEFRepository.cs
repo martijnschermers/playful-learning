@@ -8,9 +8,10 @@ public class GameNightEFRepository : IGameNightRepository
 {
     private readonly DomainDbContext _context;
 
-    public GameNightEFRepository(DomainDbContext context)
+    public GameNightEFRepository(DomainDbContext context, IDbContextFactory<DomainDbContext>? contextFactory)
     {
         _context = context;
+        if (contextFactory != null) _context = contextFactory.CreateDbContext();
     }
 
     public ICollection<GameNight> GetAllGameNights()

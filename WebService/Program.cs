@@ -15,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
+builder.Services.AddDbContextFactory<DomainDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Domain")));
+
 builder.Services.AddScoped<IGameNightRepository, GameNightEFRepository>();
 builder.Services.AddScoped<IUserRepository, UserEFRepository>();
 builder.Services.AddScoped<IGameRepository, GameEFRepository>();
@@ -22,9 +25,6 @@ builder.Services.AddScoped<IGameRepository, GameEFRepository>();
 builder.Services.AddScoped<IGameNightService, GameNightService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHelperService, HelperService>();
-
-builder.Services.AddDbContext<DomainDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Domain")));
 
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Identity")));
@@ -55,9 +55,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddGraphQLServer()
     // .AddAuthorization()
-    .RegisterDbContext<DomainDbContext>()
+    .AddQueryType<Query>()
     .AddMutationType<Mutation>()
-    .AddQueryType<Query>();
+    // .RegisterDbContext<DomainDbContext>(DbContextKind.Synchronized)
+    .AddProjections()
+    .AddFiltering().AddSorting(); 
 
 var app = builder.Build();
 

@@ -7,31 +7,42 @@ namespace WebService.GraphQL;
 [Authorize]
 public class Query
 {
-    public GameNight? GetGameNightById([Service] IGameNightRepository repository, int id)
+    private readonly IGameNightRepository _gameNightRepository;
+    private readonly IGameRepository _gameRepository;
+    private readonly IUserRepository _userRepository;
+
+    public Query(IGameNightRepository gameNightRepository, IGameRepository gameRepository, IUserRepository userRepository)
     {
-        var gameNight = repository.GetGameNightById(id);
+        _gameNightRepository = gameNightRepository;
+        _gameRepository = gameRepository;
+        _userRepository = userRepository;
+    }
+    
+    public GameNight? GetGameNightById(int id)
+    {
+        var gameNight = _gameNightRepository.GetGameNightById(id);
 
         return gameNight ?? null;
     }
     
-    public ICollection<GameNight> GetAllGameNights([Service] IGameNightRepository repository)
+    public ICollection<GameNight> GetAllGameNights()
     {
-        return repository.GetAllGameNights();
+        return _gameNightRepository.GetAllGameNights();
     }
 
-    public ICollection<Game> GetAllGames([Service] IGameRepository repository)
+    public ICollection<Game> GetAllGames()
     {
-        return repository.GetAllGames();
+        return _gameRepository.GetAllGames();
     }
 
-    public ICollection<User> GetAllUsers([Service] IUserRepository repository)
+    public ICollection<User> GetAllUsers()
     {
-        return repository.GetAllUsers();
+        return _userRepository.GetAllUsers();
     }
 
-    public User? GetUserByEmail([Service] IUserRepository repository, string email)
+    public User? GetUserByEmail(string email)
     {
-        var user = repository.GetUserByEmail(email);
+        var user = _userRepository.GetUserByEmail(email);
 
         return user ?? null;
     }

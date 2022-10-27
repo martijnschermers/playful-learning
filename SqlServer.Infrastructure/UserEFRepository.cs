@@ -8,9 +8,10 @@ public class UserEFRepository : IUserRepository
 {
     private readonly DomainDbContext _context; 
     
-    public UserEFRepository(DomainDbContext context)
+    public UserEFRepository(DomainDbContext context, IDbContextFactory<DomainDbContext>? contextFactory)
     {
         _context = context; 
+        if (contextFactory != null) _context = contextFactory.CreateDbContext();
     }
     
     public void AddUser(User user)
