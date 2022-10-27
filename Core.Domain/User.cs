@@ -1,5 +1,7 @@
 namespace Core.Domain;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 public class User
 {
     public int Id { get; set; }
@@ -31,7 +33,8 @@ public class User
     public Address Address { get; set; }
     public UserType Type { get; set; }
     public ICollection<Allergy> Allergies { get; set; }
-
+    public ICollection<GameNight> GameNights { get; set; }
+    
     public int GetAge(DateTime? birthDate)
     {
         var age = DateTime.Now.Year - (birthDate ?? BirthDate).Year;
