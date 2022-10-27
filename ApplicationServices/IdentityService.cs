@@ -41,8 +41,8 @@ public class IdentityService : IIdentityService<string>
         return handler.WriteToken(securityToken);
     }
 
-    public Task<string> SignOut()
+    public async void SignOut()
     {
-        throw new NotImplementedException();
+        await _signInManager.SignOutAsync();
     }
 }
