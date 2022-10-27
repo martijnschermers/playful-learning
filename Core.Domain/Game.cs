@@ -9,4 +9,5 @@ public class Game : ICheckboxOption
     public string Image { get; set; }
     public GameType Type { get; set; }
     public Genre Genre { get; set; }
+    public ICollection<GameNight> GameNights { get; set; }
 }
