@@ -1,6 +1,8 @@
 using Core.Domain;
+using Core.DomainServices.Repositories.Interface;
+using Core.DomainServices.Services.Interface;
 
-namespace Core.DomainServices;
+namespace Core.DomainServices.Services.Implementation;
 
 public class UserService : IUserService
 {

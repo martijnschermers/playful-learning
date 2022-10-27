@@ -1,5 +1,5 @@
 using Core.Domain;
-using Core.DomainServices;
+using Core.DomainServices.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace SqlServer.Infrastructure;
@@ -24,6 +24,7 @@ public class UserEFRepository : IUserRepository
         return _context.Users
             .Where(u => u.Email == email)
             .Include(u => u.Allergies)
+            .Include(u => u.GameNights)
             .FirstOrDefault(); 
     }
 

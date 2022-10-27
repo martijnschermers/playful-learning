@@ -1,5 +1,5 @@
 using Core.Domain;
-using Core.DomainServices;
+using Core.DomainServices.Services.Interface;
 using Microsoft.AspNetCore.Http;
 
 namespace ApplicationServices;

@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Core.Domain;
-using Core.DomainServices;
+using Core.DomainServices.Repositories.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Core.Domain;
+using Core.DomainServices.Repositories.Interface;
+using Core.DomainServices.Services.Implementation;
+using Core.DomainServices.Services.Interface;
 using Moq;
 using Xunit;
 

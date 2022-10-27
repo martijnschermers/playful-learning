@@ -1,6 +1,8 @@
 using System.Text;
 using ApplicationServices;
-using Core.DomainServices;
+using Core.DomainServices.Repositories.Interface;
+using Core.DomainServices.Services.Implementation;
+using Core.DomainServices.Services.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

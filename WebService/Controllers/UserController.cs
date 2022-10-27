@@ -1,4 +1,4 @@
-using Core.DomainServices;
+using Core.DomainServices.Repositories.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Core.Domain;
+using Core.DomainServices.Repositories.Interface;
 using Moq;
 using Portal.Controllers;
 using Xunit;
@@ -49,30 +50,5 @@ public class GameNightRepositoryTest
         repositoryMock.Verify(r => r.GetAllGameNights());
         Assert.Contains(gameNight1, games);
         Assert.Contains(gameNight2, games);
-    }
-
-    [Fact]
-    public void GetParticipating_Returns_All_GameNights_In_Which_You_Participate()
-    {
-        // Arrange
-        var kees = new User { Id = 1, Name = "Kees" };
-        var jan = new User { Id = 2, Name = "Jan" };
-        var gameNight1 = new GameNight { Id = 1, DateTime = new DateTime(2022, 3, 4), Players = new List<User>{ kees } };
-        var gameNight2 = new GameNight { Id = 2, DateTime = new DateTime(2022, 5, 8), Players = new List<User>{ jan } };
-
-        var repositoryMock = new Mock<IGameNightRepository>();
-        repositoryMock
-            .Setup(r => r.GetParticipating(kees))
-            .Returns(new List<GameNight> { gameNight1 });
-
-        var controller = new GameNightController(repositoryMock.Object, null, null, null);
-
-        // Act
-        var gameNights = controller.GetParticipating(kees);
-
-        // Assert
-        repositoryMock.Verify(r => r.GetParticipating(kees));
-        Assert.Contains(gameNight1, gameNights);
-        Assert.DoesNotContain(gameNight2, gameNights);
     }
 }

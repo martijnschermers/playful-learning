@@ -1,5 +1,5 @@
 using Core.Domain;
-using Core.DomainServices;
+using Core.DomainServices.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace SqlServer.Infrastructure;
@@ -81,6 +81,7 @@ public class GameNightEFRepository : IGameNightRepository
     public void Participate(GameNight gameNight, User user)
     {
         gameNight.Players.Add(user);
+        user.GameNights.Add(gameNight);
         _context.SaveChanges();
     }
 

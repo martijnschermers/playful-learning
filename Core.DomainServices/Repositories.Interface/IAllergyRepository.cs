@@ -1,6 +1,6 @@
 using Core.Domain;
 
-namespace Core.DomainServices;
+namespace Core.DomainServices.Repositories.Interface;
 
 public interface IAllergyRepository
 {

@@ -1,6 +1,8 @@
 using ApplicationServices;
 using Core.Domain;
-using Core.DomainServices;
+using Core.DomainServices.Repositories.Interface;
+using Core.DomainServices.Services.Implementation;
+using Core.DomainServices.Services.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SqlServer.Infrastructure;

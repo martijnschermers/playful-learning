@@ -1,6 +1,7 @@
 using ApplicationServices;
 using Core.Domain;
-using Core.DomainServices;
+using Core.DomainServices.Repositories.Interface;
+using Core.DomainServices.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -46,7 +47,7 @@ public class GameNightController : Controller
     {
         var user = _helperService!.GetUser(HttpContext);
 
-        var gameNights = _gameNightRepository.GetParticipating(user);
+        var gameNights = _gameNightRepository.GetAllGameNights().Where(g => g.Players.Contains(user));
 
         return View(gameNights);
     }
@@ -201,16 +202,6 @@ public class GameNightController : Controller
     }
     
     // Methods for testing
-    public void AddGameNight(GameNight gameNight)
-    {
-        _gameNightRepository.AddGameNight(gameNight);
-    }
-
-    public string Participate(GameNight gameNight, User user)
-    {
-        return _gameNightService!.Participate(gameNight, user);
-    }
-
     public GameNight? GetGameNightById(int id)
     {
         return _gameNightRepository.GetGameNightById(id);
@@ -219,10 +210,5 @@ public class GameNightController : Controller
     public ICollection<GameNight> GetAllGameNights()
     {
         return _gameNightRepository.GetAllGameNights();
-    }
-
-    public ICollection<GameNight> GetParticipating(User user)
-    {
-        return _gameNightRepository.GetParticipating(user);
     }
 }

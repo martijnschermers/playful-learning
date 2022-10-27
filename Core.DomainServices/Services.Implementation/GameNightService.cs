@@ -1,6 +1,8 @@
 using Core.Domain;
+using Core.DomainServices.Repositories.Interface;
+using Core.DomainServices.Services.Interface;
 
-namespace Core.DomainServices;
+namespace Core.DomainServices.Services.Implementation;
 
 public class GameNightService : IGameNightService
 {
@@ -63,15 +65,15 @@ public class GameNightService : IGameNightService
         if (gameNight.Players.Count + 1 > gameNight.MaxPlayers) {
             return "Het is niet mogelijk om in te schrijven, omdat de spelavond vol is!";
         }
+        
+        if (gameNight.IsPotluck && gameNight.Foods.All(f => f.UserId != user.Id)) {
+            return "Je moet op zijn minst een ding meenemen!";
+        }
 
         if (user.Allergies.Any()) {
             if (!user.Allergies.Any(allergy => gameNight.Foods.Any(f => f.Allergies.Contains(allergy)))) {
                 return "Uw allergieën of dieetwensen sluiten niet aan op deze spelavond!";
             }
-        }
-
-        if (gameNight.IsPotluck && gameNight.Foods.All(f => f.UserId != user.Id)) {
-            return "Je moet op zijn minst een ding meenemen!";
         }
         
         _repository.Participate(gameNight, user);

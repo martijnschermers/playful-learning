@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Core.Domain;
+using Core.DomainServices.Repositories.Interface;
 using Moq;
 using Portal.Controllers;
 using Xunit;

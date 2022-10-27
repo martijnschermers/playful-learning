@@ -1,6 +1,7 @@
 using ApplicationServices;
 using Core.Domain;
-using Core.DomainServices;
+using Core.DomainServices.Repositories.Interface;
+using Core.DomainServices.Services.Interface;
 using WebService.Models;
 
 namespace WebService.GraphQL;

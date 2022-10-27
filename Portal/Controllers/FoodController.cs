@@ -1,6 +1,6 @@
 using ApplicationServices;
 using Core.Domain;
-using Core.DomainServices;
+using Core.DomainServices.Repositories.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Portal.Models;
 

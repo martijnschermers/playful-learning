@@ -1,5 +1,5 @@
 using Core.Domain;
-using Core.DomainServices;
+using Core.DomainServices.Repositories.Interface;
 using HotChocolate.AspNetCore.Authorization;
 
 namespace WebService.GraphQL;
