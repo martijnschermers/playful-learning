@@ -38,7 +38,7 @@ public class GameNightController : Controller
     {
         var user = _helperService!.GetUser(HttpContext);
 
-        var gameNights = _gameNightRepository.GetAllGameNights().Where(g => g.Organizer == user);
+        var gameNights = _gameNightRepository.GetOrganized(user);
 
         return View(gameNights);
     }
@@ -47,7 +47,7 @@ public class GameNightController : Controller
     {
         var user = _helperService!.GetUser(HttpContext);
 
-        var gameNights = _gameNightRepository.GetAllGameNights().Where(g => g.Players.Contains(user));
+        var gameNights = _gameNightRepository.GetParticipating(user);
 
         return View(gameNights);
     }
@@ -90,7 +90,7 @@ public class GameNightController : Controller
             Drinks = new List<Drink>(), Foods = new List<Food>(), Games = games, Players = new List<User>(),
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
-            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
+            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, OrganizerId = user.Id
         };
 
         _gameNightService!.AddGameNight(gameNight);
@@ -180,7 +180,7 @@ public class GameNightController : Controller
             Games = games,
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
-            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
+            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, OrganizerId = user.Id
         };
 
         var result = _gameNightService!.UpdateGameNight(id, updatedGameNight);

@@ -61,7 +61,7 @@ public class GameNightController : ControllerBase
             Players = new List<User>(),
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
-            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
+            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, OrganizerId = user.Id
         };
 
         _gameNightService.AddGameNight(gameNight);
@@ -103,7 +103,7 @@ public class GameNightController : ControllerBase
             Games = gameNightViewModel.Games,
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
-            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
+            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, OrganizerId = user.Id
         };
 
         var result = _gameNightService.UpdateGameNight(id, gameNight);

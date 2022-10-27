@@ -28,7 +28,7 @@ public class Mutation
             Players = new List<User>(),
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
-            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
+            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, OrganizerId = user.Id
         };
 
         service.AddGameNight(gameNight);
@@ -55,7 +55,7 @@ public class Mutation
             Games = gameNightViewModel.Games,
             DateTime = gameNightViewModel.DateTime, IsPotluck = gameNightViewModel.IsPotluck,
             MaxPlayers = gameNightViewModel.MaxPlayers,
-            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, Organizer = user
+            IsOnlyForAdults = gameNightViewModel.IsOnlyForAdults, OrganizerId = user.Id
         };
 
         var result = service.UpdateGameNight(id, gameNight);
