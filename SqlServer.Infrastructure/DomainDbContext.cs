@@ -5,9 +5,7 @@ namespace SqlServer.Infrastructure;
 
 public class DomainDbContext : DbContext
 {
-    public DomainDbContext(DbContextOptions<DomainDbContext> options) : base(options)
-    {
-    }
+    public DomainDbContext(DbContextOptions<DomainDbContext> options) : base(options) { }
 
     public DbSet<GameNight> GameNights { get; set; } = null!;
     public DbSet<Game> Games { get; set; } = null!;
@@ -17,6 +15,10 @@ public class DomainDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>().HasMany(u => u.GameNights).WithOne(g => g.Organizer);
+        modelBuilder.Entity<GameNight>().HasMany(g => g.Players);
+        modelBuilder.Entity<GameNight>().HasOne(g => g.Organizer);
+        
         var games = new List<Game>
         {
             new Game

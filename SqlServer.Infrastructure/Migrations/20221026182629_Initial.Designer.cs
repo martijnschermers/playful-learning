@@ -12,14 +12,14 @@ using SqlServer.Infrastructure;
 namespace SqlServer.Infrastructure.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20221005112011_AddSeedData")]
-    partial class AddSeedData
+    [Migration("20221026182629_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -33,14 +33,12 @@ namespace SqlServer.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("HouseNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("Street")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -55,6 +53,9 @@ namespace SqlServer.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("FoodId")
                         .HasColumnType("int");
@@ -71,7 +72,45 @@ namespace SqlServer.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Allergy");
+                    b.ToTable("Allergies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Gluten",
+                            Name = 4
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Lactose",
+                            Name = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Noten",
+                            Name = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Soja",
+                            Name = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Tarwe",
+                            Name = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "Vegetarisch",
+                            Name = 5
+                        });
                 });
 
             modelBuilder.Entity("Core.Domain.Drink", b =>
@@ -89,14 +128,45 @@ namespace SqlServer.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GameNightId");
 
-                    b.ToTable("Drink");
+                    b.ToTable("Drinks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ContainsAlcohol = true,
+                            Name = "Bier"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ContainsAlcohol = false,
+                            Name = "Water"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ContainsAlcohol = false,
+                            Name = "Cola"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ContainsAlcohol = true,
+                            Name = "Wijn"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ContainsAlcohol = false,
+                            Name = "Fanta"
+                        });
                 });
 
             modelBuilder.Entity("Core.Domain.Food", b =>
@@ -110,12 +180,11 @@ namespace SqlServer.Infrastructure.Migrations
                     b.Property<int?>("GameNightId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsVegetarian")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -126,14 +195,13 @@ namespace SqlServer.Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Domain.Game", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("GameNightId")
@@ -143,14 +211,12 @@ namespace SqlServer.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsOnlyForAdults")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Type")
@@ -168,7 +234,7 @@ namespace SqlServer.Infrastructure.Migrations
                             Id = 1,
                             Description = "Versimpelde versie van pesten!",
                             Genre = 0,
-                            Image = "",
+                            Image = "https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/26c6e4e18eeaa62590fccd44ea7812f8.png",
                             IsOnlyForAdults = false,
                             Name = "Uno",
                             Type = 0
@@ -178,7 +244,7 @@ namespace SqlServer.Infrastructure.Migrations
                             Id = 2,
                             Description = "Het spel met treinen!",
                             Genre = 0,
-                            Image = "",
+                            Image = "https://media.s-bol.com/4zrr6XMkgVXn/550x536.jpg",
                             IsOnlyForAdults = false,
                             Name = "Ticket to Ride",
                             Type = 1
@@ -186,11 +252,21 @@ namespace SqlServer.Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            Description = "Het spel met geld.",
+                            Description = "Het spel met geld!",
                             Genre = 0,
-                            Image = "",
-                            IsOnlyForAdults = false,
+                            Image = "https://www.bruna.nl/images/active/carrousel/fullsize/5010993414338_front.jpg",
+                            IsOnlyForAdults = true,
                             Name = "Monopoly",
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Beantwoord zoveel mogelijk vragen in 30 seconde!",
+                            Genre = 0,
+                            Image = "https://play-lh.googleusercontent.com/vLezygtbLfIe6fi23WCg9Mc4jZn2CW1_6EWBraSCukUGsIpPaBQ7yUN14x4SVggzh3g",
+                            IsOnlyForAdults = true,
+                            Name = "30 Seconds",
                             Type = 1
                         });
                 });
@@ -218,7 +294,7 @@ namespace SqlServer.Infrastructure.Migrations
                     b.Property<int>("MaxPlayers")
                         .HasColumnType("int");
 
-                    b.Property<int>("OrganizerId")
+                    b.Property<int?>("OrganizerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -238,11 +314,13 @@ namespace SqlServer.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("GameNightId")
@@ -252,10 +330,14 @@ namespace SqlServer.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("GameNightId");
 
@@ -303,10 +385,8 @@ namespace SqlServer.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Domain.User", "Organizer")
-                        .WithMany()
-                        .HasForeignKey("OrganizerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("GameNights")
+                        .HasForeignKey("OrganizerId");
 
                     b.Navigation("Address");
 
@@ -315,9 +395,15 @@ namespace SqlServer.Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Domain.User", b =>
                 {
+                    b.HasOne("Core.Domain.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
                     b.HasOne("Core.Domain.GameNight", null)
                         .WithMany("Players")
                         .HasForeignKey("GameNightId");
+
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("Core.Domain.Food", b =>
@@ -339,6 +425,8 @@ namespace SqlServer.Infrastructure.Migrations
             modelBuilder.Entity("Core.Domain.User", b =>
                 {
                     b.Navigation("Allergies");
+
+                    b.Navigation("GameNights");
                 });
 #pragma warning restore 612, 618
         }
