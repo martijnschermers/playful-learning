@@ -118,6 +118,7 @@ public class GameNightController : Controller
         var result = _gameNightService!.Participate(gameNight, user);
 
         if (result != "") {
+            ViewBag.Organizer = _helperService!.GetUserById(gameNight!.OrganizerId);
             ModelState.AddModelError("", result);
             return View(gameNight);
         }

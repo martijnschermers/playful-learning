@@ -4,32 +4,39 @@
     ViewBag.Title = "Details spelavond";
     var veganFood = false;
     var nutFood = false;
-    var nonAlcoholicDrinks = false; 
+    var nonAlcoholicDrinks = false;
 }
 
 <h1 class="text-center">Details spelavond</h1>
 
-<p>
-    Organisator: @ViewBag.Organizer.Name <br>
-    Datum en tijd: @Model.DateTime <br>
-    Adres: @Model.Address <br>
-    Aantal inschrijvingen: @Model.Players.Count <br>
-    Alleen voor volwassenen:
-    @if (Model.IsOnlyForAdults) {
-        <i class="bi bi-check-lg"></i>
-    } else {
-        <i class="bi bi-x-lg"></i>
-    }
-</p>
+<ul class="list-group col-12 col-md-6 m-auto">
+    <li class="list-group-item flex-fill">Organisator: @ViewBag.Organizer.Name</li>
+    <li class="list-group-item flex-fill">Datum en tijd: @Model.DateTime.ToString("yy-MM-dd") @Model.DateTime.ToString("t")</li>
+
+    <li class="list-group-item flex-fill">Adres: @Model.Address</li>
+    <li class="list-group-item flex-fill">Aantal inschrijvingen: @Model.Players.Count</li>
+    <li class="list-group-item flex-fill">
+        Alleen voor volwassenen:
+        @if (Model.IsOnlyForAdults) {
+            <i class="bi bi-check-lg"></i>
+        } else {
+            <i class="bi bi-x-lg"></i>
+        }
+    </li>
+</ul>
 
 @if (Model.IsPotluck) {
-    <div>
+    <div class="m-auto text-center my-3">
         <h2>Eten & Drinken</h2>
 
+        @if (Model.Drinks.Any(drink => !drink.ContainsAlcohol)) {
+            nonAlcoholicDrinks = true;
+        }
+
         @if (Model.Foods.Any()) {
-            <ul class="list-group">
+            <ul class="list-group col-10 col-md-6 m-auto">
                 @foreach (var food in Model.Foods) {
-                    <li class="list-group-item">@food.Name</li>
+                    <li class="list-group-item text-start">@food.Name</li>
 
                     if (food.Allergies.Any(allergy => allergy.Name is AllergyEnum.Vegan)) {
                         veganFood = true;
@@ -41,33 +48,30 @@
                 }
             </ul>
 
-            <p>
+            <p class="text-start text-md-center">
                 Eten aanwezig voor vegetarische mensen: @(veganFood ? Html.Raw("<i class='bi bi-check-lg'></i>") : Html.Raw("<i class='bi bi-x-lg'></i>")) <br>
-                Eten aanwezig voor mensen met een noten/lactose allergie: @(nutFood ? Html.Raw("<i class='bi bi-check-lg'></i>") : Html.Raw("<i class='bi bi-x-lg'></i>"))
+                Eten aanwezig voor mensen met een noten/lactose allergie: @(nutFood ? Html.Raw("<i class='bi bi-check-lg'></i>") : Html.Raw("<i class='bi bi-x-lg'></i>")) <br>
+                Drinken aanwezig voor mensen die geen alcohol willen drinken: @(nonAlcoholicDrinks ? Html.Raw("<i class='bi bi-check-lg'></i>") : Html.Raw("<i class='bi bi-x-lg'></i>"))
             </p>
         } else {
             <p>Er is nog geen eten aanwezig!</p>
         }
         
-        @if (Model.Drinks.Any(drink => !drink.ContainsAlcohol)) {
-            nonAlcoholicDrinks = true;
-        }
-        
-        <p>Drinken aanwezig voor mensen die geen alcohol willen drinken: @(nonAlcoholicDrinks ? Html.Raw("<i class='bi bi-check-lg'></i>") : Html.Raw("<i class='bi bi-x-lg'></i>"))</p>
-
-        <a class="btn btn-primary" asp-controller="Food" asp-action="Index" asp-route-id="@Model.Id">Eten meenemen!</a>
+        <a class="btn btn-primary col-8 col-md-4" asp-controller="Food" asp-action="Index" asp-route-id="@Model.Id">Eten meenemen!</a>
     </div>
 }
 
-<h2 class="text-center">Bordspellen</h2>
-<div class="row justify-content-center">
-    @foreach (var game in Model.Games) {
-        <partial model="game" name="_Game"/>
-    }
+<div class="my-3">
+    <h2 class="text-center">Bordspellen</h2>
+    <div class="row justify-content-center">
+        @foreach (var game in Model.Games) {
+            <partial model="game" name="_Game"/>
+        }
+    </div>
 </div>
 
-<form asp-action="Details" method="post">
-    <button class="btn btn-primary col-4 m-auto" asp-route-id="@Model.Id">Inschrijven</button>
+<form class="d-flex justify-content-center" asp-action="Details" method="post">
+    <button class="btn btn-primary col-8 col-md-4" asp-route-id="@Model.Id">Inschrijven</button>
 </form>
 
-<div class="alert alert-danger text-center m-auto col-6" role="alert" asp-validation-summary="ModelOnly"></div>
+<div class="alert alert-danger text-center m-auto col-12 col-md-6 mt-3" role="alert" asp-validation-summary="ModelOnly"></div>
