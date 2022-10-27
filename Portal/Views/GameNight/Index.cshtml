@@ -3,12 +3,11 @@
 @{
     ViewBag.Title = "Alle Spelavonden";
 }
-
-<div class="row">
-    <h1 class="col-11 text-center">Alle Spelavonden</h1>
+<div class="d-flex justify-content-center">
+    <h1 class="text-center">Alle Spelavonden</h1>
 
     @if (User.HasClaim("UserType", "Organizer")) {
-        <a class="btn btn-primary col-1" asp-action="Organize">Organiseer</a>
+        <a class="btn btn-primary text-end" asp-action="Organize">Organiseer</a>
     }
 </div>
 

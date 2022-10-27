@@ -1,15 +1,13 @@
-@model ICollection<GameNight>
+@model IEnumerable<GameNight>
 
 @{
     ViewBag.Title = "Deelnemend";
 }
 
-<body>
-<div>
-    <h1>Participating</h1>
+<h1 class="text-center">Spelavonden waar u aan deelneemt</h1>
 
+<div class="row row-cols-1 row-cols-md-3 g-3">
     @foreach (var gameNight in Model) {
         <partial model="gameNight" name="_GameNight"/>
     }
 </div>
-</body>

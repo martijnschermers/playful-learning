@@ -2,44 +2,73 @@
 
 @{
     ViewBag.Title = "Details spelavond";
+    var veganFood = false;
+    var nutFood = false;
+    var nonAlcoholicDrinks = false; 
 }
 
-<h2>Details spelavond</h2>
+<h1 class="text-center">Details spelavond</h1>
 
-<p>@Model.Address</p>
-<p>Aantal inschrijvingen: @Model.Players.Count</p>
+<p>
+    Organisator: @Model.Organizer.Name <br>
+    Datum en tijd: @Model.DateTime <br>
+    Adres: @Model.Address <br>
+    Aantal inschrijvingen: @Model.Players.Count <br>
+    Alleen voor volwassenen:
+    @if (Model.IsOnlyForAdults) {
+        <i class="bi bi-check-lg"></i>
+    } else {
+        <i class="bi bi-x-lg"></i>
+    }
+</p>
 
 @if (Model.IsPotluck) {
-    if (Model.Foods.Any()) {
-        <p>Eten: </p>
-        foreach (var food in Model.Foods) {
-            <p>@food.Name</p>
+    <div>
+        <h2>Eten</h2>
+
+        @if (Model.Foods.Any()) {
+            <ul class="list-group">
+                @foreach (var food in Model.Foods) {
+                    <li class="list-group-item">@food.Name</li>
+
+                    if (food.Allergies.Any(allergy => allergy.Name is AllergyEnum.Vegan)) {
+                        veganFood = true;
+                    }
+
+                    if (food.Allergies.Any(allergy => allergy.Name is AllergyEnum.Lactose or AllergyEnum.Nuts)) {
+                        nutFood = true;
+                    }
+                }
+            </ul>
+
+            <p>
+                Eten aanwezig voor vegetarische mensen: @(veganFood ? Html.Raw("<i class='bi bi-check-lg'></i>") : Html.Raw("<i class='bi bi-x-lg'></i>")) <br>
+                Eten aanwezig voor mensen met een noten/lactose allergie: @(nutFood ? Html.Raw("<i class='bi bi-check-lg'></i>") : Html.Raw("<i class='bi bi-x-lg'></i>"))
+            </p>
+        } else {
+            <p>Er is nog geen eten aanwezig!</p>
         }
-        
-        <p>Eten voor vegetarische mensen en mensem met een noten/lactose allergie: </p>
-        foreach (var food in Model.Foods) {
-            if (food.Allergies.Any(allergy => allergy.Name is AllergyEnum.Lactose or AllergyEnum.Nuts or AllergyEnum.Vegan)) {
-                <p>@food.Name</p>
-            }
-        }
-    }
-    
-    <a asp-controller="Food" asp-action="Index" asp-route-id="@Model.Id">Eten meenemen!</a>
+
+        <a class="btn btn-primary" asp-controller="Food" asp-action="Index" asp-route-id="@Model.Id">Eten meenemen!</a>
+    </div>
 }
 
-<p>Drinken: </p>
 @if (Model.Drinks.Any(drink => !drink.ContainsAlcohol)) {
-    <p>Drinken aanwezig voor mensen die geen alcohol willen drinken.</p>
+    nonAlcoholicDrinks = true;
 }
 
-<div class="row">
+<h2>Drinken</h2>
+<p>Drinken aanwezig voor mensen die geen alcohol willen drinken: @(nonAlcoholicDrinks ? Html.Raw("<i class='bi bi-check-lg'></i>") : Html.Raw("<i class='bi bi-x-lg'></i>"))</p>
+
+<h2 class="text-center">Bordspellen</h2>
+<div class="row justify-content-center">
     @foreach (var game in Model.Games) {
         <partial model="game" name="_Game"/>
     }
 </div>
 
 <form asp-action="Details" method="post">
-    <button class="btn btn-primary" asp-route-id="@Model.Id">Inschrijven</button>
+    <button class="btn btn-primary col-4 m-auto" asp-route-id="@Model.Id">Inschrijven</button>
 </form>
 
-<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+<div class="alert alert-danger text-center m-auto col-6" role="alert" asp-validation-summary="ModelOnly"></div>
