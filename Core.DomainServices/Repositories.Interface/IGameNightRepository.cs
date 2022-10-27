@@ -8,6 +8,7 @@ public interface IGameNightRepository
     ICollection<GameNight> GetPopularGameNights(); 
     GameNight? GetGameNightById(int id);
     ICollection<GameNight> GetParticipating(User user);
+    ICollection<GameNight> GetOrganized(User user);
     void AddGameNight(GameNight gameNight);
     void UpdateGameNight(GameNight originalGameNight, GameNight updatedGameNight);
     void DeleteGameNight(GameNight gameNight);

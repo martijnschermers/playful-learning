@@ -17,7 +17,6 @@ public class GameNightEFRepository : IGameNightRepository
     {
         return _context.GameNights
             .Include(g => g.Address)
-            .Include(g => g.Organizer)
             .Include(g => g.Players)
             .ToList();
     }
@@ -30,15 +29,20 @@ public class GameNightEFRepository : IGameNightRepository
             .ToList();
     }
 
-    public ICollection<GameNight> GetParticipating(User user)
+    public ICollection<GameNight> GetOrganized(User user)
     {
-        return _context.GameNights.Where(g => g.Players.Contains(user))  
-            .Include(g => g.Address)
-            .Include(g => g.Organizer)
-            .Include(g => g.Players)
+        return GetAllGameNights()
+            .Where(g => g.OrganizerId == user.Id)
             .ToList();
     }
-    
+
+    public ICollection<GameNight> GetParticipating(User user)
+    {
+        return GetAllGameNights()
+            .Where(g => g.Players.Contains(user))
+            .ToList();
+    }
+
     public void AddGameNight(GameNight gameNight)
     {
         _context.GameNights.Add(gameNight);
@@ -51,7 +55,6 @@ public class GameNightEFRepository : IGameNightRepository
             .Where(g => g.Id == id)
             .Include(g => g.Address)
             .Include(g => g.Games)
-            .Include(g => g.Organizer)
             .Include(g => g.Players)
             .Include(g => g.Drinks)
             .Include(g => g.Foods)
@@ -65,7 +68,7 @@ public class GameNightEFRepository : IGameNightRepository
         originalGameNight.IsOnlyForAdults = updatedGameNight.IsOnlyForAdults;
         originalGameNight.IsPotluck = updatedGameNight.IsPotluck;
         originalGameNight.DateTime = updatedGameNight.DateTime;
-        originalGameNight.Organizer = updatedGameNight.Organizer;
+        originalGameNight.OrganizerId = updatedGameNight.OrganizerId;
         originalGameNight.Games = updatedGameNight.Games;
         originalGameNight.Address = updatedGameNight.Address;
 
@@ -90,9 +93,9 @@ public class GameNightEFRepository : IGameNightRepository
         var gameNight = GetGameNightById(id);
 
         if (gameNight == null) {
-            return false; 
+            return false;
         }
-        
+
         gameNight.Foods.Add(food);
 
         _context.SaveChanges();
