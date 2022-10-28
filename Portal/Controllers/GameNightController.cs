@@ -103,7 +103,7 @@ public class GameNightController : Controller
     {
         var gameNight = _gameNightRepository.GetGameNightById(id);
 
-        ViewBag.Organizer = _helperService!.GetUserById(gameNight!.OrganizerId);
+        ViewBag.Organizer = _helperService!.GetUserById(gameNight!.OrganizerId)!;
         
         return View(gameNight);
     }
@@ -118,7 +118,7 @@ public class GameNightController : Controller
         var result = _gameNightService!.Participate(gameNight, user);
 
         if (result != "") {
-            ViewBag.Organizer = _helperService!.GetUserById(gameNight!.OrganizerId);
+            ViewBag.Organizer = _helperService!.GetUserById(gameNight.OrganizerId)!;
             ModelState.AddModelError("", result);
             return View(gameNight);
         }

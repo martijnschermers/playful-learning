@@ -13,7 +13,7 @@ public class HelperService : IHelperService
         _userService = userService;
     }
 
-    public User GetUserById(int id)
+    public User? GetUserById(int id)
     {
         return _userService.GetUserById(id);
     }
