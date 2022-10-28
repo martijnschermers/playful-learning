@@ -19,6 +19,7 @@ public class DomainDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //TODO: Add image seed 
+        
         var games = new List<Game>
         {
             new Game
