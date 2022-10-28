@@ -56,6 +56,7 @@ public class GameNightEFRepository : IGameNightRepository
             .Where(g => g.Id == id)
             .Include(g => g.Address)
             .Include(g => g.Games)
+            .ThenInclude(g => g.Image)
             .Include(g => g.Players)
             .Include(g => g.Drinks)
             .Include(g => g.Foods)

@@ -2,8 +2,8 @@
 
 <div class="col-6 col-md-3">
     <div class="card col-12 h-100">
-        @if (Model.Image != "") {
-            <img src="@Model.Image" class="card-img-top img-fluid" alt="Game image">
+        @if (Model.Image.ImageData.Any()) {
+            <img src="@ImageHelper.GetSrc(Model.Image)" class="card-img-top img-fluid" alt="Game image">
         }
         <div class="card-body">
             <h5 class="card-title">@Model.Name</h5>
