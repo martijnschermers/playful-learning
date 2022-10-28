@@ -9,8 +9,6 @@ using SqlServer.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//TODO: Specify bootstrap icon files to download, for load times
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -23,6 +21,9 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddDbContextFactory<DomainDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Domain")));
+
 builder.Services.AddScoped<IGameNightRepository, GameNightEFRepository>();
 builder.Services.AddScoped<IGameRepository, GameEFRepository>();
 builder.Services.AddScoped<IUserRepository, UserEFRepository>();
@@ -31,11 +32,6 @@ builder.Services.AddScoped<IAllergyRepository, AllergyEFRepository>();
 builder.Services.AddScoped<IGameNightService, GameNightService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHelperService, HelperService>();
-
-builder.Services.AddDbContext<DomainDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Domain"))
-        //TODO: remove in Production 
-        .EnableSensitiveDataLogging());
 
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Identity"))
