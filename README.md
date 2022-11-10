@@ -5,7 +5,7 @@ This project contains a website build following the MVC pattern and a web api th
 
 ## Screenshots
 
-![App Screenshot](https://i.imgur.com/broAZmy.png)
+![App Screenshot](https://i.imgur.com/5nWLPGb.png)
 
 
 ## Run Locally
